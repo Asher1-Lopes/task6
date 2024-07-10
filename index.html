@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style/style.css" />
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap"
+    rel="stylesheet"
+  />
+
+    
+    <title>Document</title>
+</head>
+<body>
+ <nav>
+    <div>Books</div>
+    <div class="mid">
+        <input type="text" placeholder="search for data">
+    </div>
+    <div>
+        <a href="">home</a>
+        <a href="">contact</a>
+        <a href="">about</a>
+    </div>
+ </nav>
+
+
+ <div class="sub-container">
+    <div class="subdiv">
+        <i class="fa-solid fa-rotate-left"></i>
+        <i class="fa-solid fa-rotate-right"></i>
+       <span>undo</span>
+        
+    </div>
+    
+    <div class="subdiv block2">
+        <div class="block21">
+         
+            <i class="fa-solid fa-paste" id="cop" onclick="copytext()"></i>
+            <!-- <span class="hidden1">helo</span> -->
+            <i class="fa-solid fa-copy" id="paste"></i>
+        </div>
+        <div>
+            <div><i class="fa-solid fa-scissors"></i></div>
+        </div>
+    </div>
+    <div  class="mid1 subdiv">
+        <div class="btns">
+            <button id="inst">insert</button>
+            <button id="delete1">delete</button>
+           
+            
+            <label for="file1">   
+                <input type="file" name="" id="file1" accept="text/csv" class="hidden">
+              <div>
+             Upload 
+             <i class="fa-solid fa-upload"></i>
+              </div>
+             </label>
+            <button onclick="sum()" id="active">Calc</button>
+        </div>
+    </div>
+    <div class="subdiv mid2"></div>
+
+ </div>
+
+
+ <div class="maincontainer">
+<h2 class="h2" id="h2"> Please upload csv file</h2>
+
+<input type="text" name="" id="input1" class="hidden">
+    <canvas class="canvas" id="canvas">
+ 
+
+        
+    </canvas>
+ 
+ </div>
+
+
+ <script src="./style/script.js"></script>
+</body>
+</html>

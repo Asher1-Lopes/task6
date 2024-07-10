@@ -1,0 +1,120 @@
+.sub-container{
+    margin:10px;
+    display: flex;
+    flex-direction: row;
+    // justify-content:space-around ;
+    // justify-content: space-evenly;
+    background-color: white;
+    border-radius: 5px;
+    height:100px;
+    padding:5px;
+   text-align: center;
+ 
+    .subdiv{
+    
+       display:flex;
+       flex-direction: column;
+       padding:10px;
+       justify-content: center;
+    
+  
+        border-right:1px solid rgb(190, 186, 186);
+        i{
+            margin:3px;
+            color:grey;
+        }
+        span{
+            margin:3px;
+            color:grey;
+        }
+
+
+    }
+        
+    .block2{
+       
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+         
+         
+          .block21{
+            display: flex;
+            flex-direction: column;
+           margin:3px;
+
+         
+        //    i:hover{
+        //    color:black;
+           
+        //    }
+          }
+      }
+    .mid1{
+        flex-grow: 1;
+        .btns{
+                display:flex;
+                flex-direction: row;
+                justify-content: space-between;
+
+                .hidden{
+                    display: none;
+                   }
+                
+                   label{
+                        //   display:flex;
+                        //   justify-content: center;
+                    div{
+                        // border:1px solid black;
+                        // width:100px;
+                        // height:30px;
+                        // padding-top:10px;
+                        // // border:none;
+                        // box-shadow: none;
+                        padding:3px;
+                        min-width: 150px;
+                    text-align: center;
+                    background-color:grey;
+                    color:white;
+                    border-radius: 5px;
+                    box-shadow: 1px 2px 1px 1px black;
+                      
+                       i{
+                        color:black;
+                       }
+                
+                    }}
+
+        
+                button{
+                    padding:3px;
+                    min-width: 150px;
+                    text-align: center;
+                    background-color:grey;
+                    color:white;
+                    border-radius: 5px;
+                    box-shadow: 1px 1px 1px black;
+                    
+        
+                }
+            }
+    }
+    .mid2{
+        flex-grow: 1;
+    }
+    // .btns{
+    //     display:flex;
+    //     flex-direction: row;
+    //     justify-content: space-between;
+
+    //     button{
+    //         padding:3px;
+    //         max-width: 100px;
+    //         text-align: center;
+    //         background-color: black;
+    //         color:white;
+            
+
+    //     }
+    // }
+}
