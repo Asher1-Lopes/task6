@@ -9,6 +9,8 @@ var startc = 0;
 var endr1 = 0;
 var endc1 = 0;
 var sum1 = 0;
+
+var arrw = [150,150,150,150,150,150,150,150,150,150,150,150,150,150];
 // console.log(data[3][columns[0]] );
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
@@ -28,14 +30,14 @@ function excel() {
   canvas.setAttribute("width", width1);
   for (let i = 0; i < row; i++) {
     for (let j = 0; j < col; j++) {
-      var x = j * sizel;
+      var x = j * sizel;//  arrw[j]
       var y = i * sizeb;
 
       ctx.fillStyle = "white";
       ctx.strokestyle = "black";
-      ctx.fillRect(x, y, sizel, sizeb);
+      ctx.fillRect(x, y, sizel, sizeb);  //arr[j]
 
-      ctx.strokeRect(x, y, sizel, sizeb);
+      ctx.strokeRect(x, y, sizel, sizeb); //arr[j]
 
       ctx.stroke();
     }
@@ -216,60 +218,7 @@ function sum() {
   }
 
 }
-// copy
-// var flag3 = false;
-// function copytext() {
 
-//   if (flag3 == true) {
-//     flag3 = false;
-//   } else {
-//     flag3 = true;
-//   }
-//   if(flag3==true){
-//   function getMousePosition(canvas, event) {
-//     let rect = canvas.getBoundingClientRect();
-//     let x = event.clientX - rect.left;
-//     let y = event.clientY - rect.top;
-//     let sizel = 150;
-//     let sizeb = 30;
-//    let  r = Math.floor(x / sizel);
-//     let c = Math.floor(y / sizeb);
-
-//     // console.log("ROW: " + r, "CoL: " + c);
-//     // console.log("header " + headers[r], "data " + data[c - 1][headers[r]]);
-
-//     return [r, c];
-
-//     //   cell = {row:r, col:c};
-//   }
-
-// function copy1(e) {
-//   var [r, c] = getMousePosition(canvasElem, e);
-//   console.log("lastest"+r, c);
-//   var copy = data[c - 1][headers[r]];
-//   console.log("data which u copied"+copy);
-//   navigator.clipboard.writeText(copy);
-  
-// }
-//   // console.log("copy")
-//   canvasElem.addEventListener("click", copy1);
-//   // console.log("lastest"+r, c);
-//   console.log("copy started")
-//   document.getElementById("cop").style.color="green";
-// }
-// else{
-//   // canvasElem.removeEventListener("click", copy1);
-//   console.log("copy stoped")
-//   document.getElementById("cop").style.color="grey";
-// }
-
-//     // console.log("laets"+r,c);
-//     // var copy = data[c - 1][headers[r]];
-//     // navigator.clipboard.writeText(copy);
-//     // console.log(copy);
-
-
-//   }
 
 
 var flag1 = false;
@@ -349,7 +298,7 @@ function down1(e) {
   let sizeb = 30;
   startr = Math.floor(x / sizel);
   startc = Math.floor(y / sizeb);
-  console.log("start " + startr, startc); // 7 1
+  // console.log("start " + startr, startc); // 7 1
 //   ctx.fillStyle = "rgb(163, 164, 167)";
 //   // ctx.strokestyle = "black";
 //   ctx.fillRect(startr*sizeb, startc*sizel, sizel, sizeb);
@@ -363,13 +312,40 @@ function move(e) {
   let sizeb = 30;
   endr1 = Math.floor(x1 / sizel);
   endc1 = Math.floor(y1 / sizeb);
-console.log("start1 "+ startr,startc) ;// 7 1
-  console.log("end1 " + endr1, endc1); // 7 8
+console.log("start1 "+ startr,startc) ;// 7 1 1 4
+  console.log("end1 " + endr1, endc1); // 7 8 0 2
 
  
 
 // if(endr1==startr){
 var copy = "";
+
+// if(startr >= endr1 && startc >= endc1){
+
+//   for (let i = startc; i <= endc1; i++) { // 0 2
+//     for (let j = startr; j <= endr1; j++) {  // 1 4
+//       ctx.fillStyle = "rgb(172, 218, 236)";
+    
+//       ctx.fillRect(i * sizel, j* sizeb, sizel, sizeb);
+     
+//       ctx.font = `${18}px areal `;
+
+      
+//       ctx.fillStyle = "black";
+//       ctx.fillText(data[i-1][headers[j]], j * sizel + 2, (i + 1) * sizeb - 5);
+//       ctx.strokeRect(k * sizel, i * sizeb, sizel, sizeb);
+//        copy += data[i - 1][headers[j]] + "\n";
+//       // console.log("data which u copied"+copy);
+//       navigator.clipboard.writeText(copy);
+            
+//     }
+//   }
+// }
+// else{
+
+
+if(startc>0 && startr>=0){
+
   for (let i = startr; i <= endr1; i++) {
     for (let j = startc; j <= endc1; j++) {
       ctx.fillStyle = "rgb(172, 218, 236)";
@@ -389,7 +365,7 @@ var copy = "";
     }
   }
 
-
+}
 
 
 }
@@ -444,6 +420,9 @@ drag1.onclick = () =>{
     
     let sizel = 150;
     let sizeb = 30;
+
+
+
     for (let i = startr; i <= endr1; i++) {
       for (let j = startc; j <= endc1; j++) {
         ctx.fillStyle = "white";
@@ -465,6 +444,185 @@ drag1.onclick = () =>{
     document.getElementById("paste").style.color="grey";
   }
 }
+
+
+
+
+
+
+// graph
+var startgr =0;
+var startgc =0;
+var endgr1 =0;
+var endgc1 =0;
+
+function down2(e) {
+  let rect = canvasElem.getBoundingClientRect();
+  let x = e.clientX - rect.left;
+  let y = e.clientY - rect.top;
+  let sizel = 150;
+  let sizeb = 30;
+  startgr = Math.floor(x / sizel);
+  startgc = Math.floor(y / sizeb);
+  console.log("startgraph" + startgr, startgc); // 7 1  2 3
+
+}
+const ctx1 = document.getElementById('myChart');
+function up2(e,p1){
+ console.log(p1)
+    let rect = canvasElem.getBoundingClientRect();
+    let x1 = e.clientX - rect.left;
+    let y1 = e.clientY - rect.top;
+    let sizel = 150;
+    let sizeb = 30;
+    endgr1 = Math.floor(x1 / sizel);
+    endgc1 = Math.floor(y1 / sizeb);
+
+    console.log("endgraph" + endgr1, endgc1); // 7 8  5 3
+
+    let labels1 = [];
+    let data1 = [];
+    var count =0;
+    var count2 =0;
+   
+
+    for (let i = startgr; i <= endgr1; i++) {   // 2 3  // 2  5
+      for (let j = startgc; j <= endgc1; j++) { //  3 3
+     
+      
+
+        data1[count2] = data[j-1][headers[i]];    
+       
+      }
+      count2++;
+    }
+    console.log(data1);
+
+    for(let i =startgr;i<=endgr1;i++){
+         labels1[count] = headers[i];
+         count++;
+    }
+    console.log(labels1);
+  
+   if(draw!=null)
+    draw.destroy();
+
+    
+    draw = new Chart(ctx1, {
+      type: p1,
+      data: {
+        labels: labels1, // headers
+        datasets: [{
+          label: '# of Votes',
+          data: data1, //data
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+ 
+}
+
+// main call of graph
+var graph1 = document.querySelector("#grp");
+
+var draw;
+var flag5 = false;
+var p1 = null;
+graph1.onclick = () =>{
+  if (flag5 == true) {
+    flag5 = false;
+  } else {
+    flag5 = true;
+  }
+
+  if (flag5) {
+    p1 = "bar";
+    document.getElementById("grp").style.background="green";
+    document.getElementById("myChart").style.display="block"; 
+ 
+
+
+
+    canvasElem.addEventListener("mousedown", down2);
+    canvasElem.addEventListener("mouseup",(e) => up2(e, p1));
+
+ 
+    console.log("startgraph1" + startgr, startgc); // 13 
+    console.log("endgraph1 " + endgr1, endgc1);   //6
+// 
+
+
+
+
+
+
+
+ 
+
+  } else {
+    canvasElem.removeEventListener("mousedown", down2);
+    canvasElem.removeEventListener("mouseup", up2);
+    document.getElementById("grp").style.background="grey";
+ 
+    document.getElementById("myChart").style.display="none"; 
+  
+   
+  }
+}
+
+
+var lineg = document.querySelector("#line");
+var flag6 = false;
+var p2 = null;
+lineg.onclick = () =>{
+  if (flag6 == true) {
+    flag6 = false;
+  } else {
+    flag6 = true;
+  }
+
+  if (flag6 ) {
+   p2 = "line";
+    document.getElementById("line").style.background="green";
+    document.getElementById("myChart").style.display="block"; 
+  
+    // draw.destroy();
+
+    canvasElem.addEventListener("mousedown", down2);
+    canvasElem.addEventListener("mouseup", (e) => up2(e, p2));
+
+ 
+    // console.log("startgraph1" + startgr, startgc); // 13 
+    // console.log("endgraph1 " + endgr1, endgc1);   //6
+// 
+
+
+
+ 
+
+  } else {
+
+    canvasElem.removeEventListener("mousedown", down2);
+    canvasElem.removeEventListener("mouseup", up2);
+    document.getElementById("line").style.background="grey";
+  //  draw.destroy();
+    document.getElementById("myChart").style.display="none"; 
+  
+   
+  }
+}
+
+
+
+
 
 
 

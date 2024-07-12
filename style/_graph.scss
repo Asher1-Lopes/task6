@@ -1,0 +1,13 @@
+.graph{
+    display:flex;
+    justify-content: center;
+    // padding-top:30px;
+    // align-items: center;
+    height:300px;
+    // width:600px;
+
+    canvas{
+        height:400px;
+        width:600px;
+    }
+}

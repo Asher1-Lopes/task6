@@ -100,6 +100,40 @@ nav a {
 }
 .sub-container .mid2 {
   flex-grow: 1;
+  display: flex;
+  align-items: center;
+}
+.sub-container .mid2 .button1 {
+  padding: 3px;
+  min-width: 150px;
+  max-width: 150px;
+  text-align: center;
+  background-color: grey;
+  color: white;
+  border-radius: 5px;
+  box-shadow: 1px 1px 1px black;
+  position: relative;
+}
+.sub-container .mid2 span .graph12 {
+  display: none;
+}
+.sub-container .mid2 span:hover .graph12 {
+  display: flex;
+  flex-direction: column;
+  width: 150px;
+  align-items: center;
+  background-color: rgb(177, 179, 176);
+  position: absolute;
+  z-index: 1;
+}
+.sub-container .mid2 span:hover .graph12 button {
+  width: 100px;
+  padding: 3px;
+  margin: 3px;
+  text-align: center;
+  background-color: grey;
+  color: white;
+  border-radius: 5px;
 }
 
 .maincontainer {
@@ -112,7 +146,7 @@ nav a {
 .maincontainer .h2 {
   text-align: center;
 }
-.maincontainer canvas {
+.maincontainer .canvas {
   background-color: none;
 }
 .maincontainer .hidden {
@@ -126,4 +160,14 @@ nav a {
   width: 150px;
   background: white;
   outline: none;
+}
+
+.graph {
+  display: flex;
+  justify-content: center;
+  height: 300px;
+}
+.graph canvas {
+  height: 400px;
+  width: 600px;
 }/*# sourceMappingURL=style.css.map */
