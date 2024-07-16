@@ -320,28 +320,7 @@ console.log("start1 "+ startr,startc) ;// 7 1 1 4
 // if(endr1==startr){
 var copy = "";
 
-// if(startr >= endr1 && startc >= endc1){
 
-//   for (let i = startc; i <= endc1; i++) { // 0 2
-//     for (let j = startr; j <= endr1; j++) {  // 1 4
-//       ctx.fillStyle = "rgb(172, 218, 236)";
-    
-//       ctx.fillRect(i * sizel, j* sizeb, sizel, sizeb);
-     
-//       ctx.font = `${18}px areal `;
-
-      
-//       ctx.fillStyle = "black";
-//       ctx.fillText(data[i-1][headers[j]], j * sizel + 2, (i + 1) * sizeb - 5);
-//       ctx.strokeRect(k * sizel, i * sizeb, sizel, sizeb);
-//        copy += data[i - 1][headers[j]] + "\n";
-//       // console.log("data which u copied"+copy);
-//       navigator.clipboard.writeText(copy);
-            
-//     }
-//   }
-// }
-// else{
 
 
 if(startc>0 && startr>=0){

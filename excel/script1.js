@@ -9,8 +9,15 @@ constructor(csv, wraper){
     // this.init();
     this.f = false;
 
-    
-
+    var startr = 0;
+var startc = 0;
+var endr1 = 0;
+var endc1 = 0;
+this.startr = startr;
+this.startc = startc;
+this.endr1 = endr1;
+this.endc1 = endc1
+this.flag = false
 }
 
 
@@ -49,6 +56,8 @@ this.data.addEventListener("click", (e)=> this.click(e,this.data))
 this.data.addEventListener("dblclick", (e)=> this.dblclick(e,this.data)) 
 
 
+this.down = (e)=> this.mousedown1(e,this.data,this.cell)
+this.data.addEventListener("mousedown", this.down) 
 
 
 
@@ -112,7 +121,6 @@ return canvas;
 
 
 
-
 csvToJson() {
     const lines = this.csv.split("\n");
    
@@ -125,7 +133,7 @@ csvToJson() {
 let nos = ['1','2','3','4','2','3','4','2','3','4','2','3','4','2','3','4','2','3','4','2','3','4','2','3','4','2','3','4'];
 let alpha = ['a','b','c','d','e','f','g','h','i','k','l','h','i','k','l'];
 
-let sizel = [100,100,150,100,100,100,200,100,200,100,100,100,100,100,100,100]
+let sizel = [150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150]
 this.sizel = sizel;
 
 
@@ -205,7 +213,7 @@ let counter =0;
     
 
 
-
+this.active = this.arr2d[0][0];
 
 
   }
@@ -262,8 +270,7 @@ sidebar(alpha){
 
   this.leftctx.fillStyle = "grey";
   this.leftctx.strokestyle = alpha.color;
-  // console.log(data.data);
-  // this.ctx.fillRect(data.x, data.y,data.sizel,data.sizeb);  //arr[j]
+ 
   this.leftctx.fillRect( alpha.xpos, alpha.ypos, alpha.width, alpha.height); 
   this.leftctx.strokeRect( alpha.xpos, alpha.ypos, alpha.width, alpha.height); //arr[j]
   this.leftctx.fillStyle = "black";
@@ -322,19 +329,7 @@ dblclick(e,data){
 }
 
 
-click(e,data)
-{
-  var [r, c] = this.position(data, e);
-  // this.cell = this.data[r][c]
-  this.cell = this.arr2d[c][r-1];
 
- console.log(r,c) 
- console.log(this.cell.data)
-//  console.log(this.data[r][c]) 
-
-// this.inputtext( r,c,e,this.cell,this.datactx);
-
-}
 
 
 
@@ -345,7 +340,7 @@ click(e,data)
 
   // console.log(r,c)
 
-  let element = document.querySelector(".hidden");
+  var element = document.querySelector(".hidden");
   this.element = element;
  this.element.style.width=`${cell.width}px` 
  this.element.style.height=`${cell.height}px`
@@ -380,7 +375,7 @@ click(e,data)
   cell.data = nvalue;
 
 
-  datactx.clearRect(cell.xpos, cell.ypos, cell.width, cell.height);
+  this.datactx.clearRect(cell.xpos, cell.ypos, cell.width, cell.height);
   // this.datacell(cell)
   this.datactx.save();
   this.datactx.fillStyle = "white";
@@ -405,18 +400,201 @@ this.datactx.stroke();
     this.f = false;
     
     this.element.removeEventListener("blur", this.x);
+  
    
   }
 }
 
 
 
+click(e,data)
+{
+  var [r, c] = this.position(data, e);
+  // this.cell = this.data[r][c]
+
+  this.cell = this.arr2d[c][r-1];
+
+  // return {row:r,col:c};
+
+
+
+
+ 
+
+this.element.style.display="none";
+
+
+
+
+
+}
+
+// keys(){
 
 
 
 
 
 
+
+// }
+
+
+move(e,data,cell){
+
+  // console.log("cell"+cell.width)
+      let rect = data.getBoundingClientRect();
+      let sum=0;
+
+let r=0;
+    let x1 = e.clientX - rect.left;
+    let y1 = e.clientY - rect.top;
+
+    for(let i =0;i<length;i++){
+
+      if(x1>sum){
+        r++
+      }else{
+        break;
+      }
+    sum += this.sizel[i];
+    
+     }
+this.sizel
+  let sizel = 150;
+    let sizeb = 30;
+    this.endr1 = Math.floor(x1 / sizel);
+    this.endc1 = Math.floor(y1 / sizeb);
+  console.log("start1 "+ this.startr,this.startc) ;// 7 1 1 4
+    console.log("end1 " + this.endr1, this.endc1); // 7 8 0 2
+ let maxi = Math.max(this.startr,this.endr1)
+  let mini = Math.min(this.startr,this.endr1)
+
+  let maxj = Math.max(this.startc,this.endc1)
+  let minj = Math.min(this.startc,this.endc1) 
+
+
+  for (let i = mini; i <= maxi; i++) {
+    for (let j = minj; j <= maxj; j++) {
+      // let sizel = this.sizel[i];
+      this.datactx.fillStyle = "rgb(172, 218, 236)";
+    
+      this.datactx.fillRect(i * sizel, j* sizeb, sizel, sizeb);
+     
+      this.datactx.font = `${18}px areal `;
+
+      
+      this.datactx.fillStyle = "black";
+      this.datactx.fillText("hi", i * sizel + 2, (j + 1) * sizeb - 5);
+      this.datactx.strokeRect(i * sizel, j * sizeb, sizel, sizeb);
+      
+      // console.log("data which u copied"+copy);
+  this.flag = true;
+            
+    }
+  }
+
+
+
+
+
+
+}
+
+mouseup(e,data,cell){
+  // console.log(data)
+  let sum=0;
+
+let r=0;
+    let rect = this.data.getBoundingClientRect();
+    let x1 = e.clientX - rect.left;
+    for(let i =0;i<length;i++){
+
+      if(x1>sum){
+        r++
+      }else{
+        break;
+      }
+    sum += this.sizel[i];
+    
+     }
+  
+    let y1 = e.clientY - rect.top;
+    let sizel = 150;
+
+    // let y1 = e.clientY - rect.top;
+    // let sizel = 150;
+    let sizeb = 30;
+    this.endr1 = Math.floor(x1 / sizel);
+    this.endc1 = Math.floor(y1 / sizeb);
+     
+    console.log("end1 " + this.endr1, this.endc1); // 7 8
+
+// console.log(cell)
+  
+
+
+// // canvasElem.removeEventListener("mousemove", move);
+
+
+data.removeEventListener("mousemove", this.mo);
+data.removeEventListener("mouseup", this.up);
+// data.removeEventListener("mousedown", this.down);
+
+
+}
+
+
+
+mousedown1(e,data,cell){
+
+ 
+  let length = this.sizel.length;
+  console.log(length)
+  // this.cell = cell;
+  console.log(cell)
+  this.active = cell;
+let sum=0;
+
+let r=0;
+  // console.log(data)
+  let rect = data.getBoundingClientRect();
+  let x = e.clientX - rect.left;
+
+  for(let i =0;i<length;i++){
+
+    if(x>sum){
+      r++
+    }else{
+      break;
+    }
+  sum += this.sizel[i];
+  
+   }
+
+  let y = e.clientY - rect.top;
+  let sizel = 150;
+  let sizeb = 30;
+  this.startr = Math.floor(x / sizel);
+ this.startc = Math.floor(y / sizeb);
+  console.log("start " + this.startr, this.startc); // 7 1
+
+
+  this.mo = (e)=> this.move(e,data,this.active)
+  data.addEventListener("mousemove", this.mo) 
+  
+  
+  
+ 
+
+ 
+this.up = (e)=> this.mouseup(e,data,cell)
+data.addEventListener("mouseup",this.up) 
+
+
+
+
+}
 
 
 
