@@ -52,7 +52,49 @@
      </div>
 
 
-
+<script>
+  drawOptimized() {
+        this.ctx?.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height)
+        let canvaWidth = this.canvasElement.offsetWidth
+        let canvaHeight = this.canvasElement.offsetHeight
+ 
+        let initHeight = 0
+        let newScrollY = this.scrollY * this.cellheight / 100
+        console.log("🚀 ~ Excel ~ drawOptimized ~ newScrollY:", newScrollY)
+        let newScrollX = this.scrollX
+        this.ctx?.translate(-newScrollX, -newScrollY)
+ 
+        for (let i = newScrollY / this.cellheight; i < this.data.length; i++) {
+            const row = this.data[i];
+            if (initHeight > canvaHeight + newScrollY) {
+                break
+            } else {
+                let initWidth = 0
+                initHeight += row[0].height
+ 
+                // this.drawCell(row[0])
+                for (let j = 0; j < row.length; j++) {
+                    const col = row[j];
+                    if (initWidth >= newScrollX && initWidth <= canvaWidth) {
+                        this.drawCell(col)
+                    }
+                    if (initWidth > canvaWidth) break
+                }
+                // if (initHeight >= newScrollY && initHeight <= canvaHeight) {
+                // }
+                // if (initHeight > canvaHeight + newScrollY) break
+            }
+        }
+        this.ctx?.setTransform(1, 0, 0, 1, 0, 0);
+ 
+        // if (this.data.length && this.data[0].length) {
+        //     if (!this.activeInputCell) {
+        //         this.activeInputCell = this.data[0][0]
+        //     }
+        //     this.highLightCell(this.activeInputCell)
+        // }
+    }
+</script>
      
 </body>
 </html>

@@ -2,4 +2,141 @@ body {
   margin: 0;
   padding: 0;
   background-color: white;
+}
+
+nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+  background-color: #6E6E6E;
+  color: #288754;
+  font-size: larger;
+  font-weight: bold;
+  height: 3em;
+}
+nav .mid {
+  flex-grow: 1;
+}
+nav .mid input {
+  min-width: 400px;
+  border-radius: 10px;
+  border: none;
+  text-align: center;
+  padding: 5px;
+}
+nav a {
+  text-decoration: none;
+  color: white;
+  margin-right: 3px;
+}
+
+.sub-container {
+  margin: 10px;
+  display: flex;
+  flex-direction: row;
+  background-color: #e4e4e4;
+  border-radius: 5px;
+  height: 100px;
+  padding: 5px;
+  text-align: center;
+}
+.sub-container .subdiv {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  justify-content: center;
+  border-right: 1px solid rgb(190, 186, 186);
+}
+.sub-container .subdiv i {
+  margin: 3px;
+  color: grey;
+}
+.sub-container .subdiv span {
+  margin: 3px;
+  color: grey;
+}
+.sub-container .block2 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.sub-container .block2 .block21 {
+  display: flex;
+  flex-direction: column;
+  margin: 3px;
+}
+.sub-container .mid1 {
+  flex-grow: 1;
+}
+.sub-container .mid1 .btns {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.sub-container .mid1 .btns .hidden {
+  display: none;
+}
+.sub-container .mid1 .btns label div {
+  padding: 3px;
+  min-width: 150px;
+  text-align: center;
+  background-color: grey;
+  color: white;
+  border-radius: 5px;
+  box-shadow: 1px 2px 1px 1px black;
+}
+.sub-container .mid1 .btns label div i {
+  color: black;
+}
+.sub-container .mid1 .btns button {
+  padding: 3px;
+  min-width: 150px;
+  text-align: center;
+  background-color: grey;
+  color: white;
+  border-radius: 5px;
+  box-shadow: 1px 1px 1px black;
+}
+.sub-container .mid2 {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+}
+.sub-container .mid2 .button1 {
+  padding: 3px;
+  min-width: 150px;
+  max-width: 150px;
+  text-align: center;
+  background-color: grey;
+  color: white;
+  border-radius: 5px;
+  box-shadow: 1px 1px 1px black;
+  position: relative;
+}
+.sub-container .mid2 span .graph12 {
+  display: none;
+}
+.sub-container .mid2 span:hover {
+  position: relative;
+}
+.sub-container .mid2 span:hover .graph12 {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  top: 30px;
+  right: 0px;
+  align-items: center;
+  background-color: rgb(177, 179, 176);
+  position: absolute;
+  z-index: 2;
+}
+.sub-container .mid2 span:hover .graph12 button {
+  width: 100px;
+  padding: 3px;
+  margin: 3px;
+  text-align: center;
+  background-color: grey;
+  color: white;
+  border-radius: 5px;
 }/*# sourceMappingURL=style.css.map */
