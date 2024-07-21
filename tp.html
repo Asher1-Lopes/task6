@@ -1,198 +1,45 @@
-class excel {
-
-  constructor(csv, wraper){
-      this.wraper = wraper;
-      this.csv = csv;
-      this.init(); 
-      this.topgrid();
-      this.csvToJson();
-      // this.init();
-  
-  }
-  
-  
-  init(){
-  
-  let headers = this.canvas(1000,30,"red")
-  let leftheaders = this.canvas(100,500,"blue")
-  let data = this.canvas(1000-100,500,"green")
-  this.headersctx = headers.getContext("2d")
-  this.leftctx = leftheaders.getContext("2d")
-  this.datactx = data.getContext("2d")
-  this.wraper.appendChild(headers);
-  
-  let div = document.createElement('div');
-  div.classList.add("subwrapper")
-  div.appendChild(leftheaders);
-  div.appendChild(data);
-  this.wraper.appendChild(div);
-  
-  
-  // div.style.display = "flex";
-  // div.style.flexDirection = "row"
-  // data.style.flexGrow ="1";
-  
-  let stylesheet = document.createElement("style")
-          stylesheet.textContent = `
-          .subwrapper{
-          display:flex;
-          flex-direction : row;
-        
-  
-          }
-  
-    
-          
-          `
-   document.head.appendChild(stylesheet)
-  
-  
-  
-  
-  }
-  
-  canvas(width,height,color){
-  let canvas = document.createElement('canvas');
-  canvas.width = width;
-  canvas.height = height;
-  canvas.style.background = color;
-  
-  return canvas;
-  
-  }
-  
-  
-  createdata(){
-  
-  }
-  csvToJson() {
-      const lines = this.csv.split("\n");
-     
-      this.arr2d = []
-  
-     let headers = lines[0].split(",");
-   
-      this.arr2d = [];
-      let header1d = [];
-  // let alpha = ['a','b','c','d','e'];
-  // let alpha1d = [];
-  
-      // for(let i=0;i<alpha.length;i++){
-      //     let rectData = {};
-      //     rectData["xpos"] = j * 100;
-      //     rectData["ypos"] = 0;
-      //     rectData["width"] = 100;
-      //     rectData["height"] = 30;
-      //     rectData["color"] = "black";
-      //     rectData["data"] = alpha[i];
-      //     alpha1d.push(rectData);
-      //     this.headercell(rectData); 
-      // }
-  
-      for (let j = 0; j < headers.length; j++) {
-        let rectData = {};
-        rectData["xpos"] = j * 100;
-        rectData["ypos"] = 0;
-        rectData["width"] = 100;
-        rectData["height"] = 30;
-        rectData["color"] = "black";
-        rectData["data"] = headers[j];
-        header1d.push(rectData);
-        this.datacell(rectData);
-      }
-      this.arr2d.push(header1d);
-  
-      for (let i = 1; i < lines.length; i++) {
-        let data1d = [];
-        for (let j = 0; j < headers.length; j++) {
-          let rectData = {};
-          rectData["xpos"] = j * 100;
-          rectData["ypos"] = i * 30;
-          rectData["width"] = 100;
-          rectData["height"] = 30;
-          rectData["color"] = "black";
-          rectData["data"] = lines[i].split(",")[j];
-          data1d.push(rectData);
-          this.datacell(rectData);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marching Ants Animation</title>
+    <style>
+        canvas {
+            border: 1px solid black;
         }
-        this.arr2d.push(data1d);
-   
-      }
-      console.log(this.arr2d);
-  
+    </style>
+</head>
+<body>
+    <canvas id="myCanvas" width="500" height="500"></canvas>
+    <script >
       
-  
-  
-  
-  
-  
-    }
-  
-  
-    datacell(data){
-      this.datactx.fillStyle = "white";
-      this.datactx.strokestyle = data.color;
-      // console.log(data.data);
-      // this.ctx.fillRect(data.x, data.y,data.sizel,data.sizeb);  //arr[j]
-      this.datactx.fillRect(data.xpos, data.ypos,data.width,data.height); 
-      this.datactx.strokeRect(data.xpos, data.ypos,data.width,data.height); //arr[j]
-      this.datactx.fillStyle = "black";
-      this.datactx.font = `${18}px areal`;
-      this.datactx.fillText(data.data, data.xpos  + 2, data.ypos-5);
-      this.datactx.stroke();
-    }
-  
-  //   headercell(data){
-  //     this.headersctx.fillStyle = "white";
-  //     this.headersctx.strokestyle = data.color;
-  //     // console.log(data.data);
-  //     // this.ctx.fillRect(data.x, data.y,data.sizel,data.sizeb);  //arr[j]
-  //     this.headersctx.fillRect(data.xpos, data.ypos,data.width,data.height); 
-  //     this.headersctx.strokeRect(data.xpos, data.ypos,data.width,data.height); //arr[j]
-  //     this.headersctx.fillStyle = "black";
-  //     this.headersctx.font = `${18}px areal`;
-  //     this.headersctx.fillText(data.data, data.xpos  + 2, data.ypos-5);
-  //     this.headersctx.stroke();
-  //   }
-  
-  
-  
-  
-  // topgrid(){
+      const canvas = document.getElementById('myCanvas');
+const ctx = canvas.getContext('2d');
+let offset = 0;
+
+function drawLine() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+    ctx.setLineDash([5, 5]); // Define the dash pattern
+    ctx.lineDashOffset = -offset; // Set the offset to create the marching effect
+
+    ctx.beginPath();
+    ctx.moveTo(50, 50); // Starting point of the line
+    ctx.lineTo(450, 450); // Ending point of the line
+    ctx.strokeStyle = 'black'; // Color of the line
+    ctx.lineWidth = 2; // Width of the line
+    ctx.stroke();
+}
+
+function animate() {
+    offset += 1; // Increment the offset to create the animation
+    drawLine();
+    requestAnimationFrame(animate); // Call animate recursively
+}
+
+animate(); // Start the animation
+
       
-  //     for(let i =0;i<1;i++){
-  //   for(let j=0;j<5;j++){
-  //     this.headersctx.fillStyle = "white";
-  //     this.headersctx.strokestyle = "black";
-  //     this.headersctx.fillRect(j*100,i*30,100,30); 
-  //     this.headersctx.strokeRect(j*100,i*30,100,30); //arr[j]
-  
-  //     this.headersctx.stroke();
-  //   }
-  //     }
-  
-  
-    
-  // }
-  
-  
-  
-  hdata = [
-      {x : 0, y: 0 , sizel : 100,sizeb:30},
-     
-  ]
-  
-  
-  rect(hdata){
-      this.headersctx.fillStyle = "white";
-      this.headersctx.strokestyle = "black";
-      // this.ctx.fillRect(data.x, data.y,data.sizel,data.sizeb);  //arr[j]
-      this.headersctx.fillRect(hdata.x, hdata.y,hdata.sizel,hdata.sizeb); 
-      this.headersctx.strokeRect(hdata.x, hdata.y,hdata.sizel,hdata.sizeb); //arr[j]
-     
-      this.headersctx.stroke();
-  }
-  
-  }
-  
-  
+    </script>
+</body>
+</html>

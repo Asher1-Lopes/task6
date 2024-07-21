@@ -25,6 +25,11 @@ this.boole = false
 this.scrollY = 0
 this.cellheight = 30
 this.scrollX =0
+// this.offset = 0;
+// this.animate = this.animate.bind(this); // Ensure `this` context is bound
+// requestAnimationFrame(this.animate); // Start the animation
+// this.startAnimation()
+
 }
 
 
@@ -50,6 +55,21 @@ this.wraper.appendChild(headers);
 let div = document.createElement('div');
 this.div = div
 this.div.classList.add("subwrapper")
+
+let div1 = document.createElement('div');
+div1.classList.add("draggable-div")
+
+let div2 = document.createElement('div');
+div2.classList.add("close-btnv")
+
+this.div.appendChild(div1);
+div1.appendChild(div2)
+{/* <div id="draggableDiv" class="draggable-div">
+<div class="close-btn" id="closeBtn">X</div>
+</div> */}
+
+
+
 this.div.appendChild(leftheaders);
 this.div.appendChild(data);
 this.wraper.appendChild(div);
@@ -290,16 +310,16 @@ this.active = this.arr2d[0][0];
         this.datactx.save();
         this.datactx.beginPath()
         this.datactx.fillStyle = "white";
-        this.datactx.strokestyle = data.color;
+        this.datactx.strokestyle = "black";
         this.datactx.rect(data.xpos, data.ypos,data.width,data.height);
         this.datactx.clip();
 
     this.datactx.fillStyle = "black";
     this.datactx.font = `${18}px areal`;
     this.datactx.fillText(data.data, data.xpos  + 2, data.ypos +data.height -5) ;
-    this.datactx.restore();
-    this.datactx.stroke();
 
+    this.datactx.stroke();
+    this.datactx.restore();
 
 
   }
@@ -553,6 +573,7 @@ line(){
 click(e,data)
 {
 if(this.acti){
+  console.log("acti"+this.acti.data)
   this.datactx.clearRect(this.acti.xpos, this.acti.ypos,this.acti.width, this.acti.height);
   this.datacell(this.acti)
 
@@ -788,24 +809,40 @@ if(col>0){
 
   }
 
+
+
 border(startr,startc,endr2,endc2){
+  // this.datactx.clearRect(0,0,this.data.width,this.data.height);
+  // this.csvToJson()
 console.log('starter'+startr,startc,endr2,endc2)
 console.log(this.arr2d[startc][startr].data)
 console.log(this.arr2d[endc2][endr2].data)
+console.log(this.selectedfinal[1])
 
+// this.offset = offset
 this.datactx.beginPath();
 
 // Set a start-point
 this.datactx.strokeStyle = "green";
+// this.datactx.setLineDash([5, 5]); // Define the dash pattern
+// this.datactx.lineDashOffset = -this.offset; 
 this.datactx.lineWidth = 4;
-this.datactx.moveTo(this.arr2d[startc][startr].xpos,this.arr2d[startc][startr].ypos);
+this.datactx.moveTo(this.arr2d[startc][startr].xpos,this.arr2d[startc][startr].ypos); // start 
 
 // Set an end-point
-this.datactx.lineTo(this.arr2d[startc][startr].xpos,this.arr2d[endc2][endr2].ypos);
-this.datactx.lineTo(this.arr2d[endc2][endr2].xpos,this.arr2d[startc][startr].ypos);
 
-this.datactx.lineTo(this.arr2d[endc2][endr2].xpos,this.arr2d[endc2][endr2].ypos);
-this.datactx.lineTo(this.arr2d[endc2][endr2].xpos,this.arr2d[endc2][endr2].ypos);
+this.datactx.lineTo(this.arr2d[startc][startr].xpos,this.arr2d[endc2][endr2].ypos +this.arr2d[endc2][endr2].height);  // straight line first
+
+this.datactx.moveTo(this.arr2d[startc][startr].xpos,this.arr2d[startc][startr].ypos); 
+this.datactx.lineTo(this.arr2d[endc2][endr2].xpos + this.arr2d[endc2][endr2].width,this.arr2d[startc][startr].ypos);  
+
+this.datactx.moveTo(this.arr2d[endc2][endr2].xpos + this.arr2d[endc2][endr2].width,this.arr2d[startc][startr].ypos); 
+this.datactx.lineTo(this.arr2d[endc2][endr2].xpos + this.arr2d[endc2][endr2].width ,this.arr2d[endc2][endr2].ypos+this.arr2d[endc2][endr2].height);
+
+this.datactx.moveTo(this.arr2d[endc2][endr2].xpos + this.arr2d[endc2][endr2].width ,this.arr2d[endc2][endr2].ypos+this.arr2d[endc2][endr2].height); 
+this.datactx.lineTo(this.arr2d[startc][startr].xpos ,this.arr2d[endc2][endr2].ypos+this.arr2d[endc2][endr2].height);
+
+
 
 // Draw it
 this.datactx.stroke();
@@ -813,47 +850,35 @@ this.datactx.restore();
 this.datactx.closePath();
 
 
-//   // this.datactx.beginPath();
-
-//   // // Set a start-point
-//   // this.datactx.strokeStyle = "green";
-//   // this.datactx.lineWidth = 6;
-//   // this.datactx.moveTo(this.acti.xpos,);
-  
-//   // // Set an end-point
-//   // this.datactx.lineTo(this.acti.xpos+this.acti.width+50,30);
-  
-//   // // Draw it
-//   // this.datactx.stroke();
-//   // this.datactx.restore();
-
-
-// console.log("now"+this.arr2d[startr][startc+1].data)
-
-// console.log(this.arr2d[endr2][endc2])
-// //   for(let i =0;i<1;i++){
-// //     for(let j=startc;j<=endc2;j++){
-// // total += this.arr2d[j][i].xpos-50
-// //   //     this.datactx.strokeStyle = "green";
-// //   // this.datactx.lineWidth = 6;
-// //   // this.datactx.moveTo(this.arr2d[j][i].xpos,this.arr2d[j][i].ypos);
-  
-// //   // // Set an end-point
-// //   // this.datactx.lineTo(this.arr2d[j][i].xpos+this.arr2d[j][i].width,this.arr2d[j][i].ypos);
-  
-// //   // // Draw it
-// //   // this.datactx.stroke();
-// //   // this.datactx.restore();
-
-
-// //     }
-// //     console.log("total" + total)
-// //     total=0;
-  
-// //   }
 
   
 }
+// startAnimation(startr, startc, endr2, endc2) {
+//   this.startr = startr;
+//   this.startc = startc;
+//   this.endr2 = endr2;
+//   this.endc2 = endc2;
+//   this.animate(); // Start the animation
+// }
+
+// animate() {
+//   this.offset += 1; // Increment the offset to create the animation
+//   this.border(this.startr,this.startc,this.endr1, this.endc1);
+//   requestAnimationFrame(this.animate); // Call animate recursively
+// }
+
+// startAnimation() {
+//   // this.startr = startr;
+//   // this.startc = startc;
+//   // this.endr2 = endr2;
+//   // this.endc2 = endc2;
+//   this.animate(); // Start the animation
+// }
+
+
+
+
+
 move(e,data,cell){
 
     let[prevstartr,prevstartc] =[this.startr,this.startc ]
@@ -934,7 +959,10 @@ mouseup(e,data,cell){
     // console.log("end1 " + this.endr1, this.endc1); // 7 8
     console.log("start1 "+ this.startr,this.startc) ;// 7 1 1 4
     console.log("end1 " + this.endr1, this.endc1); // 7 8 0 2
-    this.border(this.startr,this.startc,this.endr1, this.endc1)
+    
+    // this.border(this.startr,this.startc,this.endr1, this.endc1)
+  
+    
 
     console.log(this.arr2d[this.endc1][this.endr1].data)
 
@@ -953,7 +981,7 @@ mouseup(e,data,cell){
      let sum1 = 0;
     let  counter=0;
     let  arr=[];
-    // if(this.endr1==this.startr){
+
 let multi = 1
   for (let i = mini; i <= maxi; i++) {
     for (let j = minj; j <= maxj; j++) {
@@ -965,34 +993,24 @@ let multi = 1
           // sum += j;
         }
       }
-  // }else{
-  // //     alert("select from same row");
-  // }
+
       console.log("multi" + multi)
       console.log("sum"+sum1);
       console.log(Math.max(...arr));
       console.log(Math.min(...arr));
       var mean = sum1/counter;
       console.log("mean"+mean);
-  //     if(endr1==startr){  
-  // // alert("addition"+sum1 +"\nmean"+mean+"\nmax"+Math.max(...arr)+"\n min"+Math.min(...arr));
-  //     }
-  // canvasElem.removeEventListener("mouseup", up);
+
       sum1 = 0;
       counter=0;
       arr=[];
       multi = 1;
 
-      // var highlight_selec=(e)=> {
-      //   console.log("start11- "+ this.startr,this.startc) ;// 7 1 1 4
-      //   console.log("end11- " + this.endr1, this.endc1); // 7 8 0 2
-      // }
-
-      // data.addEventListener('mousedown',highlight_selec)
+  
 
 
 
-
+// this.csvToJson()
 
 
 
@@ -1088,7 +1106,7 @@ let sum =0;
  for(let i =0;i<this.sizel.length;i++){
   // const   = this.sizel[i];
 
-    if(sum +4> x && x>sum && x>56){
+    if(sum +4> x && x>sum  && x>56){
          this.headers.style.cursor = "col-resize"
 
       this.headers.addEventListener("mousedown", (e)=> this.redown(e,this.headers))
@@ -1139,12 +1157,14 @@ redown(e,headers){
 }
   var resize_mouseup=(e)=> {
 
+  if(this.prev_width+addition>50){
   this.sizel[x7-2]=this.prev_width+addition
   console.log(this.sizel)
   headers.removeEventListener("mousemove",resize_mousemove)
   this.headerdraw()
   this.csvToJson()
   headers.removeEventListener('mouseup',resize_mouseup)
+  }
 }
 headers.addEventListener('mousemove',resize_mousemove)
 headers.addEventListener('mouseup',resize_mouseup)

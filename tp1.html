@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draggable Div on Canvas</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        canvas {
+            border: 1px solid black;
+            display: block;
+            margin: 20px auto;
+        }
+        .draggable-div {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-color: rgba(0, 128, 0, 0.5);
+            border: 2px solid green;
+            display: none;
+        }
+        .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            color: white;
+            text-align: center;
+            line-height: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="myCanvas" width="500" height="500"></canvas>
+    <!-- this need to be added in js -->
+    <div id="draggableDiv" class="draggable-div">
+        <div class="close-btn" id="closeBtn">X</div>
+    </div>
+    
+    <script >
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('myCanvas');
+            const draggableDiv = document.getElementById('draggableDiv');
+            const closeBtn = document.getElementById('closeBtn');
+        
+            let isDragging = false;
+            let offsetX, offsetY;
+        
+            // Function to place the div on the canvas
+            canvas.addEventListener('click', (event) => {
+                const rect = canvas.getBoundingClientRect();
+                const x = event.clientX - rect.left;
+                const y = event.clientY - rect.top;
+        
+                draggableDiv.style.left = `${x}px`;
+                draggableDiv.style.top = `${y}px`;
+                draggableDiv.style.display = 'block';
+            });
+        
+            // Make the div draggable
+            draggableDiv.addEventListener('mousedown', (event) => {
+                if (event.target === closeBtn) return; // Do not start dragging if the close button is clicked
+        
+                isDragging = true;
+                const rect = draggableDiv.getBoundingClientRect();
+                offsetX = event.clientX - rect.left;
+                offsetY = event.clientY - rect.top;
+            });
+        
+            document.addEventListener('mousemove', (event) => {
+                if (isDragging) {
+                    draggableDiv.style.left = `${event.clientX - offsetX}px`;
+                    draggableDiv.style.top = `${event.clientY - offsetY}px`;
+                }
+            });
+        
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+        
+            // Close button functionality
+            closeBtn.addEventListener('click', () => {
+                draggableDiv.style.display = 'none';
+            });
+        });
+        
+    </script>
+</body>
+</html>
