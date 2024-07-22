@@ -37,59 +37,33 @@
     </style>
 </head>
 <body>
-    <canvas id="myCanvas" width="500" height="500"></canvas>
-    <!-- this need to be added in js -->
-    <div id="draggableDiv" class="draggable-div">
-        <div class="close-btn" id="closeBtn">X</div>
-    </div>
-    
-    <script >
-        document.addEventListener('DOMContentLoaded', () => {
-            const canvas = document.getElementById('myCanvas');
-            const draggableDiv = document.getElementById('draggableDiv');
-            const closeBtn = document.getElementById('closeBtn');
-        
-            let isDragging = false;
-            let offsetX, offsetY;
-        
-            // Function to place the div on the canvas
-            canvas.addEventListener('click', (event) => {
-                const rect = canvas.getBoundingClientRect();
-                const x = event.clientX - rect.left;
-                const y = event.clientY - rect.top;
-        
-                draggableDiv.style.left = `${x}px`;
-                draggableDiv.style.top = `${y}px`;
-                draggableDiv.style.display = 'block';
-            });
-        
-            // Make the div draggable
-            draggableDiv.addEventListener('mousedown', (event) => {
-                if (event.target === closeBtn) return; // Do not start dragging if the close button is clicked
-        
-                isDragging = true;
-                const rect = draggableDiv.getBoundingClientRect();
-                offsetX = event.clientX - rect.left;
-                offsetY = event.clientY - rect.top;
-            });
-        
-            document.addEventListener('mousemove', (event) => {
-                if (isDragging) {
-                    draggableDiv.style.left = `${event.clientX - offsetX}px`;
-                    draggableDiv.style.top = `${event.clientY - offsetY}px`;
-                }
-            });
-        
-            document.addEventListener('mouseup', () => {
-                isDragging = false;
-            });
-        
-            // Close button functionality
-            closeBtn.addEventListener('click', () => {
-                draggableDiv.style.display = 'none';
-            });
+    <div>
+        <canvas id="myChart"></canvas>
+      </div>
+      
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      
+      <script>
+        const ctx = document.getElementById('myChart');
+      
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            datasets: [{
+              label: '# of Votes',
+              data: [12, 19, 3, 5, 2, 3],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
         });
-        
-    </script>
+      </script>
 </body>
 </html>
