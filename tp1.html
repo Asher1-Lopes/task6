@@ -1,69 +1,113 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marching Ants Animation</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="myCanvas" width="500" height="500"></canvas>
+    <script >
+      
+      const canvas = document.getElementById('myCanvas');
+const ctx = canvas.getContext('2d');
+let offset = 0;
+
+function drawLine() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+    ctx.setLineDash([5, 5]); // Define the dash pattern
+    ctx.lineDashOffset = -offset; // Set the offset to create the marching effect
+
+    ctx.beginPath();
+    ctx.moveTo(50, 50); // Starting point of the line
+    ctx.lineTo(450, 450); // Ending point of the line
+    ctx.strokeStyle = 'black'; // Color of the line
+    ctx.lineWidth = 2; // Width of the line
+    ctx.stroke();
+}
+
+function animate() {
+    offset += 1; // Increment the offset to create the animation
+    drawLine();
+    requestAnimationFrame(animate); // Call animate recursively
+}
+
+animate(); // Start the animation
+
+      
+    </script>
+</body>
+</html> -->
+// Sample 2D array
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Draggable Div on Canvas</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-        }
-        canvas {
-            border: 1px solid black;
-            display: block;
-            margin: 20px auto;
-        }
-        .draggable-div {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            background-color: rgba(0, 128, 0, 0.5);
-            border: 2px solid green;
-            display: none;
-        }
-        .close-btn {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            width: 20px;
-            height: 20px;
-            background-color: red;
-            color: white;
-            text-align: center;
-            line-height: 20px;
-            cursor: pointer;
-        }
-    </style>
+    <title>Search 2D Array</title>
 </head>
 <body>
-    <div>
-        <canvas id="myChart"></canvas>
-      </div>
-      
-      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-      
-      <script>
-        const ctx = document.getElementById('myChart');
-      
-        new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            datasets: [{
-              label: '# of Votes',
-              data: [12, 19, 3, 5, 2, 3],
-              borderWidth: 1
-            }]
-          },
-          options: {
-            scales: {
-              y: {
-                beginAtZero: true
-              }
+    <input type="text" id="searchInput" placeholder="Enter search term">
+    <button onclick="search2DArray()">Search</button>
+    <div id="results"></div>
+
+    <script>
+        let arr2d = [
+            ['apple', 'orange', 'banana'],
+            ['carrot', 'lettuce', 'spinach'],
+            ['dog', 'cat', 'rabbit']
+        ];
+        
+        // Function to search the 2D array
+        function search2DArray() {
+            // Get the search term from the input field
+            let searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        
+            // Array to store matched results
+            let results = [];
+        
+            // Loop through the 2D array
+            for (let i = 0; i < arr2d.length; i++) {
+                for (let j = 0; j < arr2d[i].length; j++) {
+                    // Convert each element to lowercase for case-insensitive comparison
+                    let element = arr2d[i][j].toLowerCase();
+                    // Check if the element contains the searchTerm
+                    if (element.includes(searchTerm)) {
+                        // If match found, push it to results array
+                        results.push(arr2d[i][j]);
+                    }
+                }
             }
-          }
-        });
-      </script>
+        
+            // Display results
+            displayResults(results);
+        }
+        
+        // Function to display results
+        function displayResults(results) {
+            let resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = ''; // Clear previous results
+        
+            if (results.length > 0) {
+                let resultHtml = '<p>Search results:</p>';
+                resultHtml += '<ul>';
+                results.forEach(result => {
+                    resultHtml += `<li>${result}</li>`;
+                });
+                resultHtml += '</ul>';
+                resultsDiv.innerHTML = resultHtml;
+            } else {
+                resultsDiv.innerHTML = '<p>No results found.</p>';
+            }
+        }
+        </script>
 </body>
 </html>
+
+

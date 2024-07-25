@@ -98,3 +98,30 @@
      
 </body>
 </html>
+this.leftctx.beginPath();
+this.leftctx.save();
+this.leftctx.fillStyle = "#E8E8E8";
+this.leftctx.strokestyle = "black";
+// console.log(data.data);
+// this.ctx.fillRect(data.x, data.y,data.sizel,data.sizeb);  //arr[j]
+this.leftctx.fillRect(
+  alpha.xpos,
+  alpha.ypos-this.scrollY,
+  alpha.width,
+  alpha.height
+);
+this.leftctx.strokeRect(
+  alpha.xpos,
+  alpha.ypos-this.scrollY,
+  alpha.width,
+  alpha.height
+); //arr[j]
+this.leftctx.fillStyle = "black";
+this.leftctx.font = `${18}px areal`;
+this.leftctx.fillText(
+  alpha.data,
+  alpha.xpos + 30,
+  alpha.ypos + alpha.height - 5-this.scrollY
+);
+this.leftctx.stroke();
+this.leftctx.restore()

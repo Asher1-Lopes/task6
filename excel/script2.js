@@ -30,4 +30,6 @@ frf,34,212,23,14,12,12, tghtr,rttt,tg,etg,etrg,334,23,33`;
 var ele = document.querySelector(".wraper");
 var excel1 = new excel(csv,ele);
 
+
+
                               

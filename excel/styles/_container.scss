@@ -1,3 +1,10 @@
+.sub1{
+ 
+    position: sticky;
+    top: 0px;
+    z-index: 1;
+    background-color: white;
+    // position: relative;
 .sub-container{
     margin:10px;
     display: flex;
@@ -9,7 +16,17 @@
     height:100px;
     padding:5px;
    text-align: center;
- 
+   position: relative;
+ .searchdiv{
+  position: absolute;
+  top: 200px;
+  left:100px;
+  width:400px;
+  height:400px;
+  background-color:white;
+
+        //   display:none;
+    }
     .subdiv{
     
        display:flex;
@@ -52,6 +69,9 @@
       }
     .mid1{
         flex-grow: 1;
+
+
+
         .btns{
                 display:flex;
                 flex-direction: row;
@@ -85,18 +105,59 @@
                 
                     }}
 
-        
-                button{
-                    padding:3px;
-                    min-width: 150px;
-                    text-align: center;
-                    background-color:grey;
-                    color:white;
-                    border-radius: 5px;
-                    box-shadow: 1px 1px 1px black;
+                    span{
+                        .box{
+                            display: none;
+                         }
+                      }
+         span:hover{
+                         position: relative;
+
+
+                         .box{
+                             display: block;
+                            //  flex-direction: column;
+                            
+                             width:450px;
+                          top:120px;
+                          right:0px;
+                             align-items: center;
+                             background-color: white;
+                             color : black;
+                             position:absolute;
+                             z-index: 10;
+                             box-shadow: 2px 2px 1px 1px grey;
+            
+            
+                         }
+                         
+                            //  button{
+                            //     padding:3px;
+                            //     min-width: 150px;
+                            //     text-align: center;
+                            //     background-color:grey;
+                            //     color:white;
+                            //     border-radius: 5px;
+                            //     box-shadow: 1px 1px 1px black;
+                                
                     
+                            // // }
+                        }
+                        button{
+                            padding:3px;
+                            min-width: 150px;
+                            text-align: center;
+                            background-color:grey;
+                            color:white;
+                            border-radius: 5px;
+                            box-shadow: 1px 1px 1px black;
+                            
+                
+                        }
+
+   
         
-                }
+              
             }
     }
     .mid2{
@@ -104,6 +165,11 @@
         display: flex;
         // justify-content: center;
         align-items: center;
+   
+
+
+
+
         .button1{
             padding:3px;
             min-width: 150px;
@@ -165,4 +231,5 @@
 
     //     }
     // }
+}
 }

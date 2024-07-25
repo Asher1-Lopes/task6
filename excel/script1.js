@@ -1,15 +1,11 @@
 class excel {
   constructor(csv, wraper) {
-    this.wraper = wraper;
-    this.csv = csv;
-    this.init();
-    // this.topgrid();
-    this.csvToJson();
-    // this.init();
-    this.f = false;
-    this.headerdraw();
-    this.sidedraw();
-    this.extend();
+
+    let num = []
+    this.num = num
+    this.scrollY = 0;
+    this.cellheight = 30;
+    this.scrollX = 0;
     var startr = 0;
     var startc = 0;
     var endr1 = 0;
@@ -22,16 +18,31 @@ class excel {
     this.selectedfinal = [];
     // this.acti
     this.boole = false;
-    this.scrollY = 0;
-    this.cellheight = 30;
-    this.scrollX = 0;
+    this.f = false;
     var draw;
     this.draw = draw;
+    this.wraper = wraper;
+    this.csv = csv;
+    this.init();
+    // this.topgrid();
+    this.csvToJson();
+    // this.init();
+ 
+    this.headerdraw();
+    this.sidedraw();
 
-    // this.offset = 0;
-    // this.animate = this.animate.bind(this); // Ensure `this` context is bound
-    // requestAnimationFrame(this.animate); // Start the animation
-    // this.startAnimation()
+    this.drawOptimized();
+
+    // this.extend();
+    // this.extentside()
+  
+
+ 
+
+    
+    // Normalize coordinate system to use CSS pixels.
+  
+    
   }
 
   init() {
@@ -40,88 +51,18 @@ class excel {
       150, 150, 150,
     ];
 
-    let headers = this.canvas(2100, 30, "white");
-    headers.classList.add("headers");
-
-    let graph = this.canvas(200, 200, "white");
-
-    graph.classList.add("graph");
-    // graph.id.add("mychart")
-    graph.setAttribute("id", "myChart");
-    this.graphctx = graph.getContext("2d");
-    // this.graph = graph
-
-    this.headers = headers;
-    let leftheaders = this.canvas(50, 2000, "white");
-    let data = this.canvas(2000, 2000, "white");
-    data.classList.add("data");
-    this.data = data;
-    this.headersctx = headers.getContext("2d");
-    this.leftctx = leftheaders.getContext("2d");
-    this.datactx = data.getContext("2d");
-    this.wraper.appendChild(headers);
-
-    let div = document.createElement("div");
-    this.div = div;
-    this.div.classList.add("subwrapper");
-
-    let draggablediv = document.createElement("div");
-    draggablediv.classList.add("draggable-div");
-
-    let closebtnv = document.createElement("div");
-    closebtnv.classList.add("close-btn");
-    // closebtnv.id.add("close-btn")
-    closebtnv.textContent = "X";
-    this.div.appendChild(draggablediv);
-    draggablediv.appendChild(closebtnv);
-    draggablediv.appendChild(graph);
-    /*<div id="draggableDiv" class="draggable-div">
-<div class="close-btn" id="closeBtn">X</div>
-</div> */
-
-    this.div.appendChild(leftheaders);
-    this.div.appendChild(data);
-    this.wraper.appendChild(div);
-
-    let input = document.createElement("input");
-    input.classList.add("hidden");
-
-    this.div.appendChild(input);
-
-    // div.style.display = "flex";
-    // div.style.flexDirection = "row"
-    // data.style.flexGrow ="1";
-
-    this.data.addEventListener("click", (e) => this.click(e, this.data));
-
-    this.data.addEventListener("dblclick", (e) => this.dblclick(e, this.data));
-
-    window.addEventListener("keydown", (e) => this.keyfunc(e, this.data));
-
-    this.down = (e) => this.mousedown1(e, this.data, this.cell);
-    this.data.addEventListener("mousedown", this.down);
-
-    document.addEventListener("DOMContentLoaded", (e) =>
-      this.draggraph(e, draggablediv, closebtnv)
-    );
-
-    this.headers.addEventListener("mousemove", (e) =>
-      this.resize(e, this.headers)
-    );
-
-    this.data.addEventListener("wheel", (e) => this.scroller(e));
-
     let stylesheet = document.createElement("style");
     stylesheet.textContent = `
        .headers{
        position: sticky;
-         top: 0;
-         z-index: 1;
+         top: 110px;
+         z-index: 2;
        }
+
        .wraper{
-        height:600px;
-        width:100vw;
-       overflow-y :scroll;
+       height:100vh;
+      //   width:100vw;
+      //  overflow-y :scroll;
         position:relative;
         margin:3px;
         }
@@ -183,6 +124,94 @@ class excel {
         
         `;
     document.head.appendChild(stylesheet);
+
+    let headers = this.canvas(2100, 30, "white");
+    headers.classList.add("headers");
+
+    let graph = this.canvas(200, 200, "white");
+
+    graph.classList.add("graph");
+    // graph.id.add("mychart")
+    graph.setAttribute("id", "myChart");
+    this.graphctx = graph.getContext("2d");
+    // this.graph = graph
+
+    this.headers = headers;
+    console.log( this.wraper.offsetHeight)
+    let leftheaders = this.canvas(50,this.wraper.offsetHeight-30, "white");
+    
+    let data = this.canvas(this.wraper.offsetWidth-50, this.wraper.offsetHeight-30, "white");
+    data.classList.add("data");
+    this.data = data;
+    this.headersctx = headers.getContext("2d");
+    this.leftctx = leftheaders.getContext("2d");
+    this.leftheaders = leftheaders
+    this.datactx = data.getContext("2d");
+    this.wraper.appendChild(headers);
+
+    let div = document.createElement("div");
+    this.div = div;
+    this.div.classList.add("subwrapper");
+
+
+
+
+    
+    let draggablediv = document.createElement("div");
+    draggablediv.classList.add("draggable-div");
+
+    let closebtnv = document.createElement("div");
+    closebtnv.classList.add("close-btn");
+
+    // closebtnv.id.add("close-btn")
+    closebtnv.textContent = "X";
+    this.div.appendChild(draggablediv);
+    draggablediv.appendChild(closebtnv);
+    draggablediv.appendChild(graph);
+    /*<div id="draggableDiv" class="draggable-div">
+<div class="close-btn" id="closeBtn">X</div>
+</div> */
+
+    this.div.appendChild(leftheaders);
+    this.div.appendChild(data);
+    this.wraper.appendChild(div);
+
+    let input = document.createElement("input");
+    input.classList.add("hidden");
+
+    this.div.appendChild(input);
+
+    // div.style.display = "flex";
+    // div.style.flexDirection = "row"
+    // data.style.flexGrow ="1";
+    const search = document.getElementById("search");
+    search.addEventListener("click", (e) => this.search2DArray(e));
+
+
+    this.data.addEventListener("click", (e) => this.click(e, this.data));
+
+
+    this.data.addEventListener("dblclick", (e) => this.dblclick(e, this.data));
+
+    window.addEventListener("keydown", (e) => this.keyfunc(e, this.data));
+    window.addEventListener("keydown", (e) => this.xscroll(e));
+    this.down = (e) => this.mousedown1(e, this.data, this.cell);
+    this.data.addEventListener("mousedown", this.down);
+
+    document.addEventListener("DOMContentLoaded", (e) =>
+      this.draggraph(e, draggablediv, closebtnv)
+    );
+
+    this.headers.addEventListener("mousemove", (e) =>
+      this.resize(e, this.headers)
+    );
+
+    this.data.addEventListener("wheel", (e) => this.scroller(e));
+    // const scale = window.devicePixelRatio; // Change to 1 on retina screens to see blurry canvas.
+    // this.scale = scale
+    this.datactx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    // this.leftctx.scale(scale, scale);
+    // this.headersctx.scale(scale, scale);
   }
 
   draggraph(e, draggablediv, closebtnv) {
@@ -240,16 +269,8 @@ class excel {
   }
 
   graph1() {
-    // const ctx = document.getElementById('myChart');
-    // console.log("added"+this.graphctx)
-    // this.graph = graph
 
-    // selected arr
-
-    // console.log("graph"+this.selectedfinal[0].row,this.selectedfinal[0].col)
-
-    // console.log("graph"+this.selectedfinal[this.selectedfinal.length-1].data)
-
+if(this.selectedfinal.length>0){
     let startcor = this.selectedfinal[0].row;
     let startcoc = this.selectedfinal[0].col; //0
 
@@ -303,10 +324,13 @@ class excel {
         },
       },
     });
+
+  }
   }
 
   extend(count,axis) {
-    console.log(this.arr2d[this.arr2d.length - 1][0].data);
+    console.log("1")
+    // console.log(this.arr2d[this.arr2d.length - 1][0].data);
     // console.log(this.arr2d[0][1])
     // let lastarr = this.arr2d[this.arr2d.length - 1];
     // console.log(lastarr);
@@ -336,64 +360,146 @@ class excel {
       }
       this.arr2d.push(data1d);
     }
+    this.extentside(count)
   }
+
+   
+//    if(axis=='x'){ 
+//           this.arr2d.forEach((row, i) => {
+//             let prevColumns = row.length;
+
+//             for (let j = prevColumns; j < prevColumns+ count; j++) {
+
+//               let left = row[j - 1].xpos + row[j - 1].width;
+//               let top = row[j-1].ypos;
+//               // console.log(top)
+//               let rectData = {};
+//               rectData["xpos"] = left;
+//               rectData["ypos"] = top;
+//               rectData["width"] = 100;
+//               // this.arr_width.push(100)
+//               this.sizel.push(100)
+              
+//               rectData["height"] = 30;
+//               rectData["color"] = "black";
+//               rectData["data"] = "";
+//               // rectData["lineWidth"] = 1;
+//               rectData["rows"] = i;
+//               rectData["cols"] = j;
+//               row.push(rectData);
+//               // data1d.push(rectData);
+//               this.datacell(rectData);
+//             }
+           
+//           });
+//           // // this.extendHeader(count)
+       
+    
+     
+// }
     // console.log(this.arr2d.length);
     // let lastarr = this.arr2d[this.arr2d.length-1]
     // console.log(lastarr)
+  
   }
+xscroll(event){
+  if(event.shiftKey){
+    this.xscrollX = true
+  }else{
+    this.xscrollX = false
+  }
+}
+
+
   scroller(event) {
     // console.log("22")
     let { deltaX, deltaY } = event;
-    this.scrollX = Math.max(0, this.scrollX + deltaX);
-    this.scrollY = Math.max(0, this.scrollY + deltaY);
+    if(this.xscrollX){
+    this.scrollX = Math.max(0, this.scrollX + deltaY);
+    }else{
+    this.scrollY = Math.max(0, this.scrollY + (deltaY < 0 ? -30 : 30));
+    }
+
     this.drawOptimized();
   }
 
   drawOptimized() {
     // console.log("22")
-
+console.log(this.scrollY)
+console.log(this.scrollX)
     this.datactx?.clearRect(0, 0, this.data.width, this.data.height);
+    this.leftctx.clearRect(0,0,this.leftheaders.width,this.leftheaders.height)
     let canvaWidth = this.data.offsetWidth;
     let canvaHeight = this.data.offsetHeight;
 
+// console.log(this.cell)
     let initHeight = 0;
-    let newScrollY = (this.scrollY * this.cellheight) / 100;
+    let newScrollY = this.scrollY 
+   
     console.log("🚀 ~ Excel ~ drawOptimized ~ newScrollY:", newScrollY);
+    this.newScrollY = newScrollY
     let newScrollX = this.scrollX;
-    this.datactx?.translate(-newScrollX, -newScrollY);
+    // this.datactx?.translate(-newScrollX, -newScrollY);
 
     for (let i = newScrollY / this.cellheight; i < this.arr2d.length; i++) {
       const row = this.arr2d[i];
+    if(i==this.arr2d.length-1){
+      // this.extentside(10,'y')
+      // this.sidebar(this.num[i])
+      this.extend(10,"y")
+      // this.extentside(10)
+    }
+
       if (initHeight > canvaHeight + newScrollY) {
         break;
       } else {
         let initWidth = 0;
         initHeight += row[0].height;
-
+       this.sidebar(this.num[i])
         // this.drawCell(row[0])
         for (let j = 0; j < row.length; j++) {
           const col = row[j];
-          if(i == row.length-1){
-            this.extend(10,"y")
+          if(j == row.length-2){
+            // this.extend(10,"x")
+            //
+           
           }
-          if (initWidth >= newScrollX && initWidth <= canvaWidth) {
-            // this.drawcell(col)
-            this.datacell(col);
+          if(initWidth>canvaWidth+newScrollX){
+            break;
+          }else{
+
+            initWidth +=row[j].width
+            const col = row[j]
+            this.datacell(col)
+       
+            
           }
-          if (initWidth > canvaWidth) break;
-        }
+
+        //   if (initWidth >= newScrollX && initWidth <= canvaWidth) {
+        //     // this.drawcell(col)
+        //     this.datacell(col);
+        //     // this.sidebar(this.num[j])
+        //   }
+        //   if (initWidth > canvaWidth) break;
+        // }
+
         // if (initHeight >= newScrollY && initHeight <= canvaHeight) {
         // }
         // if (initHeight > canvaHeight + newScrollY) break
       }
     }
-    this.datactx?.setTransform(1, 0, 0, 1, 0, 0);
+    // this.datactx?.setTransform(1, 0, 0, 1, 0, 0);
   }
 
+}
+
   canvas(width, height, color) {
+    // const scale = window.devicePixelRatio; // Change to 1 on retina screens to see blurry canvas.
+    // canvas.width = Math.floor(size * scale);
+    // canvas.height = Math.floor(size * scale);
     let canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
+    canvas.width = width*window.devicePixelRatio ;
+    canvas.height = height * window.devicePixelRatio;
     canvas.style.background = color;
 
     return canvas;
@@ -436,7 +542,7 @@ class excel {
 
       for (let j = 0; j < headers.length; j++) {
         let rectData = {};
-        // if(i>=lines.length){
+    
         rectData["xpos"] = counter;
         rectData["ypos"] = i * 30;
         rectData["width"] = this.sizel[j];
@@ -448,22 +554,7 @@ class excel {
         data1d.push(rectData);
         this.datacell(rectData);
         counter += this.sizel[j];
-        // }
-
-        // else{
-
-        // rectData["xpos"] =counter;
-        // rectData["ypos"] = i * 30;
-        // rectData["width"] = this.sizel[j];
-        // rectData["height"] = 30;
-        // rectData["color"] = "black";
-        // rectData["row"] = i
-        // rectData["col"] = j
-        // rectData["data"] = lines[i].split(",")[j];
-        // data1d.push(rectData);
-        // this.datacell(rectData);
-        // counter +=this.sizel[j];
-        // }
+     
       }
       this.arr2d.push(data1d);
     }
@@ -479,15 +570,19 @@ class excel {
     this.datactx.beginPath();
     this.datactx.fillStyle = "white";
     this.datactx.strokestyle = "black";
-    this.datactx.rect(data.xpos, data.ypos, data.width, data.height);
+    this.datactx.lineWidth = 2
+    this.datactx.rect(data.xpos-0.5 , data.ypos - this.scrollY -0.5, data.width+1, data.height+1);
     this.datactx.clip();
+
+
+    this.datactx.fillRect(data.xpos - 0.5, data.ypos - this.scrollY - 0.5, data.width + 1, data.height + 1);
 
     this.datactx.fillStyle = "black";
     this.datactx.font = `${18}px areal`;
     this.datactx.fillText(
       data.data,
       data.xpos + 2,
-      data.ypos + data.height - 5
+      data.ypos + data.height - 5 - this.scrollY
     );
 
     this.datactx.stroke();
@@ -587,72 +682,140 @@ class excel {
     }
   }
 
+  
   sidedraw() {
-    let nos = [
-      "1",
-      "2",
-      "3",
-      "4",
-      "2",
-      "3",
-      "4",
-      "2",
-      "3",
-      "4",
-      "2",
-      "3",
-      "4",
-      "2",
-      "3",
-      "4",
-      "2",
-      "3",
-      "4",
-      "2",
-      "3",
-      "4",
-      "2",
-      "3",
-      "4",
-      "2",
-      "3",
-      "4",
-    ];
 
-    for (let i = 0; i < nos.length; i++) {
+    // console.log("thisss"+this.nos.length)
+
+    for (let i = 0; i < this.arr2d.length; i++) {
       let rectData = {};
       rectData["xpos"] = 0;
       rectData["ypos"] = i * 30;
       rectData["width"] = 50;
       rectData["height"] = 30;
       rectData["color"] = "black";
-      rectData["data"] = nos[i];
+      rectData["data"] = i+1;
 
       this.sidebar(rectData);
+      this.num.push(rectData)
     }
+    console.log("num arr",this.num)
+    // console.log("num arr"+this.num[0].data)
   }
 
-  sidebar(alpha) {
-    this.leftctx.fillStyle = "grey";
-    this.leftctx.strokestyle = alpha.color;
+  sidedraw1() {
 
-    this.leftctx.fillRect(alpha.xpos, alpha.ypos, alpha.width, alpha.height);
-    this.leftctx.strokeRect(alpha.xpos, alpha.ypos, alpha.width, alpha.height); //arr[j]
+    // console.log("thisss"+this.nos.length)
+
+    for (let i = 0; i < this.num.length; i++) {
+   
+      this.sidebar(this.num[i]);
+      
+    }
+    console.log("num arr",this.num)
+    // console.log("num arr"+this.num[0].data)
+  }
+
+  extentside(count){
+ 
+    let length = this.num.length;
+// console.log(length)
+// console.log("arr"+this.nos)
+// this.nos.push()
+  // console.log( this.num[length].ypos , this.num[length].height)
+  // console.log(this.num)
+  // //   if(axis=="y"){
+    for (let i = length; i <length+count; i++) {
+      let rectData = {};
+      rectData["xpos"] = 0;
+      rectData["ypos"] =  this.num[i-1].ypos + this.num[i-1].height;
+      rectData["width"] = 50;
+      rectData["height"] = 30;
+      rectData["color"] = "black";
+      rectData["data"] = i+1;
+    
+      this.sidebar(rectData);
+      this.num.push(rectData);
+    }
+  // console.log("ff"+this.num.length)
+  //   // this.arr2d.push(data1d);
+  
+
+  // }
+  console.log("this"+this.num.length)
+
+
+
+   
+  
+  }
+
+
+
+
+  sidebar(alpha) {
+    // acti 
+    // console.log("th"+this.scrollY)
+
+    // this.leftctx.fillStyle = "grey";
+    // this.leftctx.strokestyle = "black";
+
+    // this.leftctx.fillRect(alpha.xpos, alpha.ypos-this.scrollY, alpha.width, alpha.height);
+    // this.leftctx.strokeRect(alpha.xpos, alpha.ypos-this.scrollY, alpha.width, alpha.height); //arr[j]
+    // this.leftctx.fillStyle = "black";
+    // this.leftctx.font = `${18}px areal`;
+    // this.leftctx.fillText(
+    //   alpha.data,
+    //   alpha.xpos + 10,
+    //   alpha.ypos + alpha.height - 5-this.scrollY
+    // );
+
+    // this.leftctx.stroke();
+
+    this.leftctx.restore()
+    this.leftctx.save();
+    this.leftctx.beginPath();
+   
+    this.leftctx.fillStyle = "#E8E8E8";
+    this.leftctx.strokestyle = "black";
+    // console.log(data.data);
+    // this.ctx.fillRect(data.x, data.y,data.sizel,data.sizeb);  //arr[j]
+    this.leftctx.fillRect(
+      alpha.xpos,
+      alpha.ypos-this.scrollY,
+      alpha.width,
+      alpha.height
+    );
+    this.leftctx.strokeRect(
+      alpha.xpos,
+      alpha.ypos-this.scrollY,
+      alpha.width,
+      alpha.height
+    ); //arr[j]
     this.leftctx.fillStyle = "black";
     this.leftctx.font = `${18}px areal`;
     this.leftctx.fillText(
       alpha.data,
-      alpha.xpos + 10,
-      alpha.ypos + alpha.height - 5
+      alpha.xpos + 5,
+      alpha.ypos + alpha.height - 5-this.scrollY
     );
-
     this.leftctx.stroke();
-  }
+  
 
+
+
+
+
+
+
+
+    
+  }
+// same as extentside
   position(data, event) {
     let rect = this.data.getBoundingClientRect();
     let x = event.clientX - rect.left;
-    let y = event.clientY - rect.top;
+    let y = event.clientY - rect.top + this.scrollY ;
 
     let sum = 0;
     let r = 0;
@@ -694,7 +857,7 @@ class excel {
 
     // console.log(cell)
     this.element.style.left = `${cell.xpos + 50}px`;
-    this.element.style.top = `${cell.ypos}px`;
+    this.element.style.top = `${cell.ypos - this.scrollY}px`;
 
     // console.log(datactx)
     this.element.value = cell.data;
@@ -717,17 +880,17 @@ class excel {
       //   data[y3 - 1][headers[x3]] = nvalue;
       cell.data = nvalue;
 
-      this.datactx.clearRect(cell.xpos, cell.ypos, cell.width, cell.height);
+      this.datactx.clearRect(cell.xpos-0.5, cell.ypos - this.scrollY-0.5, cell.width+1, cell.height+1);
       // this.datacell(cell)
       this.datactx.save();
       this.datactx.fillStyle = "white";
       this.datactx.strokestyle = "black";
-      this.datactx.rect(cell.xpos, cell.ypos, cell.width, cell.height);
+      this.datactx.rect(cell.xpos-0.5, cell.ypos - this.scrollY-0.5, cell.width+1, cell.height+1);
       this.datactx.clip();
 
       this.datactx.fillStyle = "black";
       this.datactx.font = `${18}px areal`;
-      this.datactx.fillText(nvalue, cell.xpos + 2, cell.ypos + cell.height - 5);
+      this.datactx.fillText(nvalue, cell.xpos + 2, cell.ypos + cell.height - 5 - this.scrollY);
       this.datactx.restore();
       this.datactx.stroke();
 
@@ -748,16 +911,42 @@ class excel {
     // Set an end-point
     this.headersctx.lineTo(this.acti.xpos + this.acti.width + 50, 30);
 
+
+
+   
+
     // Draw it
     this.headersctx.stroke();
     this.headersctx.restore();
+
+
+    this.leftctx.beginPath()
+    this.leftctx.strokeStyle = "green";
+    this.leftctx.lineWidth = 6;
+    this.leftctx.moveTo(0+50, this.acti.ypos-this.scrollY);
+
+    // Set an end-point
+    this.leftctx.lineTo(0+50,this.acti.ypos+30 -this.scrollY);
+
+
+
+   
+
+    // Draw it
+    this.leftctx.stroke();
+    this.leftctx.restore();
+
+
   }
+
   click(e, data) {
+
+
     if (this.acti) {
       console.log("acti" + this.acti.data);
       this.datactx.clearRect(
         this.acti.xpos,
-        this.acti.ypos,
+        this.acti.ypos - this.scrollY,
         this.acti.width,
         this.acti.height
       );
@@ -767,6 +956,10 @@ class excel {
       this.headersctx.clearRect(0, 0, 2100, 30);
 
       this.headerdraw();
+      this.leftctx.clearRect(0,0,50,this.leftheaders.height)
+      
+      this.sidedraw1()
+
       // // this.topgrid(this.acti)
       // this.topg(this.acti)
     }
@@ -779,9 +972,10 @@ class excel {
     // this.cell = this.data[r][c]
     this.r = r;
     this.c = c;
+    console.log(this.scrollY)
     console.log("row" + r, c);
 
-    console.log(this.arr2d[c][r - 1].xpos, this.arr2d[c][r - 1].ypos);
+    // console.log(this.arr2d[c][r - 1].xpos, this.arr2d[c][r - 1].ypos);
     this.cell = this.arr2d[c][r - 1];
     this.acti = this.arr2d[c][r - 1];
 
@@ -793,7 +987,7 @@ class excel {
 
     this.datactx.clearRect(
       this.acti.xpos,
-      this.acti.ypos,
+      this.acti.ypos - this.scrollY,
       this.acti.width,
       this.acti.height
     );
@@ -801,18 +995,18 @@ class excel {
 
     this.datactx.beginPath();
     this.datactx.fillStyle = "white";
-    this.datactx.strokeStyle = "green";
+    this.datactx.strokeStyle = "#107c41";
     this.datactx.lineWidth = 2;
 
     this.datactx.rect(
       this.acti.xpos,
-      this.acti.ypos,
+      this.acti.ypos - this.scrollY,
       this.acti.width,
       this.acti.height
     );
     this.datactx.strokeRect(
       this.acti.xpos,
-      this.acti.ypos,
+      this.acti.ypos - this.scrollY,
       this.acti.width,
       this.acti.height
     );
@@ -825,7 +1019,7 @@ class excel {
     this.datactx.fillText(
       this.acti.data,
       this.acti.xpos + 2,
-      this.acti.ypos + this.acti.height - 5
+      this.acti.ypos + this.acti.height - 5 - this.scrollY
     );
 
     this.datactx.restore();
@@ -835,7 +1029,7 @@ class excel {
     this.element.style.display = "none";
   }
   delete(data) {
-    this.datactx.clearRect(data.xpos, data.ypos, data.width, data.height);
+    this.datactx.clearRect(data.xpos, data.ypos - this.scrollY, data.width, data.height);
     this.datactx.save();
 
     this.datactx.beginPath();
@@ -843,29 +1037,29 @@ class excel {
     this.datactx.strokeStyle = "black";
     this.datactx.lineWidth = 2;
 
-    this.datactx.rect(data.xpos, data.ypos, data.width, data.height);
-    this.datactx.strokeRect(data.xpos, data.ypos, data.width, data.height);
+    this.datactx.rect(data.xpos-0.5, data.ypos - this.scrollY-0.5, data.width+1, data.height+1);
+    // this.datactx.strokeRect(data.xpos-0.5, data.ypos - this.scrollY-0.5, data.width+1, data.height+1);
 
     this.datactx.clip();
 
     this.datactx.fillStyle = "black";
-    this.datactx.font = `${20}px areal`;
-    this.datactx.fillText("", data.xpos + 2, data.ypos + data.height - 5);
+    this.datactx.font = `${18}px areal`;
+    this.datactx.fillText("", data.xpos + 2, data.ypos + data.height - 5 - this.scrollY);
 
     this.datactx.restore();
   }
 
   selected(data) {
-    this.datactx.clearRect(data.xpos, data.ypos, data.width, data.height);
+    this.datactx.clearRect(data.xpos, data.ypos - this.scrollY, data.width, data.height);
     this.datactx.save();
 
     this.datactx.beginPath();
     this.datactx.fillStyle = "white";
-    this.datactx.strokeStyle = "green";
+    this.datactx.strokeStyle = "#107c41";
     this.datactx.lineWidth = 2;
 
-    this.datactx.rect(data.xpos, data.ypos, data.width, data.height);
-    this.datactx.strokeRect(data.xpos, data.ypos, data.width, data.height);
+    this.datactx.rect(data.xpos, data.ypos - this.scrollY, data.width, data.height);
+    this.datactx.strokeRect(data.xpos, data.ypos - this.scrollY, data.width, data.height);
 
     this.datactx.clip();
 
@@ -874,16 +1068,17 @@ class excel {
     this.datactx.fillText(
       data.data,
       data.xpos + 2,
-      data.ypos + data.height - 5
+      data.ypos + data.height - 5 - this.scrollY
     );
 
     this.datactx.restore();
   }
 
   keyfunc(e, data) {
+    if(this.acti!=null){
     this.datactx.clearRect(
       this.acti.xpos,
-      this.acti.ypos,
+      this.acti.ypos - this.scrollY,
       this.acti.width,
       this.acti.height
     );
@@ -957,14 +1152,14 @@ class excel {
         this.selected(this.acti);
         break;
 
-      case e.shiftKey && 13:
-        if (row > 1) {
-          this.acti = this.arr2d[row - 1][col];
-          // console.log( this.acti.data)
+      // case e.shiftKey && 13:
+      //   if (row > 1) {
+      //     this.acti = this.arr2d[row - 1][col];
+      //     // console.log( this.acti.data)
 
-          this.selected(this.acti);
-        }
-        break;
+      //     this.selected(this.acti);
+      //   }
+      //   break;
 
       case 13:
         this.acti = this.arr2d[row + 1][col];
@@ -979,11 +1174,24 @@ class excel {
       default:
         break;
     }
+
+  }
   }
 
   border(startr, startc, endr2, endc2) {
     // this.datactx.clearRect(0,0,this.data.width,this.data.height);
     // this.csvToJson()
+    // if (this.acti) {
+    //   console.log("acti" + this.acti.data);
+    //   this.datactx.clearRect(
+    //     this.acti.xpos,
+    //     this.acti.ypos - this.scrollY,
+    //     this.acti.width,
+    //     this.acti.height
+    //   );
+    //   this.datacell(this.acti);
+    // }
+
     console.log("starter" + startr, startc, endr2, endc2);
     console.log(this.arr2d[startc][startr].data);
     console.log(this.arr2d[endc2][endr2].data);
@@ -997,45 +1205,45 @@ class excel {
     this.datactx.strokeStyle = "green";
     // this.datactx.setLineDash([5, 5]); // Define the dash pattern
     // this.datactx.lineDashOffset = -this.offset;
-    this.datactx.lineWidth = 4;
-    this.datactx.moveTo(this.selectedfinal[0].xpos, this.selectedfinal[0].ypos); // start
+    this.datactx.lineWidth = 2;
+    this.datactx.moveTo(this.selectedfinal[0].xpos, this.selectedfinal[0].ypos - this.scrollY); // start
 
     // Set an end-point
 
     this.datactx.lineTo(
       this.selectedfinal[0].xpos,
-      this.selectedfinal[this.selectedfinal.length - 1].ypos +
+      this.selectedfinal[this.selectedfinal.length - 1].ypos  - this.scrollY+
         this.selectedfinal[this.selectedfinal.length - 1].height
     ); // straight line first
 
-    this.datactx.moveTo(this.selectedfinal[0].xpos, this.selectedfinal[0].ypos);
+    this.datactx.moveTo(this.selectedfinal[0].xpos, this.selectedfinal[0].ypos - this.scrollY);
     this.datactx.lineTo(
       this.selectedfinal[this.selectedfinal.length - 1].xpos +
         this.selectedfinal[this.selectedfinal.length - 1].width,
-      this.selectedfinal[0].ypos
+      this.selectedfinal[0].ypos - this.scrollY
     );
 
     this.datactx.moveTo(
       this.selectedfinal[this.selectedfinal.length - 1].xpos +
         this.selectedfinal[this.selectedfinal.length - 1].width,
-      this.selectedfinal[0].ypos
+      this.selectedfinal[0].ypos - this.scrollY
     );
     this.datactx.lineTo(
       this.selectedfinal[this.selectedfinal.length - 1].xpos +
         this.selectedfinal[this.selectedfinal.length - 1].width,
-      this.selectedfinal[this.selectedfinal.length - 1].ypos +
+      this.selectedfinal[this.selectedfinal.length - 1].ypos - this.scrollY +
         this.selectedfinal[this.selectedfinal.length - 1].height
     );
 
     this.datactx.moveTo(
       this.selectedfinal[this.selectedfinal.length - 1].xpos +
         this.selectedfinal[this.selectedfinal.length - 1].width,
-      this.selectedfinal[this.selectedfinal.length - 1].ypos +
+      this.selectedfinal[this.selectedfinal.length - 1].ypos - this.scrollY +
         this.selectedfinal[this.selectedfinal.length - 1].height
     );
     this.datactx.lineTo(
       this.selectedfinal[0].xpos,
-      this.selectedfinal[this.selectedfinal.length - 1].ypos +
+      this.selectedfinal[this.selectedfinal.length - 1].ypos - this.scrollY +
         this.selectedfinal[this.selectedfinal.length - 1].height
     );
 
@@ -1044,27 +1252,7 @@ class excel {
     this.datactx.restore();
     this.datactx.closePath();
   }
-  // startAnimation(startr, startc, endr2, endc2) {
-  //   this.startr = startr;
-  //   this.startc = startc;
-  //   this.endr2 = endr2;
-  //   this.endc2 = endc2;
-  //   this.animate(); // Start the animation
-  // }
 
-  // animate() {
-  //   this.offset += 1; // Increment the offset to create the animation
-  //   this.border(this.startr,this.startc,this.endr1, this.endc1);
-  //   requestAnimationFrame(this.animate); // Call animate recursively
-  // }
-
-  // startAnimation() {
-  //   // this.startr = startr;
-  //   // this.startc = startc;
-  //   // this.endr2 = endr2;
-  //   // this.endc2 = endc2;
-  //   this.animate(); // Start the animation
-  // }
 
   move(e, data, cell) {
     let [prevstartr, prevstartc] = [this.startr, this.startc];
@@ -1093,29 +1281,69 @@ class excel {
         // let sizel = this.sizel[i];
         this.final = this.arr2d[j][i];
         this.arr_selec.push(this.final);
-        this.datactx.fillStyle = "#e5fbe5";
+     
+        
 
-        this.datactx.fillRect(
-          this.arr2d[j][i].xpos,
-          this.arr2d[j][i].ypos,
-          this.arr2d[j][i].width,
-          this.arr2d[j][i].height
-        );
 
-        this.datactx.font = `${18}px areal `;
-
+        this.datactx.save();
+        this.datactx.beginPath();
+        this.datactx.fillStyle = "#e7f1ec";
+        this.datactx.strokestyle = "black";
+        this.datactx.lineWidth = 2
+        this.datactx.rect(  this.arr2d[j][i].xpos-0.5,
+          this.arr2d[j][i].ypos - this.scrollY-0.5,
+          this.arr2d[j][i].width+1,
+          this.arr2d[j][i].height+1);
+        this.datactx.clip();
+    
+    
+        this.datactx.fillRect(  this.arr2d[j][i].xpos-0.5,
+          this.arr2d[j][i].ypos - this.scrollY-0.5,
+          this.arr2d[j][i].width+1,
+          this.arr2d[j][i].height+1);
+    
         this.datactx.fillStyle = "black";
+        this.datactx.font = `${18}px areal`;
         this.datactx.fillText(
           this.arr2d[j][i].data,
           this.arr2d[j][i].xpos + 2,
-          this.arr2d[j + 1][i].ypos - 5
+          this.arr2d[j + 1][i].ypos - 5 - this.scrollY
         );
-        this.datactx.strokeRect(
-          this.arr2d[j][i].xpos,
-          this.arr2d[j][i].ypos,
-          this.arr2d[j][i].width,
-          this.arr2d[j][i].height
-        );
+    
+        this.datactx.stroke();
+        this.datactx.restore();
+
+
+
+
+
+
+
+
+
+        // this.datactx.fillStyle = "#e7f1ec";
+
+        // this.datactx.fillRect(
+        //   this.arr2d[j][i].xpos-0.5,
+        //   this.arr2d[j][i].ypos - this.scrollY-0.5,
+        //   this.arr2d[j][i].width+1,
+        //   this.arr2d[j][i].height+1
+        // );
+
+        // this.datactx.font = `${18}px areal `;
+
+        // this.datactx.fillStyle = "black";
+        // this.datactx.fillText(
+        //   this.arr2d[j][i].data,
+        //   this.arr2d[j][i].xpos + 2,
+        //   this.arr2d[j + 1][i].ypos - 5 - this.scrollY
+        // );
+        // this.datactx.strokeRect(
+        //   this.arr2d[j][i].xpos,
+        //   this.arr2d[j][i].ypos - this.scrollY,
+        //   this.arr2d[j][i].width,
+        //   this.arr2d[j][i].height
+        // );
 
         this.flag = true;
       }
@@ -1134,7 +1362,7 @@ class excel {
   }
 
   clearcell(c) {
-    this.datactx.clearRect(c.xpos, c.ypos, c.width, c.height);
+    this.datactx.clearRect(c.xpos, c.ypos - this.scrollY, c.width, c.height);
   }
 
   mouseup(e, data, cell) {
@@ -1171,13 +1399,43 @@ class excel {
       }
     }
 
-    console.log("multi" + multi);
-    console.log("sum" + sum1);
-    console.log(Math.max(...arr));
-    console.log(Math.min(...arr));
+    // console.log("multi" + multi);
+    // console.log("sum" + sum1);
+    // console.log(Math.max(...arr));
+    // console.log(Math.min(...arr));
     var mean = sum1 / counter;
-    console.log("mean" + mean);
+    // console.log("mean" + mean);
 
+    let multi1 = document.getElementById("multi")
+    let sum = document.getElementById("sum")
+    let min = document.getElementById("min")
+    let max = document.getElementById("max")
+    let mean1 = document.getElementById("mean")
+
+  if(isNaN(multi) ){
+    multi1.innerHTML="Please select only numerical value";
+    sum.innerHTML="Please select only numerical value";
+    max.innerHTML="Please select only numerical value";
+
+    min.innerHTML="Please select only numerical value"
+    mean1.innerHTML="Please select only numerical value";
+  }else{
+    multi1.innerHTML=multi;
+    sum.innerHTML=sum1;
+    max.innerHTML=Math.max(...arr);
+
+    min.innerHTML=Math.min(...arr);
+    mean1.innerHTML=mean;
+  }
+
+  
+
+    // multi1.innerHTML=multi;
+    // sum.innerHTML=sum1;
+    // max.innerHTML=Math.max(...arr);
+
+    // min.innerHTML=Math.min(...arr);
+    // mean1.innerHTML=mean;
     sum1 = 0;
     counter = 0;
     arr = [];
@@ -1185,7 +1443,7 @@ class excel {
 
     // this.csvToJson()
 
-    this.graph1()
+    // this.graph1()
 
     data.removeEventListener("mousemove", this.mo);
     data.removeEventListener("mouseup", this.up);
@@ -1219,36 +1477,76 @@ class excel {
 
     for (let i = mini; i <= maxi; i++) {
       for (let j = minj; j <= maxj; j++) {
-        // let sizel = this.sizel[i];
-        this.datactx.fillStyle = "white";
+        // // let sizel = this.sizel[i];
+        // this.datactx.fillStyle = "white";
+        // this.datactx.strokeStyle = "black"
+        // this.datactx.lineWidth = 2
 
-        this.datactx.fillRect(
-          this.arr2d[j][i].xpos,
-          this.arr2d[j][i].ypos,
-          this.arr2d[j][i].width,
-          this.arr2d[j][i].height
-        );
+        // this.datactx.fillRect(
+        //   this.arr2d[j][i].xpos-0.5,
+        //   this.arr2d[j][i].ypos - this.scrollY-0.5,
+        //   this.arr2d[j][i].width+1,
+        //   this.arr2d[j][i].height+1
+        // );
 
-        this.datactx.font = `${18}px areal `;
+        // this.datactx.font = `${18}px areal `;
 
+        // this.datactx.fillStyle = "black";
+        // this.datactx.fillText(
+        //   this.arr2d[j][i].data,
+        //   this.arr2d[j][i].xpos + 2,
+        //   this.arr2d[j + 1][i].ypos - 5 - this.scrollY
+        // );
+        // this.datactx.strokeRect(
+        //   this.arr2d[j][i].xpos,
+        //   this.arr2d[j][i].ypos - this.scrollY,
+        //   this.arr2d[j][i].width,
+        //   this.arr2d[j][i].height
+        // );
+
+
+
+
+
+        this.datactx.save();
+        this.datactx.beginPath();
+         this.datactx.fillStyle = "white";
+        this.datactx.strokeStyle = "black"
+        this.datactx.lineWidth = 2
+        this.datactx.rect(  this.arr2d[j][i].xpos-0.5,
+          this.arr2d[j][i].ypos - this.scrollY-0.5,
+          this.arr2d[j][i].width+1,
+          this.arr2d[j][i].height+1);
+        this.datactx.clip();
+    
+    
+        this.datactx.fillRect(  this.arr2d[j][i].xpos-0.5,
+          this.arr2d[j][i].ypos - this.scrollY-0.5,
+          this.arr2d[j][i].width+1,
+          this.arr2d[j][i].height+1);
+    
         this.datactx.fillStyle = "black";
+        this.datactx.font = `${18}px areal`;
         this.datactx.fillText(
           this.arr2d[j][i].data,
           this.arr2d[j][i].xpos + 2,
-          this.arr2d[j + 1][i].ypos - 5
+          this.arr2d[j + 1][i].ypos - 5 - this.scrollY
         );
-        this.datactx.strokeRect(
-          this.arr2d[j][i].xpos,
-          this.arr2d[j][i].ypos,
-          this.arr2d[j][i].width,
-          this.arr2d[j][i].height
-        );
+    
+        this.datactx.stroke();
+        this.datactx.restore();
+
+
+
+
+
 
         this.flag = true;
       }
     }
 
     // this.csvToJson()
+    this.graph1()
   }
 
   resize(e) {
@@ -1280,7 +1578,7 @@ class excel {
     if (this.acti) {
       this.datactx.clearRect(
         this.acti.xpos,
-        this.acti.ypos,
+        this.acti.ypos - this.scrollY,
         this.acti.width,
         this.acti.height
       );
@@ -1315,4 +1613,74 @@ class excel {
     headers.addEventListener("mousemove", resize_mousemove);
     headers.addEventListener("mouseup", resize_mouseup);
   }
+ search2DArray() {
+    // Get the search term from the input field
+    let searchTerm = document.getElementById('searchInput').value.toLowerCase();
+console.log(searchTerm)
+    // Array to store matched results
+    let results = [];
+
+    // // Loop through the 2D array
+    for (let i = 0; i < this.arr2d.length; i++) {
+        for (let j = 0; j < this.arr2d[i].length; j++) {
+            // Convert each element to lowercase for case-insensitive comparison
+            let element = this.arr2d[i][j].data.toLowerCase();
+            // Check if the element contains the searchTerm
+            if (element.includes(searchTerm)) {
+                // If match found, push it to results array
+                results.push(this.arr2d[i][j].data);
+            }
+        }
+    }
+console.log(results)
+    // Display results
+    // this.displayResults(results);
+}
+
+// displayResults(results) {
+//   let resultsDiv = document.getElementById('results');
+//   resultsDiv.innerHTML = ''; // Clear previous results
+
+//   if (results.length > 0) {
+//       let resultHtml = '<p>Search results:</p>';
+//       resultHtml += '<ul>';
+//       results.forEach(result => {
+//           resultHtml += `<li>${result}</li>`;
+//       });
+//       resultHtml += '</ul>';
+//       resultsDiv.innerHTML = resultHtml;
+//   } else {
+//       resultsDiv.innerHTML = '<p>No results found.</p>';
+//   }
+// }
+//   let arr = [
+//     { id: 1, name: 'Alice' },
+//     { id: 2, name: 'Bob' },
+//     { id: 3, name: 'Charlie' },
+//     { id: 4, name: 'David' },
+//     { id: 5, name: 'Eve' }
+// ];
+
+//  search(arr, searchTerm) {
+//     // Convert searchTerm to lowercase for case-insensitive search
+//     searchTerm = searchTerm.toLowerCase();
+
+//     // Filter the array based on the searchTerm
+//     let results = this.arr2d.filter(item => {
+//         // Convert item's name to lowercase for case-insensitive search
+//         let itemName = item.data.toLowerCase();
+//         // Check if itemName includes the searchTerm
+//         return itemName.includes(searchTerm);
+//     });
+
+//     // Display results
+//     if (results.length > 0) {
+//         console.log('Search results:');
+//         results.forEach(result => {
+//             console.log(`${result.id}: ${result.name}`);
+//         });
+//     } else {
+//         console.log('No results found.');
+//     }
+// }
 }

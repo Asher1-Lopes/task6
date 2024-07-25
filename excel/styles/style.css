@@ -31,7 +31,13 @@ nav a {
   margin-right: 3px;
 }
 
-.sub-container {
+.sub1 {
+  position: sticky;
+  top: 0px;
+  z-index: 1;
+  background-color: white;
+}
+.sub1 .sub-container {
   margin: 10px;
   display: flex;
   flex-direction: row;
@@ -40,44 +46,53 @@ nav a {
   height: 100px;
   padding: 5px;
   text-align: center;
+  position: relative;
 }
-.sub-container .subdiv {
+.sub1 .sub-container .searchdiv {
+  position: absolute;
+  top: 200px;
+  left: 100px;
+  width: 400px;
+  height: 400px;
+  background-color: white;
+}
+.sub1 .sub-container .subdiv {
   display: flex;
   flex-direction: column;
   padding: 10px;
   justify-content: center;
   border-right: 1px solid rgb(190, 186, 186);
 }
-.sub-container .subdiv i {
+.sub1 .sub-container .subdiv i {
   margin: 3px;
   color: grey;
 }
-.sub-container .subdiv span {
+.sub1 .sub-container .subdiv span {
   margin: 3px;
   color: grey;
 }
-.sub-container .block2 {
+.sub1 .sub-container .block2 {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
-.sub-container .block2 .block21 {
+.sub1 .sub-container .block2 .block21 {
   display: flex;
   flex-direction: column;
   margin: 3px;
 }
-.sub-container .mid1 {
+.sub1 .sub-container .mid1 {
   flex-grow: 1;
 }
-.sub-container .mid1 .btns {
+.sub1 .sub-container .mid1 .btns {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
-.sub-container .mid1 .btns .hidden {
+.sub1 .sub-container .mid1 .btns .hidden {
   display: none;
 }
-.sub-container .mid1 .btns label div {
+.sub1 .sub-container .mid1 .btns label div {
   padding: 3px;
   min-width: 150px;
   text-align: center;
@@ -86,10 +101,28 @@ nav a {
   border-radius: 5px;
   box-shadow: 1px 2px 1px 1px black;
 }
-.sub-container .mid1 .btns label div i {
+.sub1 .sub-container .mid1 .btns label div i {
   color: black;
 }
-.sub-container .mid1 .btns button {
+.sub1 .sub-container .mid1 .btns span .box {
+  display: none;
+}
+.sub1 .sub-container .mid1 .btns span:hover {
+  position: relative;
+}
+.sub1 .sub-container .mid1 .btns span:hover .box {
+  display: block;
+  width: 450px;
+  top: 120px;
+  right: 0px;
+  align-items: center;
+  background-color: white;
+  color: black;
+  position: absolute;
+  z-index: 10;
+  box-shadow: 2px 2px 1px 1px grey;
+}
+.sub1 .sub-container .mid1 .btns button {
   padding: 3px;
   min-width: 150px;
   text-align: center;
@@ -98,12 +131,12 @@ nav a {
   border-radius: 5px;
   box-shadow: 1px 1px 1px black;
 }
-.sub-container .mid2 {
+.sub1 .sub-container .mid2 {
   flex-grow: 1;
   display: flex;
   align-items: center;
 }
-.sub-container .mid2 .button1 {
+.sub1 .sub-container .mid2 .button1 {
   padding: 3px;
   min-width: 150px;
   max-width: 150px;
@@ -114,13 +147,13 @@ nav a {
   box-shadow: 1px 1px 1px black;
   position: relative;
 }
-.sub-container .mid2 span .graph12 {
+.sub1 .sub-container .mid2 span .graph12 {
   display: none;
 }
-.sub-container .mid2 span:hover {
+.sub1 .sub-container .mid2 span:hover {
   position: relative;
 }
-.sub-container .mid2 span:hover .graph12 {
+.sub1 .sub-container .mid2 span:hover .graph12 {
   display: flex;
   flex-direction: column;
   width: 250px;
@@ -131,7 +164,7 @@ nav a {
   position: absolute;
   z-index: 2;
 }
-.sub-container .mid2 span:hover .graph12 button {
+.sub1 .sub-container .mid2 span:hover .graph12 button {
   width: 100px;
   padding: 3px;
   margin: 3px;
