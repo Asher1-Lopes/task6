@@ -24,7 +24,21 @@
   width:400px;
   height:400px;
   background-color:white;
-
+  box-shadow: 1px 2px 1px 1px grey;
+  display: none;
+#close{
+    position: absolute;
+    top:0px;
+    right:0px;
+    cursor: pointer;
+    background-color: red;
+    width: 30px;
+    color:white;
+}
+.results{
+    overflow-y: scroll;
+    height: 250px;
+}
         //   display:none;
     }
     .subdiv{

@@ -2,6 +2,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: white;
+  overflow: hidden;
 }
 
 nav {
@@ -55,6 +56,21 @@ nav a {
   width: 400px;
   height: 400px;
   background-color: white;
+  box-shadow: 1px 2px 1px 1px grey;
+  display: none;
+}
+.sub1 .sub-container .searchdiv #close {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  cursor: pointer;
+  background-color: red;
+  width: 30px;
+  color: white;
+}
+.sub1 .sub-container .searchdiv .results {
+  overflow-y: scroll;
+  height: 250px;
 }
 .sub1 .sub-container .subdiv {
   display: flex;

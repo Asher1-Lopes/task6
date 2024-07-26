@@ -152,11 +152,20 @@ class excel {
     let div = document.createElement("div");
     this.div = div;
     this.div.classList.add("subwrapper");
-
-
-
-
     
+    // let div1 = document.createElement("div");
+    // this.div1 = div1;
+
+
+
+    // search12
+
+    const searchbtn = document.getElementById("search12")
+    console.log(searchbtn)
+    const close = document.getElementById("close")
+    this.searchbtn = searchbtn
+    this.close = close
+
     let draggablediv = document.createElement("div");
     draggablediv.classList.add("draggable-div");
 
@@ -184,8 +193,8 @@ class excel {
     // div.style.display = "flex";
     // div.style.flexDirection = "row"
     // data.style.flexGrow ="1";
-    const search = document.getElementById("search");
-    search.addEventListener("click", (e) => this.search2DArray(e));
+    const find = document.getElementById("find");
+    find.addEventListener("click", (e) => this.search2DArray(e));
 
 
     this.data.addEventListener("click", (e) => this.click(e, this.data));
@@ -207,12 +216,35 @@ class excel {
     );
 
     this.data.addEventListener("wheel", (e) => this.scroller(e));
+    // console.log(this.searchbtn)
+    this.searchbtn.addEventListener("click",(e)=>this.searchdiv(e))
     // const scale = window.devicePixelRatio; // Change to 1 on retina screens to see blurry canvas.
     // this.scale = scale
     this.datactx.scale(window.devicePixelRatio, window.devicePixelRatio);
     // this.leftctx.scale(scale, scale);
     // this.headersctx.scale(scale, scale);
   }
+
+searchdiv(e){
+  // this.searchbtn
+  // console.log(this.searchbtn)
+  // this.searchbtn.style.display="block";
+  let searchdiv1 = document.getElementById("searchdiv")
+  this.searchdiv1 = searchdiv1
+  searchdiv1.style.display="block"
+
+
+
+  this.close.addEventListener("click",(e)=>this.closed(e))
+  // this.close 
+
+}
+closed(e){
+   this.searchdiv1.style.display="none"
+}
+
+
+
 
   draggraph(e, draggablediv, closebtnv) {
     // const canvas = document.getElementById('myCanvas');
@@ -361,47 +393,94 @@ if(this.selectedfinal.length>0){
       this.arr2d.push(data1d);
     }
     this.extentside(count)
+   
   }
 
    
-//    if(axis=='x'){ 
-//           this.arr2d.forEach((row, i) => {
-//             let prevColumns = row.length;
+   if(axis=='x'){ 
+          this.arr2d.forEach((row, i) => {
+            let prevColumns = row.length;
 
-//             for (let j = prevColumns; j < prevColumns+ count; j++) {
+            for (let j = prevColumns; j < prevColumns+ count; j++) {
 
-//               let left = row[j - 1].xpos + row[j - 1].width;
-//               let top = row[j-1].ypos;
-//               // console.log(top)
-//               let rectData = {};
-//               rectData["xpos"] = left;
-//               rectData["ypos"] = top;
-//               rectData["width"] = 100;
-//               // this.arr_width.push(100)
-//               this.sizel.push(100)
+              let left = row[j - 1].xpos + row[j - 1].width;
+              let top = row[j-1].ypos;
+              // console.log(top)
+              let rectData = {};
+              rectData["xpos"] = left;
+              rectData["ypos"] = top;
+              rectData["width"] = 100;
+              // this.arr_width.push(100)
+              this.sizel.push(100)
               
-//               rectData["height"] = 30;
-//               rectData["color"] = "black";
-//               rectData["data"] = "";
-//               // rectData["lineWidth"] = 1;
-//               rectData["rows"] = i;
-//               rectData["cols"] = j;
-//               row.push(rectData);
-//               // data1d.push(rectData);
-//               this.datacell(rectData);
-//             }
+              rectData["height"] = 30;
+              rectData["color"] = "black";
+              rectData["data"] = "";
+              // rectData["lineWidth"] = 1;
+              rectData["rows"] = i;
+              rectData["cols"] = j;
+              row.push(rectData);
+              // data1d.push(rectData);
+              this.datacell(rectData);
+            }
            
-//           });
-//           // // this.extendHeader(count)
+          });
+//           
        
-    
+// this.extendheader(count)
      
-// }
+}
+
+
+
+
     // console.log(this.arr2d.length);
     // let lastarr = this.arr2d[this.arr2d.length-1]
     // console.log(lastarr)
   
   }
+
+
+
+extendheader(count){
+
+
+  for (let i = this.alpha.length; i <this.alpha.length+count ; i++) {
+    let rectData = {};
+    // if (c == 0) {
+    //   rectData["xpos"] = c;
+    //   rectData["ypos"] = 0;
+    //   rectData["width"] = 50;
+    //   rectData["height"] = 30;
+    //   rectData["color"] = "black";
+    //   rectData["data"] = "\u25BC";
+    //   this.boole = true;
+    //   this.topgrid(rectData);
+    // }
+    rectData["xpos"] = this.alpha[i - 1].xpos + this.alpha[i - 1].width;
+    rectData["ypos"] = 0;
+    rectData["width"] = this.sizel[i];
+    rectData["height"] = 30;
+    rectData["color"] = "black";
+    rectData["data"] = this.toLetters(i);
+
+    this.topgrid(rectData);
+    c += this.sizel[i];
+  }
+
+
+}
+
+toLetters(num){
+  var mod = num % 26,
+      pow = num / 26 | 0,
+      out = mod ? String.fromCharCode(64 + mod) : (--pow, 'Z');
+  return pow ? this.toLetters(pow) + out : out;
+}
+
+
+
+
 xscroll(event){
   if(event.shiftKey){
     this.xscrollX = true
@@ -412,10 +491,10 @@ xscroll(event){
 
 
   scroller(event) {
-    // console.log("22")
+    // console.log(event)
     let { deltaX, deltaY } = event;
-    if(this.xscrollX){
-    this.scrollX = Math.max(0, this.scrollX + deltaY);
+    if(event.shiftKey){
+    this.scrollX = Math.max(0, this.scrollX + deltaY );
     }else{
     this.scrollY = Math.max(0, this.scrollY + (deltaY < 0 ? -30 : 30));
     }
@@ -456,11 +535,13 @@ console.log(this.scrollX)
         let initWidth = 0;
         initHeight += row[0].height;
        this.sidebar(this.num[i])
+      //  this.topgrid(this.alpha[i])
+       
         // this.drawCell(row[0])
         for (let j = 0; j < row.length; j++) {
           const col = row[j];
-          if(j == row.length-2){
-            // this.extend(10,"x")
+          if(j == row.length-1){
+            this.extend(10,"x")
             //
            
           }
@@ -471,6 +552,7 @@ console.log(this.scrollX)
             initWidth +=row[j].width
             const col = row[j]
             this.datacell(col)
+            // this.topgrid(this.alpha[j])
        
             
           }
@@ -571,17 +653,17 @@ console.log(this.scrollX)
     this.datactx.fillStyle = "white";
     this.datactx.strokestyle = "black";
     this.datactx.lineWidth = 2
-    this.datactx.rect(data.xpos-0.5 , data.ypos - this.scrollY -0.5, data.width+1, data.height+1);
+    this.datactx.rect(data.xpos-0.5 - this.scrollX, data.ypos - this.scrollY -0.5, data.width+1, data.height+1);
     this.datactx.clip();
 
 
-    this.datactx.fillRect(data.xpos - 0.5, data.ypos - this.scrollY - 0.5, data.width + 1, data.height + 1);
+    this.datactx.fillRect(data.xpos - 0.5- this.scrollX, data.ypos - this.scrollY - 0.5, data.width + 1, data.height + 1);
 
     this.datactx.fillStyle = "black";
     this.datactx.font = `${18}px areal`;
     this.datactx.fillText(
       data.data,
-      data.xpos + 2,
+      data.xpos + 2- this.scrollX,
       data.ypos + data.height - 5 - this.scrollY
     );
 
@@ -591,24 +673,13 @@ console.log(this.scrollX)
 
   headerdraw() {
     this.headersctx.clearRect(0, 0, 2100, 30);
-    let alpha = [
-      "a",
-      "b",
-      "c",
-      "d",
-      "e",
-      "f",
-      "g",
-      "h",
-      "i",
-      "k",
-      "l",
-      "h",
-      "i",
-      "k",
-    ];
+    let aplhabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    let arr1 = aplhabets.split("")
+    console.log(arr1)
+    let alpha = [];
+    this.alpha = alpha
     let c = 0;
-    for (let i = 0; i < alpha.length; i++) {
+    for (let i = 0; i < arr1.length; i++) {
       let rectData = {};
       if (c == 0) {
         rectData["xpos"] = c;
@@ -619,17 +690,21 @@ console.log(this.scrollX)
         rectData["data"] = "\u25BC";
         this.boole = true;
         this.topgrid(rectData);
+        this.alpha.push(rectData)
       }
       rectData["xpos"] = c + 50;
       rectData["ypos"] = 0;
       rectData["width"] = this.sizel[i];
       rectData["height"] = 30;
       rectData["color"] = "black";
-      rectData["data"] = alpha[i];
+      rectData["data"] = arr1[i];
 
       this.topgrid(rectData);
+      this.alpha.push(rectData)
       c += this.sizel[i];
     }
+
+    console.log(this.alpha)
   }
 
   topgrid(alpha) {
@@ -686,7 +761,7 @@ console.log(this.scrollX)
   sidedraw() {
 
     // console.log("thisss"+this.nos.length)
-
+    
     for (let i = 0; i < this.arr2d.length; i++) {
       let rectData = {};
       rectData["xpos"] = 0;
@@ -699,6 +774,7 @@ console.log(this.scrollX)
       this.sidebar(rectData);
       this.num.push(rectData)
     }
+   
     console.log("num arr",this.num)
     // console.log("num arr"+this.num[0].data)
   }
@@ -706,13 +782,15 @@ console.log(this.scrollX)
   sidedraw1() {
 
     // console.log("thisss"+this.nos.length)
-
+   
     for (let i = 0; i < this.num.length; i++) {
    
       this.sidebar(this.num[i]);
       
     }
     console.log("num arr",this.num)
+
+   
     // console.log("num arr"+this.num[0].data)
   }
 
@@ -771,8 +849,12 @@ console.log(this.scrollX)
     // );
 
     // this.leftctx.stroke();
-
+  // this.leftctx.translate(this.scrollX,0)
+// console.log("xxx"+this.scrollX)
     this.leftctx.restore()
+    
+    // this.leftctx.transform(1,0,0,1,0,0)
+    // this.leftctx.translate(this.scrollX,0)
     this.leftctx.save();
     this.leftctx.beginPath();
    
@@ -808,13 +890,12 @@ console.log(this.scrollX)
 
 
 
-
     
   }
 // same as extentside
   position(data, event) {
     let rect = this.data.getBoundingClientRect();
-    let x = event.clientX - rect.left;
+    let x = event.clientX - rect.left + this.scrollX;
     let y = event.clientY - rect.top + this.scrollY ;
 
     let sum = 0;
@@ -856,7 +937,7 @@ console.log(this.scrollX)
     this.element.style.display = "block";
 
     // console.log(cell)
-    this.element.style.left = `${cell.xpos + 50}px`;
+    this.element.style.left = `${cell.xpos + 50-this.scrollX}px`;
     this.element.style.top = `${cell.ypos - this.scrollY}px`;
 
     // console.log(datactx)
@@ -880,17 +961,17 @@ console.log(this.scrollX)
       //   data[y3 - 1][headers[x3]] = nvalue;
       cell.data = nvalue;
 
-      this.datactx.clearRect(cell.xpos-0.5, cell.ypos - this.scrollY-0.5, cell.width+1, cell.height+1);
+      this.datactx.clearRect(cell.xpos-0.5-this.scrollX, cell.ypos - this.scrollY-0.5, cell.width+1, cell.height+1);
       // this.datacell(cell)
       this.datactx.save();
       this.datactx.fillStyle = "white";
       this.datactx.strokestyle = "black";
-      this.datactx.rect(cell.xpos-0.5, cell.ypos - this.scrollY-0.5, cell.width+1, cell.height+1);
+      this.datactx.rect(cell.xpos-0.5-this.scrollX, cell.ypos - this.scrollY-0.5, cell.width+1, cell.height+1);
       this.datactx.clip();
 
       this.datactx.fillStyle = "black";
       this.datactx.font = `${18}px areal`;
-      this.datactx.fillText(nvalue, cell.xpos + 2, cell.ypos + cell.height - 5 - this.scrollY);
+      this.datactx.fillText(nvalue, cell.xpos + 2-this.scrollX, cell.ypos + cell.height - 5 - this.scrollY);
       this.datactx.restore();
       this.datactx.stroke();
 
@@ -945,7 +1026,7 @@ console.log(this.scrollX)
     if (this.acti) {
       console.log("acti" + this.acti.data);
       this.datactx.clearRect(
-        this.acti.xpos,
+        this.acti.xpos-this.scrollX,
         this.acti.ypos - this.scrollY,
         this.acti.width,
         this.acti.height
@@ -986,7 +1067,7 @@ console.log(this.scrollX)
     // this.datacell(this.acti)
 
     this.datactx.clearRect(
-      this.acti.xpos,
+      this.acti.xpos-this.scrollX,
       this.acti.ypos - this.scrollY,
       this.acti.width,
       this.acti.height
@@ -999,13 +1080,13 @@ console.log(this.scrollX)
     this.datactx.lineWidth = 2;
 
     this.datactx.rect(
-      this.acti.xpos,
+      this.acti.xpos-this.scrollX,
       this.acti.ypos - this.scrollY,
       this.acti.width,
       this.acti.height
     );
     this.datactx.strokeRect(
-      this.acti.xpos,
+      this.acti.xpos-this.scrollX,
       this.acti.ypos - this.scrollY,
       this.acti.width,
       this.acti.height
@@ -1018,7 +1099,7 @@ console.log(this.scrollX)
     this.datactx.font = `${18}px areal`;
     this.datactx.fillText(
       this.acti.data,
-      this.acti.xpos + 2,
+      this.acti.xpos + 2-this.scrollX,
       this.acti.ypos + this.acti.height - 5 - this.scrollY
     );
 
@@ -1029,7 +1110,7 @@ console.log(this.scrollX)
     this.element.style.display = "none";
   }
   delete(data) {
-    this.datactx.clearRect(data.xpos, data.ypos - this.scrollY, data.width, data.height);
+    this.datactx.clearRect(data.xpos-this.scrollX, data.ypos - this.scrollY, data.width, data.height);
     this.datactx.save();
 
     this.datactx.beginPath();
@@ -1037,20 +1118,20 @@ console.log(this.scrollX)
     this.datactx.strokeStyle = "black";
     this.datactx.lineWidth = 2;
 
-    this.datactx.rect(data.xpos-0.5, data.ypos - this.scrollY-0.5, data.width+1, data.height+1);
+    this.datactx.rect(data.xpos-0.5-this.scrollX, data.ypos - this.scrollY-0.5, data.width+1, data.height+1);
     // this.datactx.strokeRect(data.xpos-0.5, data.ypos - this.scrollY-0.5, data.width+1, data.height+1);
 
     this.datactx.clip();
 
     this.datactx.fillStyle = "black";
     this.datactx.font = `${18}px areal`;
-    this.datactx.fillText("", data.xpos + 2, data.ypos + data.height - 5 - this.scrollY);
+    this.datactx.fillText("", data.xpos + 2-this.scrollX, data.ypos + data.height - 5 - this.scrollY);
 
     this.datactx.restore();
   }
 
   selected(data) {
-    this.datactx.clearRect(data.xpos, data.ypos - this.scrollY, data.width, data.height);
+    this.datactx.clearRect(data.xpos-this.scrollX, data.ypos - this.scrollY, data.width, data.height);
     this.datactx.save();
 
     this.datactx.beginPath();
@@ -1058,8 +1139,8 @@ console.log(this.scrollX)
     this.datactx.strokeStyle = "#107c41";
     this.datactx.lineWidth = 2;
 
-    this.datactx.rect(data.xpos, data.ypos - this.scrollY, data.width, data.height);
-    this.datactx.strokeRect(data.xpos, data.ypos - this.scrollY, data.width, data.height);
+    this.datactx.rect(data.xpos-this.scrollX, data.ypos - this.scrollY, data.width, data.height);
+    this.datactx.strokeRect(data.xpos-this.scrollX, data.ypos - this.scrollY, data.width, data.height);
 
     this.datactx.clip();
 
@@ -1067,7 +1148,7 @@ console.log(this.scrollX)
     this.datactx.font = `${20}px areal`;
     this.datactx.fillText(
       data.data,
-      data.xpos + 2,
+      data.xpos + 2-this.scrollX,
       data.ypos + data.height - 5 - this.scrollY
     );
 
@@ -1077,7 +1158,7 @@ console.log(this.scrollX)
   keyfunc(e, data) {
     if(this.acti!=null){
     this.datactx.clearRect(
-      this.acti.xpos,
+      this.acti.xpos-this.scrollX,
       this.acti.ypos - this.scrollY,
       this.acti.width,
       this.acti.height
@@ -1088,6 +1169,9 @@ console.log(this.scrollX)
     this.headersctx.clearRect(0, 0, 2100, 30);
 
     this.headerdraw();
+    this.leftctx.clearRect(0,0,50,this.leftheaders.height)
+      
+    this.sidedraw1()
 
     let { row, col } = this.acti;
     // console.log(row,col)
@@ -1290,14 +1374,14 @@ console.log(this.scrollX)
         this.datactx.fillStyle = "#e7f1ec";
         this.datactx.strokestyle = "black";
         this.datactx.lineWidth = 2
-        this.datactx.rect(  this.arr2d[j][i].xpos-0.5,
+        this.datactx.rect(  this.arr2d[j][i].xpos-0.5-this.scrollX,
           this.arr2d[j][i].ypos - this.scrollY-0.5,
           this.arr2d[j][i].width+1,
           this.arr2d[j][i].height+1);
         this.datactx.clip();
     
     
-        this.datactx.fillRect(  this.arr2d[j][i].xpos-0.5,
+        this.datactx.fillRect(  this.arr2d[j][i].xpos-0.5-this.scrollX,
           this.arr2d[j][i].ypos - this.scrollY-0.5,
           this.arr2d[j][i].width+1,
           this.arr2d[j][i].height+1);
@@ -1306,7 +1390,7 @@ console.log(this.scrollX)
         this.datactx.font = `${18}px areal`;
         this.datactx.fillText(
           this.arr2d[j][i].data,
-          this.arr2d[j][i].xpos + 2,
+          this.arr2d[j][i].xpos + 2-this.scrollX,
           this.arr2d[j + 1][i].ypos - 5 - this.scrollY
         );
     
@@ -1362,7 +1446,7 @@ console.log(this.scrollX)
   }
 
   clearcell(c) {
-    this.datactx.clearRect(c.xpos, c.ypos - this.scrollY, c.width, c.height);
+    this.datactx.clearRect(c.xpos-this.scrollX, c.ypos - this.scrollY, c.width, c.height);
   }
 
   mouseup(e, data, cell) {
@@ -1513,14 +1597,14 @@ console.log(this.scrollX)
          this.datactx.fillStyle = "white";
         this.datactx.strokeStyle = "black"
         this.datactx.lineWidth = 2
-        this.datactx.rect(  this.arr2d[j][i].xpos-0.5,
+        this.datactx.rect(  this.arr2d[j][i].xpos-0.5-this.scrollX,
           this.arr2d[j][i].ypos - this.scrollY-0.5,
           this.arr2d[j][i].width+1,
           this.arr2d[j][i].height+1);
         this.datactx.clip();
     
     
-        this.datactx.fillRect(  this.arr2d[j][i].xpos-0.5,
+        this.datactx.fillRect(  this.arr2d[j][i].xpos-0.5-this.scrollX,
           this.arr2d[j][i].ypos - this.scrollY-0.5,
           this.arr2d[j][i].width+1,
           this.arr2d[j][i].height+1);
@@ -1529,7 +1613,7 @@ console.log(this.scrollX)
         this.datactx.font = `${18}px areal`;
         this.datactx.fillText(
           this.arr2d[j][i].data,
-          this.arr2d[j][i].xpos + 2,
+          this.arr2d[j][i].xpos + 2-this.scrollX,
           this.arr2d[j + 1][i].ypos - 5 - this.scrollY
         );
     
@@ -1577,7 +1661,7 @@ console.log(this.scrollX)
     console.log(this.acti);
     if (this.acti) {
       this.datactx.clearRect(
-        this.acti.xpos,
+        this.acti.xpos-this.scrollX,
         this.acti.ypos - this.scrollY,
         this.acti.width,
         this.acti.height
@@ -1634,25 +1718,25 @@ console.log(searchTerm)
     }
 console.log(results)
     // Display results
-    // this.displayResults(results);
+    this.displayResults(results);
 }
 
-// displayResults(results) {
-//   let resultsDiv = document.getElementById('results');
-//   resultsDiv.innerHTML = ''; // Clear previous results
+displayResults(results) {
+  let resultsDiv = document.getElementById('results');
+  resultsDiv.innerHTML = ''; // Clear previous results
 
-//   if (results.length > 0) {
-//       let resultHtml = '<p>Search results:</p>';
-//       resultHtml += '<ul>';
-//       results.forEach(result => {
-//           resultHtml += `<li>${result}</li>`;
-//       });
-//       resultHtml += '</ul>';
-//       resultsDiv.innerHTML = resultHtml;
-//   } else {
-//       resultsDiv.innerHTML = '<p>No results found.</p>';
-//   }
-// }
+  if (results.length > 0) {
+      let resultHtml ='<span>count </span>'+ results.length +'<span> Search results:</span>';
+      resultHtml += '<ul>';
+      results.forEach(result => {
+          resultHtml += `<li>${result}</li>`;
+      });
+      resultHtml += '</ul>';
+      resultsDiv.innerHTML = resultHtml;
+  } else {
+      resultsDiv.innerHTML = '<p>No results found.</p>';
+  }
+}
 //   let arr = [
 //     { id: 1, name: 'Alice' },
 //     { id: 2, name: 'Bob' },
