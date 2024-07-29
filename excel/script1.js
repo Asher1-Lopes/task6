@@ -47,16 +47,16 @@ class excel {
 
   init() {
     this.sizel = [
-      100, 100, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150,
-      150, 150, 150,
+      100, 100, 150, 150, 150, 150, 150, 150, 150, 150, 100, 100, 100, 100, 100,
+      100, 100, 100,100,100,100,100,100,100,100,100
     ];
 
     let stylesheet = document.createElement("style");
     stylesheet.textContent = `
        .headers{
-       position: sticky;
-         top: 110px;
-         z-index: 2;
+      //  position: sticky;
+      //    top: 110px;
+      //    z-index: 2;
        }
 
        .wraper{
@@ -118,14 +118,26 @@ class excel {
             line-height: 20px;
             cursor: pointer;
         }
+            .div3{
+             display: inline-block;
+             width:50px;
+            //  height:50px;
+            }
 
       
   
         
         `;
+        const scale = window.devicePixelRatio;
+        this.scale = scale
+   
     document.head.appendChild(stylesheet);
-
-    let headers = this.canvas(2100, 30, "white");
+    let div3 = document.createElement("div");
+    this.div3 = div3;
+    this.wraper.appendChild(div3);
+    div3.textContent = "";
+    div3.classList.add("div3");
+    let headers = this.canvas(this.wraper.offsetWidth-50, 30, "white");
     headers.classList.add("headers");
 
     let graph = this.canvas(200, 200, "white");
@@ -151,8 +163,9 @@ class excel {
 
     let div = document.createElement("div");
     this.div = div;
-    this.div.classList.add("subwrapper");
     
+    this.div.classList.add("subwrapper");
+
     // let div1 = document.createElement("div");
     // this.div1 = div1;
 
@@ -195,6 +208,8 @@ class excel {
     // data.style.flexGrow ="1";
     const find = document.getElementById("find");
     find.addEventListener("click", (e) => this.search2DArray(e));
+    const replace1 = document.getElementById("replace")
+    replace1.addEventListener("click", (e) => this.replaceitem(e));
 
 
     this.data.addEventListener("click", (e) => this.click(e, this.data));
@@ -411,7 +426,7 @@ if(this.selectedfinal.length>0){
               rectData["ypos"] = top;
               rectData["width"] = 100;
               // this.arr_width.push(100)
-              this.sizel.push(100)
+            this.sizel.push(100)  
               
               rectData["height"] = 30;
               rectData["color"] = "black";
@@ -427,7 +442,7 @@ if(this.selectedfinal.length>0){
           });
 //           
        
-// this.extendheader(count)
+this.extendheader(count)
      
 }
 
@@ -443,29 +458,22 @@ if(this.selectedfinal.length>0){
 
 
 extendheader(count){
-
-
-  for (let i = this.alpha.length; i <this.alpha.length+count ; i++) {
+// console.log("eee"+this.alpha.length)
+let prev= this.alpha.length
+  for (let i = prev; i <prev+count ; i++) {
     let rectData = {};
-    // if (c == 0) {
-    //   rectData["xpos"] = c;
-    //   rectData["ypos"] = 0;
-    //   rectData["width"] = 50;
-    //   rectData["height"] = 30;
-    //   rectData["color"] = "black";
-    //   rectData["data"] = "\u25BC";
-    //   this.boole = true;
-    //   this.topgrid(rectData);
-    // }
-    rectData["xpos"] = this.alpha[i - 1].xpos + this.alpha[i - 1].width;
+ 
+    rectData["xpos"] = this.alpha[i -1].xpos + this.alpha[i-1 ].width;
     rectData["ypos"] = 0;
-    rectData["width"] = this.sizel[i];
+    rectData["width"] = 100;
+
     rectData["height"] = 30;
     rectData["color"] = "black";
     rectData["data"] = this.toLetters(i);
 
-    this.topgrid(rectData);
-    c += this.sizel[i];
+    // this.topgrid(rectData);
+    this.alpha.push(rectData)
+    // c += this.sizel[i];
   }
 
 
@@ -508,6 +516,7 @@ console.log(this.scrollY)
 console.log(this.scrollX)
     this.datactx?.clearRect(0, 0, this.data.width, this.data.height);
     this.leftctx.clearRect(0,0,this.leftheaders.width,this.leftheaders.height)
+    this.headersctx.clearRect(0,0,this.headers.width,this.headers.height)
     let canvaWidth = this.data.offsetWidth;
     let canvaHeight = this.data.offsetHeight;
 
@@ -552,25 +561,15 @@ console.log(this.scrollX)
             initWidth +=row[j].width
             const col = row[j]
             this.datacell(col)
-            // this.topgrid(this.alpha[j])
+            this.topgrid(this.alpha[j])
        
             
           }
 
-        //   if (initWidth >= newScrollX && initWidth <= canvaWidth) {
-        //     // this.drawcell(col)
-        //     this.datacell(col);
-        //     // this.sidebar(this.num[j])
-        //   }
-        //   if (initWidth > canvaWidth) break;
-        // }
-
-        // if (initHeight >= newScrollY && initHeight <= canvaHeight) {
-        // }
-        // if (initHeight > canvaHeight + newScrollY) break
+      
       }
     }
-    // this.datactx?.setTransform(1, 0, 0, 1, 0, 0);
+   
   }
 
 }
@@ -579,9 +578,15 @@ console.log(this.scrollX)
     // const scale = window.devicePixelRatio; // Change to 1 on retina screens to see blurry canvas.
     // canvas.width = Math.floor(size * scale);
     // canvas.height = Math.floor(size * scale);
+
+    // const scale = window.devicePixelRatio; // Change to 1 on retina screens to see blurry canvas.
+    // canvas.width = Math.floor(size * scale);
+    // canvas.height = Math.floor(size * scale);
+
+
     let canvas = document.createElement("canvas");
-    canvas.width = width*window.devicePixelRatio ;
-    canvas.height = height * window.devicePixelRatio;
+    canvas.width = Math.floor( width*window.devicePixelRatio) ;
+    canvas.height =  Math.floor(height * window.devicePixelRatio);
     canvas.style.background = color;
 
     return canvas;
@@ -647,7 +652,7 @@ console.log(this.scrollX)
 
   datacell(data) {
     // if(!data) return;
-
+    this.datactx.scale(this.scale, this.scale);
     this.datactx.save();
     this.datactx.beginPath();
     this.datactx.fillStyle = "white";
@@ -676,32 +681,24 @@ console.log(this.scrollX)
     let aplhabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     let arr1 = aplhabets.split("")
     console.log(arr1)
+    // console.log(this.sizel.length)
     let alpha = [];
     this.alpha = alpha
     let c = 0;
     for (let i = 0; i < arr1.length; i++) {
       let rectData = {};
-      if (c == 0) {
-        rectData["xpos"] = c;
-        rectData["ypos"] = 0;
-        rectData["width"] = 50;
-        rectData["height"] = 30;
-        rectData["color"] = "black";
-        rectData["data"] = "\u25BC";
-        this.boole = true;
-        this.topgrid(rectData);
-        this.alpha.push(rectData)
-      }
-      rectData["xpos"] = c + 50;
+
+      rectData["xpos"] = c ;
       rectData["ypos"] = 0;
       rectData["width"] = this.sizel[i];
       rectData["height"] = 30;
       rectData["color"] = "black";
       rectData["data"] = arr1[i];
 
-      this.topgrid(rectData);
+      // this.topgrid(rectData);
       this.alpha.push(rectData)
       c += this.sizel[i];
+      
     }
 
     console.log(this.alpha)
@@ -713,11 +710,7 @@ console.log(this.scrollX)
       this.headersctx.beginPath();
       this.headersctx.save();
       this.headersctx.fillStyle = "white";
-      // this.headersctx.strokestyle = alpha.color;
-      // console.log(data.data);
-      // this.ctx.fillRect(data.x, data.y,data.sizel,data.sizeb);  //arr[j]
-      // this.headersctx.fillRect( alpha.xpos, alpha.ypos, alpha.width, alpha.height);
-      // this.headersctx.strokeRect( alpha.xpos, alpha.ypos, alpha.width, alpha.height); //arr[j]
+     
       this.headersctx.fillStyle = "grey";
       this.headersctx.font = `${18}px areal`;
       this.headersctx.fillText(
@@ -735,13 +728,13 @@ console.log(this.scrollX)
       // console.log(data.data);
       // this.ctx.fillRect(data.x, data.y,data.sizel,data.sizeb);  //arr[j]
       this.headersctx.fillRect(
-        alpha.xpos,
+        alpha.xpos-this.scrollX,
         alpha.ypos,
         alpha.width,
         alpha.height
       );
       this.headersctx.strokeRect(
-        alpha.xpos,
+        alpha.xpos-this.scrollX,
         alpha.ypos,
         alpha.width,
         alpha.height
@@ -750,13 +743,20 @@ console.log(this.scrollX)
       this.headersctx.font = `${18}px areal`;
       this.headersctx.fillText(
         alpha.data,
-        alpha.xpos + 30,
+        alpha.xpos + 30-this.scrollX,
         alpha.ypos + alpha.height - 5
       );
       this.headersctx.stroke();
     }
   }
 
+  headerdraw1(){
+    for (let i = 0; i < this.alpha.length; i++) {
+   
+      this.topgrid(this.alpha[i]);
+      
+    }
+  }
   
   sidedraw() {
 
@@ -797,12 +797,7 @@ console.log(this.scrollX)
   extentside(count){
  
     let length = this.num.length;
-// console.log(length)
-// console.log("arr"+this.nos)
-// this.nos.push()
-  // console.log( this.num[length].ypos , this.num[length].height)
-  // console.log(this.num)
-  // //   if(axis=="y"){
+
     for (let i = length; i <length+count; i++) {
       let rectData = {};
       rectData["xpos"] = 0;
@@ -815,11 +810,7 @@ console.log(this.scrollX)
       this.sidebar(rectData);
       this.num.push(rectData);
     }
-  // console.log("ff"+this.num.length)
-  //   // this.arr2d.push(data1d);
-  
 
-  // }
   console.log("this"+this.num.length)
 
 
@@ -987,10 +978,10 @@ console.log(this.scrollX)
     // Set a start-point
     this.headersctx.strokeStyle = "green";
     this.headersctx.lineWidth = 6;
-    this.headersctx.moveTo(this.acti.xpos + 50, 30);
+    this.headersctx.moveTo(this.acti.xpos -this.scrollX, 30);
 
     // Set an end-point
-    this.headersctx.lineTo(this.acti.xpos + this.acti.width + 50, 30);
+    this.headersctx.lineTo(this.acti.xpos + this.acti.width -this.scrollX, 30);
 
 
 
@@ -1021,10 +1012,14 @@ console.log(this.scrollX)
   }
 
   click(e, data) {
+    // if(this.selectedfinal){
+    //   this.selectedfinal=[]
 
+    // }
 
-    if (this.acti) {
+    if (this.acti ) {
       console.log("acti" + this.acti.data);
+      // this.selectedfinal=[]
       this.datactx.clearRect(
         this.acti.xpos-this.scrollX,
         this.acti.ypos - this.scrollY,
@@ -1034,21 +1029,19 @@ console.log(this.scrollX)
       this.datacell(this.acti);
 
       // this.headersctx.clearRect(this.acti.xpos+50,0,this.acti.width, this.acti.height);
-      this.headersctx.clearRect(0, 0, 2100, 30);
+      this.headersctx.clearRect(0, 0, this.headers.width, 30);
 
-      this.headerdraw();
+    
+      this.headerdraw1()
       this.leftctx.clearRect(0,0,50,this.leftheaders.height)
       
       this.sidedraw1()
-
+      // this.selectedfinal=[]
       // // this.topgrid(this.acti)
       // this.topg(this.acti)
     }
 
-    // if(this.selectedfinal.length>0){
-    //   // this.selectedfinal=null
-
-    // }
+   
     var [r, c] = this.position(data, e);
     // this.cell = this.data[r][c]
     this.r = r;
@@ -1168,7 +1161,7 @@ console.log(this.scrollX)
     //made changes
     this.headersctx.clearRect(0, 0, 2100, 30);
 
-    this.headerdraw();
+    this.headerdraw1();
     this.leftctx.clearRect(0,0,50,this.leftheaders.height)
       
     this.sidedraw1()
@@ -1220,14 +1213,14 @@ console.log(this.scrollX)
 
         this.delete(this.arr2d[row][col]);
         break;
-      case 8:
-        // console.log('backspace')
-        // this.acti = this.arr2d[row][col]
-        // console.log( this.acti.data)
-        this.acti.data = "";
-        this.inputtext(e, this.acti, this.datactx);
+      // case 8:
+      //   // console.log('backspace')
+      //   // this.acti = this.arr2d[row][col]
+      //   // console.log( this.acti.data)
+      //   this.acti.data = "";
+      //   this.inputtext(e, this.acti, this.datactx);
 
-        break;
+      //   break;
 
       case 9:
         this.acti = this.arr2d[row][col + 1];
@@ -1337,7 +1330,41 @@ console.log(this.scrollX)
     this.datactx.closePath();
   }
 
+linedraw(){
 
+console.log(this.selectedfinal.length)
+
+this.headersctx.beginPath();
+
+    // Set a start-point
+    this.headersctx.strokeStyle = "green";
+    this.headersctx.lineWidth = 6;
+    this.headersctx.moveTo(this.selectedfinal[0].xpos -this.scrollX, 30);
+
+    // Set an end-point
+    this.headersctx.lineTo(this.selectedfinal[this.selectedfinal.length-1].xpos + this.selectedfinal[this.selectedfinal.length-1].width -this.scrollX, 30);
+
+
+
+   
+
+    // Draw it
+    this.headersctx.stroke();
+    this.headersctx.restore();
+
+
+    // this.leftctx.beginPath()
+    // this.leftctx.strokeStyle = "green";
+    // this.leftctx.lineWidth = 6;
+    // this.leftctx.moveTo(0, this.this.selectedfinal[0].ypos-this.scrollY);
+
+    // // Set an end-point
+    // this.leftctx.lineTo(0,this.selectedfinal[this.selectedfinal.length-1].ypos+30 -this.scrollY);
+
+    // this.leftctx.stroke();
+    // this.leftctx.restore();
+
+}
   move(e, data, cell) {
     let [prevstartr, prevstartc] = [this.startr, this.startc];
     this.prevstartr = prevstartr;
@@ -1397,6 +1424,7 @@ console.log(this.scrollX)
         this.datactx.stroke();
         this.datactx.restore();
 
+  
 
 
 
@@ -1404,33 +1432,10 @@ console.log(this.scrollX)
 
 
 
-
-        // this.datactx.fillStyle = "#e7f1ec";
-
-        // this.datactx.fillRect(
-        //   this.arr2d[j][i].xpos-0.5,
-        //   this.arr2d[j][i].ypos - this.scrollY-0.5,
-        //   this.arr2d[j][i].width+1,
-        //   this.arr2d[j][i].height+1
-        // );
-
-        // this.datactx.font = `${18}px areal `;
-
-        // this.datactx.fillStyle = "black";
-        // this.datactx.fillText(
-        //   this.arr2d[j][i].data,
-        //   this.arr2d[j][i].xpos + 2,
-        //   this.arr2d[j + 1][i].ypos - 5 - this.scrollY
-        // );
-        // this.datactx.strokeRect(
-        //   this.arr2d[j][i].xpos,
-        //   this.arr2d[j][i].ypos - this.scrollY,
-        //   this.arr2d[j][i].width,
-        //   this.arr2d[j][i].height
-        // );
-
+     
         this.flag = true;
       }
+   
     }
 
     console.log("arrselected" + this.arr_selec);
@@ -1483,12 +1488,8 @@ console.log(this.scrollX)
       }
     }
 
-    // console.log("multi" + multi);
-    // console.log("sum" + sum1);
-    // console.log(Math.max(...arr));
-    // console.log(Math.min(...arr));
     var mean = sum1 / counter;
-    // console.log("mean" + mean);
+   
 
     let multi1 = document.getElementById("multi")
     let sum = document.getElementById("sum")
@@ -1514,20 +1515,13 @@ console.log(this.scrollX)
 
   
 
-    // multi1.innerHTML=multi;
-    // sum.innerHTML=sum1;
-    // max.innerHTML=Math.max(...arr);
-
-    // min.innerHTML=Math.min(...arr);
-    // mean1.innerHTML=mean;
+ 
+    // this.linedraw()
     sum1 = 0;
     counter = 0;
     arr = [];
     multi = 1;
 
-    // this.csvToJson()
-
-    // this.graph1()
 
     data.removeEventListener("mousemove", this.mo);
     data.removeEventListener("mouseup", this.up);
@@ -1561,33 +1555,7 @@ console.log(this.scrollX)
 
     for (let i = mini; i <= maxi; i++) {
       for (let j = minj; j <= maxj; j++) {
-        // // let sizel = this.sizel[i];
-        // this.datactx.fillStyle = "white";
-        // this.datactx.strokeStyle = "black"
-        // this.datactx.lineWidth = 2
-
-        // this.datactx.fillRect(
-        //   this.arr2d[j][i].xpos-0.5,
-        //   this.arr2d[j][i].ypos - this.scrollY-0.5,
-        //   this.arr2d[j][i].width+1,
-        //   this.arr2d[j][i].height+1
-        // );
-
-        // this.datactx.font = `${18}px areal `;
-
-        // this.datactx.fillStyle = "black";
-        // this.datactx.fillText(
-        //   this.arr2d[j][i].data,
-        //   this.arr2d[j][i].xpos + 2,
-        //   this.arr2d[j + 1][i].ypos - 5 - this.scrollY
-        // );
-        // this.datactx.strokeRect(
-        //   this.arr2d[j][i].xpos,
-        //   this.arr2d[j][i].ypos - this.scrollY,
-        //   this.arr2d[j][i].width,
-        //   this.arr2d[j][i].height
-        // );
-
+      
 
 
 
@@ -1632,10 +1600,32 @@ console.log(this.scrollX)
     // this.csvToJson()
     this.graph1()
   }
+dynamicwidth(){
 
+  let counter = 0;
+   
+    for (let i = 0; i < this.arr2d.length; i++) {
+      counter = 0;
+      for (let j = 0; j < this.arr2d[0].length; j++) {
+        let rectData =this.arr2d[i][j];
+        rectData.xpos = counter;
+        rectData.width = this.sizel[j];
+        counter += this.sizel[j];
+      }
+    }
+    counter=0
+    for (let j = 0; j < this.alpha.length; j++) {
+      let rectDatahead = this.alpha[j];
+      rectDatahead.xpos = counter;
+      rectDatahead.width = this.sizel[j];
+      counter += this.sizel[j];
+    }
+
+
+}
   resize(e) {
     let rect = this.headers.getBoundingClientRect();
-    let x = e.clientX - rect.left - 50;
+    let x = e.clientX - rect.left+this.scrollX;
     let sum = 0;
     for (let i = 0; i < this.sizel.length; i++) {
       // const   = this.sizel[i];
@@ -1679,7 +1669,7 @@ console.log(this.scrollX)
 
     var resize_mousemove = (e) => {
       let rect = headers.getBoundingClientRect();
-      let x2 = e.clientX - rect.left - 50;
+      let x2 = e.clientX - rect.left +this.scrollX;;
 
       addition = x2 - total;
       console.log(addition);
@@ -1689,41 +1679,78 @@ console.log(this.scrollX)
         this.sizel[x7 - 2] = this.prev_width + addition;
         console.log(this.sizel);
         headers.removeEventListener("mousemove", resize_mousemove);
-        this.headerdraw();
-        this.csvToJson();
+        // this.headerdraw1();///
+        // this.csvToJson();
+        this.dynamicwidth()
+        this.drawOptimized()
         headers.removeEventListener("mouseup", resize_mouseup);
       }
     };
     headers.addEventListener("mousemove", resize_mousemove);
     headers.addEventListener("mouseup", resize_mouseup);
   }
+
+  replaceitem(){
+    var boolea = false;
+    let replaceterm = document.getElementById('replaceinput').value.toLowerCase();
+    let replaceser = document.getElementById('replaceinput1').value.toLowerCase();
+    console.log(replaceterm) 
+    console.log() 
+    // this.arr2d[1][1].data = replaceterm
+    // this.drawOptimized()
+    for (let i = 0; i < this.arr2d.length; i++) {
+      for (let j = 0; j < this.arr2d[i].length; j++) {
+       
+          let element = this.arr2d[i][j].data.toLowerCase();
+         
+          if (element==replaceser) {
+              this.arr2d[i][j].data = replaceterm
+              this.drawOptimized()
+              boolea = true;
+          }
+      }
+  }
+  if(boolea==false){
+    alert("data not found")
+  }
+
+  }
  search2DArray() {
-    // Get the search term from the input field
+
     let searchTerm = document.getElementById('searchInput').value.toLowerCase();
+   
 console.log(searchTerm)
-    // Array to store matched results
+ 
     let results = [];
 
-    // // Loop through the 2D array
+  
     for (let i = 0; i < this.arr2d.length; i++) {
         for (let j = 0; j < this.arr2d[i].length; j++) {
-            // Convert each element to lowercase for case-insensitive comparison
+         
             let element = this.arr2d[i][j].data.toLowerCase();
-            // Check if the element contains the searchTerm
-            if (element.includes(searchTerm)) {
-                // If match found, push it to results array
+           
+            if (element==searchTerm) {
+             
                 results.push(this.arr2d[i][j].data);
+               
+
             }
         }
     }
 console.log(results)
-    // Display results
+    
     this.displayResults(results);
 }
 
 displayResults(results) {
   let resultsDiv = document.getElementById('results');
-  resultsDiv.innerHTML = ''; // Clear previous results
+
+
+
+
+
+
+  resultsDiv.innerHTML = '';
 
   if (results.length > 0) {
       let resultHtml ='<span>count </span>'+ results.length +'<span> Search results:</span>';
@@ -1737,34 +1764,5 @@ displayResults(results) {
       resultsDiv.innerHTML = '<p>No results found.</p>';
   }
 }
-//   let arr = [
-//     { id: 1, name: 'Alice' },
-//     { id: 2, name: 'Bob' },
-//     { id: 3, name: 'Charlie' },
-//     { id: 4, name: 'David' },
-//     { id: 5, name: 'Eve' }
-// ];
 
-//  search(arr, searchTerm) {
-//     // Convert searchTerm to lowercase for case-insensitive search
-//     searchTerm = searchTerm.toLowerCase();
-
-//     // Filter the array based on the searchTerm
-//     let results = this.arr2d.filter(item => {
-//         // Convert item's name to lowercase for case-insensitive search
-//         let itemName = item.data.toLowerCase();
-//         // Check if itemName includes the searchTerm
-//         return itemName.includes(searchTerm);
-//     });
-
-//     // Display results
-//     if (results.length > 0) {
-//         console.log('Search results:');
-//         results.forEach(result => {
-//             console.log(`${result.id}: ${result.name}`);
-//         });
-//     } else {
-//         console.log('No results found.');
-//     }
-// }
 }
