@@ -149,7 +149,7 @@ class excel {
     // this.graph = graph
 
     this.headers = headers;
-    console.log( this.wraper.offsetHeight)
+    // console.log( this.wraper.offsetHeight)
     let leftheaders = this.canvas(50,this.wraper.offsetHeight-30, "white");
     
     let data = this.canvas(this.wraper.offsetWidth-50, this.wraper.offsetHeight-30, "white");
@@ -174,7 +174,7 @@ class excel {
     // search12
 
     const searchbtn = document.getElementById("search12")
-    console.log(searchbtn)
+    // console.log(searchbtn)
     const close = document.getElementById("close")
     this.searchbtn = searchbtn
     this.close = close
@@ -325,7 +325,18 @@ if(this.selectedfinal.length>0){
     let endcoc = this.selectedfinal[this.selectedfinal.length - 1].col; //0
 
     // console.log("latest"+startcoc,startcor,endcoc,endcor)
+    let pi = "";
+    var pie = false
+    var line = false
+    var bar = false
 
+    if(pie ==true){
+      pi = "pie" 
+    }else if(line==true){
+    pi = "line"
+    }else if (bar==true){
+    pi = "bar"
+    }
     let labels1 = [];
     let data1 = [];
     var count = 0;
@@ -352,7 +363,7 @@ if(this.selectedfinal.length>0){
     if (this.draw != null) this.draw.destroy();
 
     this.draw = new Chart(this.graphctx, {
-      type: "bar",
+      type: "pie",
       data: {
         labels: labels1,
         datasets: [
@@ -524,7 +535,7 @@ console.log(this.scrollX)
     let initHeight = 0;
     let newScrollY = this.scrollY 
    
-    console.log("🚀 ~ Excel ~ drawOptimized ~ newScrollY:", newScrollY);
+    // console.log("🚀 ~ Excel ~ drawOptimized ~ newScrollY:", newScrollY);
     this.newScrollY = newScrollY
     let newScrollX = this.scrollX;
     // this.datactx?.translate(-newScrollX, -newScrollY);
@@ -645,7 +656,7 @@ console.log(this.scrollX)
       }
       this.arr2d.push(data1d);
     }
-    console.log(this.arr2d);
+    // console.log(this.arr2d);
 
     this.active = this.arr2d[0][0];
   }
@@ -680,7 +691,7 @@ console.log(this.scrollX)
     this.headersctx.clearRect(0, 0, 2100, 30);
     let aplhabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     let arr1 = aplhabets.split("")
-    console.log(arr1)
+    // console.log(arr1)
     // console.log(this.sizel.length)
     let alpha = [];
     this.alpha = alpha
@@ -701,12 +712,12 @@ console.log(this.scrollX)
       
     }
 
-    console.log(this.alpha)
+    // console.log(this.alpha)
   }
 
   topgrid(alpha) {
     if (this.boole == true) {
-      console.log("true");
+      // console.log("true");
       this.headersctx.beginPath();
       this.headersctx.save();
       this.headersctx.fillStyle = "white";
@@ -775,7 +786,7 @@ console.log(this.scrollX)
       this.num.push(rectData)
     }
    
-    console.log("num arr",this.num)
+    // console.log("num arr",this.num)
     // console.log("num arr"+this.num[0].data)
   }
 
@@ -788,7 +799,7 @@ console.log(this.scrollX)
       this.sidebar(this.num[i]);
       
     }
-    console.log("num arr",this.num)
+    // console.log("num arr",this.num)
 
    
     // console.log("num arr"+this.num[0].data)
@@ -811,7 +822,7 @@ console.log(this.scrollX)
       this.num.push(rectData);
     }
 
-  console.log("this"+this.num.length)
+  // console.log("this"+this.num.length)
 
 
 
@@ -842,8 +853,8 @@ console.log(this.scrollX)
     // this.leftctx.stroke();
   // this.leftctx.translate(this.scrollX,0)
 // console.log("xxx"+this.scrollX)
-    this.leftctx.restore()
-    
+   
+this.leftctx.restore()
     // this.leftctx.transform(1,0,0,1,0,0)
     // this.leftctx.translate(this.scrollX,0)
     this.leftctx.save();
@@ -874,7 +885,7 @@ console.log(this.scrollX)
     );
     this.leftctx.stroke();
   
-
+   
 
 
 
@@ -906,13 +917,13 @@ console.log(this.scrollX)
 
     console.log("ROW: " + r, "CoL: " + c);
     // console.log("header " + data[r], "data " + data[c - 1][headers1d[r]]);
-    console.log(this.sizel.length);
+    // console.log(this.sizel.length);
 
     return [r, c, sum - this.sizel[r - 1]];
   }
 
   dblclick(e, data) {
-    console.log(this.cell);
+    // console.log(this.cell);
     this.inputtext(e, this.cell, this.datactx);
   }
 
@@ -973,6 +984,10 @@ console.log(this.scrollX)
   }
 
   line() {
+    //  this.headersctx.clearRect( this.acti.xpos -this.scrollX, 0,
+      
+    //   this.acti.width,
+    //   this.acti.height);
     this.headersctx.beginPath();
 
     // Set a start-point
@@ -985,11 +1000,21 @@ console.log(this.scrollX)
 
 
 
-   
+      
+    this.headersctx.fillStyle = "#e7f1ec11";
+    // // this.headersctx.strokestyle = "black";
+    // // console.log(data.data);
+    // // this.ctx.fillRect(data.x, data.y,data.sizel,data.sizeb);  //arr[j]
+    this.headersctx.fill();
 
     // Draw it
     this.headersctx.stroke();
     this.headersctx.restore();
+
+
+
+
+
 
 
     this.leftctx.beginPath()
@@ -1012,13 +1037,10 @@ console.log(this.scrollX)
   }
 
   click(e, data) {
-    // if(this.selectedfinal){
-    //   this.selectedfinal=[]
-
-    // }
+ 
 
     if (this.acti ) {
-      console.log("acti" + this.acti.data);
+      // console.log("acti" + this.acti.data);
       // this.selectedfinal=[]
       this.datactx.clearRect(
         this.acti.xpos-this.scrollX,
@@ -1036,6 +1058,8 @@ console.log(this.scrollX)
       this.leftctx.clearRect(0,0,50,this.leftheaders.height)
       
       this.sidedraw1()
+    this.cellintial = null
+    this.finalcell = null
       // this.selectedfinal=[]
       // // this.topgrid(this.acti)
       // this.topg(this.acti)
@@ -1046,8 +1070,8 @@ console.log(this.scrollX)
     // this.cell = this.data[r][c]
     this.r = r;
     this.c = c;
-    console.log(this.scrollY)
-    console.log("row" + r, c);
+    // console.log(this.scrollY)
+    // console.log("row" + r, c);
 
     // console.log(this.arr2d[c][r - 1].xpos, this.arr2d[c][r - 1].ypos);
     this.cell = this.arr2d[c][r - 1];
@@ -1098,30 +1122,10 @@ console.log(this.scrollX)
 
     this.datactx.restore();
 
-    this.line();
-
+  this.line()
     this.element.style.display = "none";
   }
-  delete(data) {
-    this.datactx.clearRect(data.xpos-this.scrollX, data.ypos - this.scrollY, data.width, data.height);
-    this.datactx.save();
-
-    this.datactx.beginPath();
-    this.datactx.fillStyle = "white";
-    this.datactx.strokeStyle = "black";
-    this.datactx.lineWidth = 2;
-
-    this.datactx.rect(data.xpos-0.5-this.scrollX, data.ypos - this.scrollY-0.5, data.width+1, data.height+1);
-    // this.datactx.strokeRect(data.xpos-0.5, data.ypos - this.scrollY-0.5, data.width+1, data.height+1);
-
-    this.datactx.clip();
-
-    this.datactx.fillStyle = "black";
-    this.datactx.font = `${18}px areal`;
-    this.datactx.fillText("", data.xpos + 2-this.scrollX, data.ypos + data.height - 5 - this.scrollY);
-
-    this.datactx.restore();
-  }
+ 
 
   selected(data) {
     this.datactx.clearRect(data.xpos-this.scrollX, data.ypos - this.scrollY, data.width, data.height);
@@ -1168,7 +1172,7 @@ console.log(this.scrollX)
 
     let { row, col } = this.acti;
     // console.log(row,col)
-    console.log(e.keyCode);
+    // console.log(e.keyCode);
     switch (e.keyCode) {
       case 37:
         if (col > 0) {
@@ -1206,13 +1210,7 @@ console.log(this.scrollX)
 
         break;
 
-      case 46:
-        // alert('delete ')
-        // this.acti = this.arr2d[row][col]
-        // console.log( this.acti.data)
-
-        this.delete(this.arr2d[row][col]);
-        break;
+    
       // case 8:
       //   // console.log('backspace')
       //   // this.acti = this.arr2d[row][col]
@@ -1256,95 +1254,87 @@ console.log(this.scrollX)
   }
 
   border(startr, startc, endr2, endc2) {
-    // this.datactx.clearRect(0,0,this.data.width,this.data.height);
-    // this.csvToJson()
-    // if (this.acti) {
-    //   console.log("acti" + this.acti.data);
-    //   this.datactx.clearRect(
-    //     this.acti.xpos,
-    //     this.acti.ypos - this.scrollY,
-    //     this.acti.width,
-    //     this.acti.height
-    //   );
-    //   this.datacell(this.acti);
-    // }
+   
 
-    console.log("starter" + startr, startc, endr2, endc2);
-    console.log(this.arr2d[startc][startr].data);
-    console.log(this.arr2d[endc2][endr2].data);
-    console.log(this.selectedfinal[1]);
-    console.log(this.selectedfinal[this.selectedfinal.length - 1]);
-    // this.offset = offset
+    // this.datactx.beginPath();
 
-    this.datactx.beginPath();
+    // // Set a start-point
+    // this.datactx.strokeStyle = "green";
+    // // this.datactx.setLineDash([5, 5]); // Define the dash pattern
+    // // this.datactx.lineDashOffset = -this.offset;
+    // this.datactx.lineWidth = 2;
+    // this.datactx.moveTo(this.selectedfinal[0].xpos, this.selectedfinal[0].ypos - this.scrollY); // start
 
-    // Set a start-point
-    this.datactx.strokeStyle = "green";
-    // this.datactx.setLineDash([5, 5]); // Define the dash pattern
-    // this.datactx.lineDashOffset = -this.offset;
-    this.datactx.lineWidth = 2;
-    this.datactx.moveTo(this.selectedfinal[0].xpos, this.selectedfinal[0].ypos - this.scrollY); // start
+    // // Set an end-point
 
-    // Set an end-point
+    // this.datactx.lineTo(
+    //   this.selectedfinal[0].xpos,
+    //   this.selectedfinal[this.selectedfinal.length - 1].ypos  - this.scrollY+
+    //     this.selectedfinal[this.selectedfinal.length - 1].height
+    // ); // straight line first
 
-    this.datactx.lineTo(
-      this.selectedfinal[0].xpos,
-      this.selectedfinal[this.selectedfinal.length - 1].ypos  - this.scrollY+
-        this.selectedfinal[this.selectedfinal.length - 1].height
-    ); // straight line first
+    // this.datactx.moveTo(this.selectedfinal[0].xpos, this.selectedfinal[0].ypos - this.scrollY);
+    // this.datactx.lineTo(
+    //   this.selectedfinal[this.selectedfinal.length - 1].xpos +
+    //     this.selectedfinal[this.selectedfinal.length - 1].width,
+    //   this.selectedfinal[0].ypos - this.scrollY
+    // );
 
-    this.datactx.moveTo(this.selectedfinal[0].xpos, this.selectedfinal[0].ypos - this.scrollY);
-    this.datactx.lineTo(
-      this.selectedfinal[this.selectedfinal.length - 1].xpos +
-        this.selectedfinal[this.selectedfinal.length - 1].width,
-      this.selectedfinal[0].ypos - this.scrollY
-    );
+    // this.datactx.moveTo(
+    //   this.selectedfinal[this.selectedfinal.length - 1].xpos +
+    //     this.selectedfinal[this.selectedfinal.length - 1].width,
+    //   this.selectedfinal[0].ypos - this.scrollY
+    // );
+    // this.datactx.lineTo(
+    //   this.selectedfinal[this.selectedfinal.length - 1].xpos +
+    //     this.selectedfinal[this.selectedfinal.length - 1].width,
+    //   this.selectedfinal[this.selectedfinal.length - 1].ypos - this.scrollY +
+    //     this.selectedfinal[this.selectedfinal.length - 1].height
+    // );
 
-    this.datactx.moveTo(
-      this.selectedfinal[this.selectedfinal.length - 1].xpos +
-        this.selectedfinal[this.selectedfinal.length - 1].width,
-      this.selectedfinal[0].ypos - this.scrollY
-    );
-    this.datactx.lineTo(
-      this.selectedfinal[this.selectedfinal.length - 1].xpos +
-        this.selectedfinal[this.selectedfinal.length - 1].width,
-      this.selectedfinal[this.selectedfinal.length - 1].ypos - this.scrollY +
-        this.selectedfinal[this.selectedfinal.length - 1].height
-    );
+    // this.datactx.moveTo(
+    //   this.selectedfinal[this.selectedfinal.length - 1].xpos +
+    //     this.selectedfinal[this.selectedfinal.length - 1].width,
+    //   this.selectedfinal[this.selectedfinal.length - 1].ypos - this.scrollY +
+    //     this.selectedfinal[this.selectedfinal.length - 1].height
+    // );
+    // this.datactx.lineTo(
+    //   this.selectedfinal[0].xpos,
+    //   this.selectedfinal[this.selectedfinal.length - 1].ypos - this.scrollY +
+    //     this.selectedfinal[this.selectedfinal.length - 1].height
+    // );
 
-    this.datactx.moveTo(
-      this.selectedfinal[this.selectedfinal.length - 1].xpos +
-        this.selectedfinal[this.selectedfinal.length - 1].width,
-      this.selectedfinal[this.selectedfinal.length - 1].ypos - this.scrollY +
-        this.selectedfinal[this.selectedfinal.length - 1].height
-    );
-    this.datactx.lineTo(
-      this.selectedfinal[0].xpos,
-      this.selectedfinal[this.selectedfinal.length - 1].ypos - this.scrollY +
-        this.selectedfinal[this.selectedfinal.length - 1].height
-    );
-
-    // Draw it
-    this.datactx.stroke();
-    this.datactx.restore();
-    this.datactx.closePath();
+    // // Draw it
+    // this.datactx.stroke();
+    // this.datactx.restore();
+    // this.datactx.closePath();
   }
 
 linedraw(){
 
-console.log(this.selectedfinal.length)
+// console.log(this.selectedfinal.length)
+// console.log("thissss"+this.mini,this.maxi,this.minj,this.maxj )
+
+   this.cellintial = this.arr2d[this.minj][this.mini]
+   this.finalcell = this.arr2d[this.maxj][this.maxi]
+   console.log(this.cellintial)
+   console.log(this.finalcell)
+      
 
 this.headersctx.beginPath();
 
     // Set a start-point
     this.headersctx.strokeStyle = "green";
     this.headersctx.lineWidth = 6;
-    this.headersctx.moveTo(this.selectedfinal[0].xpos -this.scrollX, 30);
+    this.headersctx.moveTo(this.cellintial.xpos -this.scrollX, 30);
 
     // Set an end-point
-    this.headersctx.lineTo(this.selectedfinal[this.selectedfinal.length-1].xpos + this.selectedfinal[this.selectedfinal.length-1].width -this.scrollX, 30);
+    this.headersctx.lineTo(this.finalcell.xpos + this.finalcell.width -this.scrollX, 30);
 
+    // this.leftctx.moveTo(0, this.cellintial.ypos-this.scrollY);
 
+    // // Set an end-point
+    // this.leftctx.lineTo(0,this.finalcell.ypos+30 -this.scrollY);
 
    
 
@@ -1356,10 +1346,10 @@ this.headersctx.beginPath();
     // this.leftctx.beginPath()
     // this.leftctx.strokeStyle = "green";
     // this.leftctx.lineWidth = 6;
-    // this.leftctx.moveTo(0, this.this.selectedfinal[0].ypos-this.scrollY);
+    // this.leftctx.moveTo(50, this.cellintial.ypos-this.scrollY);
 
     // // Set an end-point
-    // this.leftctx.lineTo(0,this.selectedfinal[this.selectedfinal.length-1].ypos+30 -this.scrollY);
+    // this.leftctx.lineTo(50,this.finalcell.ypos+30 -this.scrollY);
 
     // this.leftctx.stroke();
     // this.leftctx.restore();
@@ -1373,8 +1363,8 @@ this.headersctx.beginPath();
     this.endr2 = endr2 - 1;
     this.endc2 = endc2;
 
-    console.log("start1 " + this.startr, this.startc); // 7 1 1 4
-    console.log("end1 " + this.endr2, this.endc2); // 7 8 0 2
+    // console.log("start1 " + this.startr, this.startc); // 7 1 1 4
+    // console.log("end1 " + this.endr2, this.endc2); // 7 8 0 2
 
     // this.selectedfinal =[]
 
@@ -1384,6 +1374,11 @@ this.headersctx.beginPath();
     let maxj = Math.max(this.startc, this.endc2);
     let minj = Math.min(this.startc, this.endc2);
     this.arr_selec = [];
+
+    this.maxi = maxi;
+this.mini = mini
+this.maxj = maxj
+this.minj = minj
     // this.final = this.arr2d[this.endc2][this.endr2]
     // console.log("this=="+this.final)
 
@@ -1424,7 +1419,7 @@ this.headersctx.beginPath();
         this.datactx.stroke();
         this.datactx.restore();
 
-  
+      
 
 
 
@@ -1437,9 +1432,9 @@ this.headersctx.beginPath();
       }
    
     }
-
-    console.log("arrselected" + this.arr_selec);
-    console.log("finalselected" + this.selectedfinal);
+    // this.linedraw()
+    // console.log("arrselected" + this.arr_selec);
+    // console.log("finalselected" + this.selectedfinal);
     this.diff = this.selectedfinal.filter(
       (c) => this.arr_selec.indexOf(c) === -1
     );
@@ -1459,18 +1454,21 @@ this.headersctx.beginPath();
     this.endr1 = endr1 - 1;
     this.endc1 = endc1;
     // console.log("end1 " + this.endr1, this.endc1); // 7 8
-    console.log("start1 " + this.startr, this.startc); // 7 1 1 4
-    console.log("end1 " + this.endr1, this.endc1); // 7 8 0 2
+    // console.log("start1 " + this.startr, this.startc); // 7 1 1 4
+    // console.log("end1 " + this.endr1, this.endc1); // 7 8 0 2
 
     // this.border(this.startr,this.startc,this.endr1, this.endc1)
 
-    console.log(this.arr2d[this.endc1][this.endr1].data);
+    // console.log(this.arr2d[this.endc1][this.endr1].data);
 
+  
     let maxi = Math.max(this.startr, this.endr1);
     let mini = Math.min(this.startr, this.endr1);
 
     let maxj = Math.max(this.startc, this.endc1);
     let minj = Math.min(this.startc, this.endc1);
+
+   
 
     let sum1 = 0;
     let counter = 0;
@@ -1483,7 +1481,7 @@ this.headersctx.beginPath();
         multi *= parseInt(this.arr2d[j][i].data);
         arr.push(parseInt(this.arr2d[j][i].data));
         counter++;
-        console.log(this.arr2d[j][i].data);
+        // console.log(this.arr2d[j][i].data);
         // sum += j;
       }
     }
@@ -1516,27 +1514,27 @@ this.headersctx.beginPath();
   
 
  
-    // this.linedraw()
+
     sum1 = 0;
     counter = 0;
     arr = [];
     multi = 1;
 
-
+   
     data.removeEventListener("mousemove", this.mo);
     data.removeEventListener("mouseup", this.up);
   }
 
   mousedown1(e, data, cell) {
     let length = this.sizel.length;
-    console.log(length);
+    // console.log(length);
     // this.cell = cell;
 
     let [startr, startc] = this.position(this.data, e);
     this.startr = startr - 1;
     this.startc = startc;
 
-    console.log("start3 " + this.startr, this.startc); // 7 1
+    // console.log("start3 " + this.startr, this.startc); // 7 1
 
     this.mo = (e) => this.move(e, data, this.cell);
     data.addEventListener("mousemove", this.mo);
@@ -1544,14 +1542,18 @@ this.headersctx.beginPath();
     this.up = (e) => this.mouseup(e, data, this.cell);
     data.addEventListener("mouseup", this.up);
 
-    console.log("start21 " + this.prevstartr, this.prevstartc); // 7 1 1 4
-    console.log("end21 " + this.endr1, this.endc1); // 7 8 0 2
+    // console.log("start21 " + this.prevstartr, this.prevstartc); // 7 1 1 4
+    // console.log("end21 " + this.endr1, this.endc1); // 7 8 0 2
 
     let maxi = Math.max(this.prevstartr, this.endr2);
     let mini = Math.min(this.prevstartr, this.endr2);
 
     let maxj = Math.max(this.prevstartc, this.endc2);
     let minj = Math.min(this.prevstartc, this.endc2);
+
+
+
+
 
     for (let i = mini; i <= maxi; i++) {
       for (let j = minj; j <= maxj; j++) {
@@ -1594,11 +1596,14 @@ this.headersctx.beginPath();
 
 
         this.flag = true;
+    
+
       }
     }
-
+    // this.linedraw()
     // this.csvToJson()
     this.graph1()
+   
   }
 dynamicwidth(){
 
@@ -1623,6 +1628,15 @@ dynamicwidth(){
 
 
 }
+
+// infidown(){
+
+// console.log("hello")
+
+// }
+
+
+
   resize(e) {
     let rect = this.headers.getBoundingClientRect();
     let x = e.clientX - rect.left+this.scrollX;
@@ -1640,6 +1654,9 @@ dynamicwidth(){
         break;
       } else {
         this.headers.style.cursor = "default";
+        // this.headers.addEventListener("mousedown", (e) =>
+        //   this.infidown(e, this.headers))
+        // break
       }
       sum += this.sizel[i];
     }
@@ -1648,7 +1665,7 @@ dynamicwidth(){
   redown(e, headers) {
     this.selectedfinal = [];
     let addition = 0;
-    console.log(this.acti);
+    // console.log(this.acti);
     if (this.acti) {
       this.datactx.clearRect(
         this.acti.xpos-this.scrollX,
@@ -1661,11 +1678,11 @@ dynamicwidth(){
     }
     // this.element.style.display="none";
     let [x7, y1, total] = this.position(this.headers, e);
-    console.log(x7, y1, total);
+    // console.log(x7, y1, total);
 
     this.prev_width = this.sizel[x7 - 2];
 
-    console.log("This is the width= " + this.prev_width);
+    // console.log("This is the width= " + this.prev_width);
 
     var resize_mousemove = (e) => {
       let rect = headers.getBoundingClientRect();
@@ -1677,7 +1694,7 @@ dynamicwidth(){
     var resize_mouseup = (e) => {
       if (this.prev_width + addition > 50) {
         this.sizel[x7 - 2] = this.prev_width + addition;
-        console.log(this.sizel);
+        // console.log(this.sizel);
         headers.removeEventListener("mousemove", resize_mousemove);
         // this.headerdraw1();///
         // this.csvToJson();
@@ -1694,8 +1711,8 @@ dynamicwidth(){
     var boolea = false;
     let replaceterm = document.getElementById('replaceinput').value.toLowerCase();
     let replaceser = document.getElementById('replaceinput1').value.toLowerCase();
-    console.log(replaceterm) 
-    console.log() 
+    // console.log(replaceterm) 
+    // console.log() 
     // this.arr2d[1][1].data = replaceterm
     // this.drawOptimized()
     for (let i = 0; i < this.arr2d.length; i++) {
@@ -1719,7 +1736,7 @@ dynamicwidth(){
 
     let searchTerm = document.getElementById('searchInput').value.toLowerCase();
    
-console.log(searchTerm)
+// console.log(searchTerm)
  
     let results = [];
 
@@ -1729,7 +1746,7 @@ console.log(searchTerm)
          
             let element = this.arr2d[i][j].data.toLowerCase();
            
-            if (element==searchTerm) {
+            if (element.includes(searchTerm)) {
              
                 results.push(this.arr2d[i][j].data);
                
@@ -1737,7 +1754,7 @@ console.log(searchTerm)
             }
         }
     }
-console.log(results)
+// console.log(results)
     
     this.displayResults(results);
 }
