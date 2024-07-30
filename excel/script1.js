@@ -30,8 +30,12 @@ class excel {
  
     this.headerdraw();
     this.sidedraw();
-
+    this.pi = "bar";
+    this.line2 = false
+    this.bar2 = false
+    this.pie2 = false
     this.drawOptimized();
+    this.decider()
 
     // this.extend();
     // this.extentside()
@@ -47,8 +51,8 @@ class excel {
 
   init() {
     this.sizel = [
-      100, 100, 150, 150, 150, 150, 150, 150, 150, 150, 100, 100, 100, 100, 100,
-      100, 100, 100,100,100,100,100,100,100,100,100
+      100, 100,100, 100,100, 100,100, 100,100, 100,100, 100,100, 100, 100, 100, 100, 100, 100,
+      100, 100, 100,100,100,100,100
     ];
 
     let stylesheet = document.createElement("style");
@@ -315,28 +319,72 @@ closed(e){
     graphBtn.addEventListener("click", clickgraph);
   }
 
+
+decider(){
+
+  const line1 = document.getElementById("line")
+  const bar1 = document.getElementById("bar")
+  const pie1 = document.getElementById("pie")
+  console.log(line1)
+  console.log(bar1)
+  // console.log(this.pi+"heyy")
+
+  pie1.addEventListener("click", () => {
+
+    this.pie2 = !this.pie2
+    if(this.pie2){
+     this.pi="pie"
+     this.line2 = false
+     this.bar2 = false
+     bar1.style.background = "grey"
+     line1.style.background = "grey"
+     pie1.style.background = "green"
+   }
+    })
+
+   bar1.addEventListener("click", () => {
+
+   this.bar2 = !this.bar2
+   if(this.bar2){
+    this.pi="bar"
+    this.line2 = false
+    this.pie2 = false
+     bar1.style.background = "green"
+     line1.style.background = "grey"
+     pie1.style.background = "grey"
+  }
+   })
+
+  line1.addEventListener("click", () => {
+
+  this.line2 = !this.line2
+
+  if(this.line2){
+    this.pi="line"
+    this.bar2 =false
+    this.pie2 = false
+    bar1.style.background = "grey"
+    line1.style.background = "green"
+    pie1.style.background = "grey"
+    
+  }
+  // console.log("d"+this.pi)
+  });
+}
+
+
   graph1() {
 
+
 if(this.selectedfinal.length>0){
+
     let startcor = this.selectedfinal[0].row;
     let startcoc = this.selectedfinal[0].col; //0
 
     let endcor = this.selectedfinal[this.selectedfinal.length - 1].row;
     let endcoc = this.selectedfinal[this.selectedfinal.length - 1].col; //0
 
-    // console.log("latest"+startcoc,startcor,endcoc,endcor)
-    let pi = "";
-    var pie = false
-    var line = false
-    var bar = false
-
-    if(pie ==true){
-      pi = "pie" 
-    }else if(line==true){
-    pi = "line"
-    }else if (bar==true){
-    pi = "bar"
-    }
+  console.log("neww"+startcor,startcoc,endcor,endcoc)
     let labels1 = [];
     let data1 = [];
     var count = 0;
@@ -348,28 +396,85 @@ if(this.selectedfinal.length>0){
       count++;
     }
 
-    // }
-    // console.log(labels1)
-
-    // console.log(data1);
+  
 
     for (let i = 0; i < this.selectedfinal.length; i++) {
       data1[i] = this.selectedfinal[i].data;
+
       //  count++;
     }
 
-    // console.log(data1);
+console.log(this.selectedfinal)
+    let arr1 = [0,0,0]
+    let sum =0;
+    // for(let i =0;i<this.selectedfinal[0].length;i++){
+    //     for(let j=0;j<this.selectedfinal.length;j++){
+    //         sum += this.selectedfinal[j].data
+            
+    //     }
+    //     arr1[i] = sum
+    //     console.log(sum)
+    //     sum=0
+    // }
 
+    // console.log("by"+arr1)
+    let c =0;
+for(let i =0;i<this.selectedfinal.length-1;i++){
+//  1 1 2 2 
+// [1,3,5 6]
+  if(this.selectedfinal[i].xpos == this.selectedfinal[i+1].xpos){
+    sum += parseInt(this.selectedfinal[i].data)
+    console.log(this.selectedfinal[i].data)
+   
+  }else{
+    sum += parseInt(this.selectedfinal[i].data)
+    arr1[c] = Math.floor( sum);
+    c++;
+    sum=0;
+  }
+
+
+
+}
+sum += parseInt(this.selectedfinal[this.selectedfinal.length-1].data)
+arr1[c] =  Math.floor( sum)
+
+
+console.log(arr1)
+  
+
+
+ 
+
+
+
+
+
+//     for(let i =startcor;i<=endcor;i++){
+// let avgcol =[]
+// let c =0
+//       for(let j = startcoc;j<=endcoc;j++){
+//         if(i==j){
+//      avgcol[c] = this.arr2d[i][j].data;
+//      c++
+//         }
+//       }
+//     }
+
+
+
+
+    
     if (this.draw != null) this.draw.destroy();
 
     this.draw = new Chart(this.graphctx, {
-      type: "pie",
+      type:this.pi,
       data: {
         labels: labels1,
         datasets: [
           {
             label: "# of Votes",
-            data: data1,
+            data: arr1,
             borderWidth: 1,
           },
         ],
