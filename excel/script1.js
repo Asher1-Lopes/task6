@@ -788,6 +788,7 @@ this.divmain = divmain
       this.leftctx.clearRect(0, 0, 50, this.leftheaders.height);
       this.sidedraw1();
     }
+    if(this.acti!=null){
     let { row, col } = this.acti;
     switch (e.keyCode) {
       case 37:
@@ -840,7 +841,8 @@ this.divmain = divmain
         break;
       default:
         break;
-    }
+    }}
+  
   }
   // mouse move
   move(e, data, cell) {
