@@ -125,3 +125,143 @@ this.leftctx.fillText(
 );
 this.leftctx.stroke();
 this.leftctx.restore()
+
+
+marcing() {
+  let totalwidth = 0;
+  let totalheight = 0;
+  for (let i = this.cellintial.col; i <= this.finalcell.col; i++) {
+    totalwidth += this.arr2d[i][0].width;
+  }
+  console.log(totalwidth);
+  for (let i = this.cellintial.row; i <= this.finalcell.row; i++) {
+    totalheight += this.arr2d[i][0].height;
+  }
+  console.log(totalheight);
+  this.datactx.save();
+  this.datactx.beginPath();
+  // Draw the rectangle
+  this.datactx.rect(
+    this.cellintial.xpos,
+    this.cellintial.ypos,
+    totalwidth,
+    totalheight
+  );
+  this.datactx.lineWidth = 4;
+  this.datactx.strokeStyle = "green";
+  this.datactx.stroke();
+  this.datactx.restore();
+  requestAnimationFrame(() => this.marcing());
+}
+// border
+
+border() {
+  this.datactx.restore();
+  this.datactx.beginPath();
+
+  // Set a start-point
+  this.datactx.strokeStyle = "green";
+  // this.datactx.setLineDash([5, 5]); // Define the dash pattern
+  // this.datactx.lineDashOffset = -this.offset;
+  this.datactx.lineWidth = 2;
+  this.datactx.moveTo(
+    this.selectedfinal[0].xpos,
+    this.selectedfinal[0].ypos - this.scrollY
+  ); // start
+
+  // Set an end-point
+
+  this.datactx.lineTo(
+    this.selectedfinal[0].xpos,
+    this.selectedfinal[this.selectedfinal.length - 1].ypos -
+      this.scrollY +
+      this.selectedfinal[this.selectedfinal.length - 1].height
+  ); // straight line first
+
+  this.datactx.moveTo(
+    this.selectedfinal[0].xpos,
+    this.selectedfinal[0].ypos - this.scrollY
+  );
+  this.datactx.lineTo(
+    this.selectedfinal[this.selectedfinal.length - 1].xpos +
+      this.selectedfinal[this.selectedfinal.length - 1].width,
+    this.selectedfinal[0].ypos - this.scrollY
+  );
+
+  this.datactx.moveTo(
+    this.selectedfinal[this.selectedfinal.length - 1].xpos +
+      this.selectedfinal[this.selectedfinal.length - 1].width,
+    this.selectedfinal[0].ypos - this.scrollY
+  );
+  this.datactx.lineTo(
+    this.selectedfinal[this.selectedfinal.length - 1].xpos +
+      this.selectedfinal[this.selectedfinal.length - 1].width,
+    this.selectedfinal[this.selectedfinal.length - 1].ypos -
+      this.scrollY +
+      this.selectedfinal[this.selectedfinal.length - 1].height
+  );
+
+  this.datactx.moveTo(
+    this.selectedfinal[this.selectedfinal.length - 1].xpos +
+      this.selectedfinal[this.selectedfinal.length - 1].width,
+    this.selectedfinal[this.selectedfinal.length - 1].ypos -
+      this.scrollY +
+      this.selectedfinal[this.selectedfinal.length - 1].height
+  );
+  this.datactx.lineTo(
+    this.selectedfinal[0].xpos,
+    this.selectedfinal[this.selectedfinal.length - 1].ypos -
+      this.scrollY +
+      this.selectedfinal[this.selectedfinal.length - 1].height
+  );
+
+  // Draw it
+  this.datactx.stroke();
+
+  this.datactx.closePath();
+}
+
+// line draw
+
+linedraw() {
+  // console.log(this.selectedfinal.length)
+  // console.log("thissss"+this.mini,this.maxi,this.minj,this.maxj )
+
+  this.cellintial = this.arr2d[this.minj][this.mini];
+  this.finalcell = this.arr2d[this.maxj][this.maxi];
+  console.log(this.cellintial);
+  console.log(this.finalcell);
+
+  this.headersctx.beginPath();
+
+  // Set a start-point
+  this.headersctx.strokeStyle = "green";
+  this.headersctx.lineWidth = 6;
+  this.headersctx.moveTo(this.cellintial.xpos - this.scrollX, 30);
+
+  // Set an end-point
+  this.headersctx.lineTo(
+    this.finalcell.xpos + this.finalcell.width - this.scrollX,
+    30
+  );
+
+  // this.leftctx.moveTo(0, this.cellintial.ypos-this.scrollY);
+
+  // // Set an end-point
+  // this.leftctx.lineTo(0,this.finalcell.ypos+30 -this.scrollY);
+
+  // Draw it
+  this.headersctx.stroke();
+  this.headersctx.restore();
+
+  // this.leftctx.beginPath()
+  // this.leftctx.strokeStyle = "green";
+  // this.leftctx.lineWidth = 6;
+  // this.leftctx.moveTo(50, this.cellintial.ypos-this.scrollY);
+
+  // // Set an end-point
+  // this.leftctx.lineTo(50,this.finalcell.ypos+30 -this.scrollY);
+
+  // this.leftctx.stroke();
+  // this.leftctx.restore();
+}

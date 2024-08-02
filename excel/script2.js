@@ -27,9 +27,44 @@ fgverg,34,212,23,14,12,13, tghtr,rttt,tg,etg,etrg,334,23,33
 gergr,34,212,23,14,12,13, tghtr,rttt,tg,etg,etrg,334,23,33
 rer,34,212,23,14,12,13, tghtr,rttt,tg,etg,etrg,334,23,33
 frf,34,212,23,14,12,12, tghtr,rttt,tg,etg,etrg,334,23,33`;
+// const csv  = ``
 var ele = document.querySelector(".wraper");
-var excel1 = new excel(csv,ele);
+// var eccel3 = new excel(csv,ele)
 
+      let currentExcel;
+   var flag = false
+        
+        const csv2 = ``;
+        const sheets = document.getElementById("sheet")
+        
+        sheets.addEventListener("click",(e)=> addsheets(e))      
+        function addsheets(){
+          if(flag) {
+            flag =false
+          }else{
+            flag = true
+          }
+
+
+if(flag){
+            if (currentExcel) {
+                currentExcel.hide();
+            }
+            currentExcel = new excel(csv2, ele);
+            // currentExcel.show();
+        }
+         else
+        {
+            if (currentExcel) {
+                currentExcel.hide();
+            }
+            currentExcel = new excel(csv, ele);
+            // currentExcel.show();
+        }
+            
+              }
+        currentExcel = new excel(csv,ele);
+        // currentExcel.show()
 
 
                               

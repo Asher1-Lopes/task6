@@ -16,7 +16,33 @@
       
       const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
-let offset = 0;
+
+
+
+let dashoffset =0;
+function marcing(){
+ctx.clearRect(0,0,canvas.height,canvas.width)
+  ctx.setLineDash([5,5])
+  ctx.lineDashOffset = -dashoffset
+  ctx.strokestyle = "black"
+  ctx.strokeRect(0,0,500,500)
+  dashoffset += 1
+requestAnimationFrame(marcing)
+}
+
+marcing()
+
+
+
+
+
+
+
+
+
+
+
+
 
 function drawLine() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas

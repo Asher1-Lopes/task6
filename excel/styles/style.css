@@ -82,6 +82,7 @@ nav a {
 .sub1 .sub-container .subdiv i {
   margin: 3px;
   color: grey;
+  cursor: pointer;
 }
 .sub1 .sub-container .subdiv span {
   margin: 3px;
