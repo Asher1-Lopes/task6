@@ -3,69 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marching Ants Animation</title>
+    <title>Resizable Div</title>
+
     <style>
-        canvas {
-            border: 1px solid black;
-        }
+      /* styles.css */
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.resizable {
+    position: relative;
+    width: 300px; /* Initial width */
+    height: 200px; /* Initial height */
+    border: 1px solid #000;
+    overflow: hidden;
+}
+
+.resizable-content {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.resizer {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #000;
+    right: 0;
+    bottom: 0;
+    cursor: nwse-resize; /* Diagonal resize cursor*/
+}  
     </style>
 </head>
 <body>
-    <canvas id="myCanvas" width="500" height="500"></canvas>
+    <div class="resizable">
+        <!-- <div class="resizable-content">
+    
+            Resizable Div
+        </div> -->
+        <div class="resizer"></div>
+    </div>
     <script >
-      
-      const canvas = document.getElementById('myCanvas');
-const ctx = canvas.getContext('2d');
+      // script.js
+document.addEventListener('DOMContentLoaded', () => {
+    const resizableDiv = document.querySelector('.resizable');
+    const resizer = document.querySelector('.resizer');
 
+    let isResizing = false;
+    let lastX = 50;
+    let lastY = 50;
 
+    resizer.addEventListener('mousedown', (e) => {
+        isResizing = true;
+        lastX = e.clientX;
+        lastY = e.clientY;
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
+    });
 
-let dashoffset =0;
-function marcing(){
-ctx.clearRect(0,0,canvas.height,canvas.width)
-  ctx.setLineDash([5,5])
-  ctx.lineDashOffset = -dashoffset
-  ctx.strokestyle = "black"
-  ctx.strokeRect(0,0,500,500)
-  dashoffset += 1
-requestAnimationFrame(marcing)
-}
+    function handleMouseMove(e) {
+        if (!isResizing) return;
 
-marcing()
+        const dx = e.clientX - lastX;
+        const dy = e.clientY - lastY;
 
+        const newWidth = resizableDiv.clientWidth + dx;
+        const newHeight = resizableDiv.clientHeight + dy;
 
+        resizableDiv.style.width = `${newWidth}px`;
+        resizableDiv.style.height = `${newHeight}px`;
 
+        lastX = e.clientX;
+        lastY = e.clientY;
+    }
 
+    function handleMouseUp() {
+        isResizing = false;
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+    }
+});
 
-
-
-
-
-
-
-
-
-function drawLine() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
-    ctx.setLineDash([5, 5]); // Define the dash pattern
-    ctx.lineDashOffset = -offset; // Set the offset to create the marching effect
-
-    ctx.beginPath();
-    ctx.moveTo(50, 50); // Starting point of the line
-    ctx.lineTo(450, 450); // Ending point of the line
-    ctx.strokeStyle = 'black'; // Color of the line
-    ctx.lineWidth = 2; // Width of the line
-    ctx.stroke();
-}
-
-function animate() {
-    offset += 1; // Increment the offset to create the animation
-    drawLine();
-    requestAnimationFrame(animate); // Call animate recursively
-}
-
-animate(); // Start the animation
-
-      
     </script>
 </body>
 </html>

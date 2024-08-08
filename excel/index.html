@@ -43,7 +43,7 @@
 
         </div>
         <div class="subdiv">
-            <i class="fa-solid fa-rotate-left"></i>
+            <i class="fa-solid fa-sort" id="sort"></i>
             <i class="fa-solid fa-rotate-right"></i>
            <span>undo</span>
             
@@ -65,7 +65,8 @@
                 <button id="search12">search</button>
                 
                 <button id="sheet">Add sheet</button>
-               
+                <button id="next"> <i class="fa-solid fa-arrow-right"  style="color:white"></i></button>
+       
                 
                 <label for="file1">   
                     <!-- <input type="file" name="" id="file1" accept="text/csv" class="hidden"> -->
@@ -88,6 +89,7 @@
            <b>MEDIAN</b><p id="median"></p>
         </div>
         </span>  
+        <button class="button1" id = "center">center</button>
             </div>
         </div>
         <div class="subdiv mid2">
@@ -99,7 +101,14 @@
                 <button id="bar">bar</button>
                 <button id="pie">pie</button>
             </div>
+      
         </span>
+        
+        
+        </div>
+        <div class="subdiv">
+              
+        current element<span id="position"></span>
         </div>
         
      </div>
@@ -109,7 +118,9 @@
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="./script1.js"></script>
+    <!-- <script src="./script3.js"></script> -->
+    <script src="../tp1.js"></script>
+    <!-- <script src="../tp.js"></script> -->
     <script src="./script2.js"></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
 </body>

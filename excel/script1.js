@@ -42,6 +42,7 @@ class excel {
   show() {
     this.wraper.style.display = "block";
     this.init()
+    this.render()
   }
 
   init() {
@@ -51,8 +52,10 @@ class excel {
     let div3 = document.createElement("div");
     this.div3 = div3;
     this.wraper.appendChild(div3);
-    div3.textContent = "";
+    // div3.textContent = `&#9698;`
+    div3.innerHTML = '';
     div3.classList.add("div3");
+
     
     
     // all canvas
@@ -425,13 +428,6 @@ this.divmain = divmain
       this.xscrollX = false;
     }
   }
-// scroll bar artifical
-
-
-
-
-
-
 // scroller func
   scroller(event) {
     let {deltaY} = event;

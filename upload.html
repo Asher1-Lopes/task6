@@ -265,3 +265,225 @@ linedraw() {
   // this.leftctx.stroke();
   // this.leftctx.restore();
 }
+
+//     // resize y 
+//     resizey(e){
+//       let rect1 = this.leftheaders.getBoundingClientRect()
+//       let y = e.clientY - rect1.top + this.scrollY;
+//       let sum = 0;
+//       console.log(y)
+// for(let i =0;i<this.sizeb.length;i++){
+//   // console.log(sum)
+//   if(sum + 2 > y && y > sum && y > 0){
+//     console.log(sum)
+//     this.leftheaders.style.cursor = "row-resize"
+//     this.leftheaders.addEventListener("mousedown", (e) => this.redowny(e, this.leftheaders) );
+//     break;
+//         } else {
+//           this.leftheaders.style.cursor = "default";
+//         }
+//   sum += this.sizeb[i]
+// }
+//     }
+
+
+// redowny(e, leftheaders){
+//   let addition =0;
+//   let [x1, y1, total] = this.position(this.leftheaders, e); // calling for co-ordinates and total length from x position
+//   this.prev_height1 = this.sizeb[y1 - 1];
+// // moving tht cursor 
+// let sumy = 0;
+
+// for(let i =0;i<this.sizeb.length;i++){
+//   if(y1>i){
+//     sumy += this.sizeb[i]
+//   }else{
+//     break;
+//   }
+// }
+// // console.log(sumy)
+
+//   var resize_mousemove = (e) => {
+//     let rect = leftheaders.getBoundingClientRect();
+//     let y2 = e.clientY - rect.top + this.scrollY;
+//     // console.log(total)
+//     // console.log("total"+sumy)
+//     // console.log(y1)
+//     addition = y2 - sumy;
+//     console.log("addi"+addition)
+//   };
+// // mouse up func will terminate
+//   var resize_mouseup = (e) => {
+//     if (this.prev_height1 + addition > 50) {
+//       console.log(y1)
+//       this.sizeb[y1 - 1] = Math.floor(this.prev_height1 + addition);
+
+//       leftheaders.removeEventListener("mousemove", resize_mousemove);
+//       console.log(this.sizeb)
+//       // this.dynamicwidth(); // calling render and width func again
+//       this.render();
+//       leftheaders.removeEventListener("mouseup", resize_mouseup);
+//     }
+//   };
+//   leftheaders.addEventListener("mousemove", resize_mousemove);
+//   leftheaders.addEventListener("mouseup", resize_mouseup);
+// }
+
+// scrollelr
+scrollerdiv(){
+  // for y axis
+    let scroldivy = document.createElement("div")
+  scroldivy.classList.add("scroldiv")
+  this.wraper.appendChild(scroldivy)
+  let childscroll = document.createElement("div")
+  childscroll.classList.add("childscroll")
+  scroldivy.appendChild(childscroll)
+  // console.log(this.arr2d.length)
+  let divheight = this.arr2d.length * 30;
+  childscroll.style.height=`${divheight}px`
+  
+  // for x axis
+  let scroldivx = document.createElement("div")
+  scroldivx.classList.add("scroldivx")
+  this.wraper.appendChild(scroldivx)
+  let childscrollx = document.createElement("div")
+  childscrollx.classList.add("childscrollx")
+  scroldivx.appendChild(childscrollx)
+  // // console.log(this.arr2d.length)
+  let divwidth = this.arr2d[0].length * 100;
+  // console.log(divwidth)
+  childscrollx.style.width=`${divwidth}px`
+  
+  
+  let y = "y"
+  scroldivy.addEventListener("scroll", (e) => this.scrollhandle(e,y));
+  
+  let x = "x"
+  scroldivx.addEventListener("scroll",(e) => this.scrollhandle(e,x))
+  
+  
+  }
+  
+  
+  scrollhandle(e,axis){
+  
+  // console.log("scrolled")
+  
+  if(axis == 'y'){
+  this.scrollY = Math.floor(e.target.scrollTop/30)*30;
+  // this.render()
+  }else{
+    this.scrollX = Math.floor(e.target.scrollLeft/100)*100;
+  //   this.render()
+  }
+  this.render()
+  
+  }
+
+
+
+  // keydown func 
+  /**
+   * 
+   * @param {Event} e keydown
+   */
+    // keyfunc(e) {
+    //   if (this.acti != null) {
+    //     this.datactx.clearRect( this.acti.xpos - this.scrollX,  this.acti.ypos - this.scrollY,  this.acti.width,  this.acti.height);
+    //     this.datacell(this.acti);
+    //     //made changes
+    //     this.headersctx.clearRect(0, 0, this.headers.width, 30);
+    //     this.headerdraw1();
+    //     this.leftctx.clearRect(0, 0, 50, this.leftheaders.height);
+    //     this.sidedraw1();
+    //   }
+    //   if(this.acti!=null){
+    //   let { row, col } = this.acti;
+    //   switch (e.keyCode) {
+    //     case 37:
+    //       if (col > 0) {
+    //         this.acti = this.arr2d[row][col - 1];// left
+    //         if (this.acti.xpos + this.acti.width - 200 < this.scrollX) {
+    //           this.scrollX = Math.max(0, this.scrollX - 100);
+    //           this.render();
+    //         }
+    //         this.line();
+    //         this.selected(this.acti);
+    //       }
+    //       break;
+    //     case 38:
+    //       if (row > 1) {
+    //         this.acti = this.arr2d[row - 1][col];// up
+    //         if (this.acti.ypos + this.acti.height - 60 < this.scrollY) {
+    //           this.scrollY = Math.max(0, this.scrollY - 30);
+    //           this.render();
+    //         }
+    //         this.line();
+    //         this.selected(this.acti);
+    //       }
+    //       break;
+    //     case 39:
+    //       this.acti = this.arr2d[row][col + 1]; // right
+    //       if (this.acti.xpos + 100 > this.scrollX + this.data.width) {
+    //         this.scrollX += 100;
+    //         this.render();
+    //       }
+    //       this.line();
+    //       this.selected(this.acti);
+    //       break;
+    //     case 40:
+    //       this.acti = this.arr2d[row + 1][col]; // down
+    //       if (this.acti.ypos + 60 > this.scrollY + this.data.height - 180) {
+    //         this.scrollY += 30;
+    //         this.render();
+    //       }
+    //       this.line();
+    //       this.selected(this.acti);
+    //       break;
+    //     case 9://tab
+    //       this.acti = this.arr2d[row][col + 1];
+    //       if (this.acti.xpos + 100 > this.scrollX + this.data.width) {
+    //         this.scrollX += 100;
+    //         this.render();
+    //       }
+    //       this.selected(this.acti);
+    //       break;
+    //     case 13: // enter
+    //       this.acti = this.arr2d[row + 1][col];
+    //       if (this.acti.ypos + 60 > this.scrollY + this.data.height - 180) {
+    //         this.scrollY += 30;
+    //         this.render();
+    //       }
+    //       this.selected(this.acti);
+    //       break;
+    //     case 46: // delete
+    //       // alert("delete")
+    //       this.delete()
+    //      break;
+    //     case e.ctrlKey && 67: // COPY
+    //     //  alert("COPY")
+    //      this.copy()
+    //     break;
+    //     case e.ctrlKey && 86: // PASTE
+    //     //  alert("PASTE")
+    //      this.paste()
+         
+    //     break;
+    //     case e.ctrlKey && 88: // CUT
+    //     //  alert("CUT")
+    //      this.cut()
+    //     break;
+    //     case 36:
+
+    //      this.scrollX = 0; // Scroll to the far left
+    //      this.scrollY = 0; // Scroll to the top
+    //      this.render();
+    //     break;
+    //     default:
+    //       break;
+    //   }
+    //   // this.render();
+    
+    // }
+    
+    // }
