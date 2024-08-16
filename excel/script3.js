@@ -218,15 +218,7 @@ class excel {
   }
   // Updated keyfunc for efficient scrolling
 keyfunc(event, data) {
-        //   if (this.acti != null) {
-    //     this.datactx.clearRect( this.acti.xpos - this.scrollX,  this.acti.ypos - this.scrollY,  this.acti.width,  this.acti.height);
-    //     this.datacell(this.acti);
-    //     //made changes
-    //     this.headersctx.clearRect(0, 0, this.headers.width, 30);
-    //     this.headerdraw1();
-    //     this.leftctx.clearRect(0, 0, 50, this.leftheaders.height);
-    //     this.sidedraw1();
-    //   }
+
     const scrollAmount = 30; // Adjust the amount as needed
 
     if (event.key === 'ArrowUp') {
@@ -244,7 +236,6 @@ keyfunc(event, data) {
     }
   }
   
-  // Render function
   // Render function
   render() {
     console.log("ScrollY:", this.scrollY);

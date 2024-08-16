@@ -213,7 +213,29 @@ events(){
       // scrolling for x axis
       window.addEventListener("keydown", (e) => this.xscroll(e));
       this.data.addEventListener("wheel", (e) => this.scroller(e));
+      window.addEventListener("resize", (e) => this.resizecsv(e))
     }
+   resizecsv(e){
+
+//  console.log(this.wraper.offsetWidth - 50)
+    this.headers.width = `${this.wraper.offsetWidth - 50}`
+
+    console.log("🚀 ~ excel ~ resizecsv ~ headers:", this.headers.width)
+    this.headers.height = 30
+
+
+    this.data.width =`${this.wraper.offsetWidth - 50}`;
+    this.data.height =`${this.wraper.offsetHeight - 50}`
+ this.render()
+    
+    // let leftheaders = this.canvas(50, this.wraper.offsetHeight - 30, "white");
+    // this.leftctx = leftheaders.getContext("2d");
+    // this.leftheaders = leftheaders;
+
+   }
+
+
+
     // sorting func
     sorting(){
       let values = []
@@ -1452,8 +1474,10 @@ selec_color(){
  let startr =this.selectedfinal1[0].row
  let col = this.selectedfinal1[0].col
  let endr = this.selectedfinal1[this.selectedfinal1.length-1].row
-//  console.log(this.arr2d[1][col].ypos)
+ console.log(col)
+ console.log(this.arr2d[startr][col].data)
     for (let j = startr; j <= endr; j++) {
+      console.log(this.arr2d[j][col].ypos)
       this.datactx.save();
       this.datactx.beginPath();
       this.datactx.fillStyle = "#e7f1ec";
@@ -1464,7 +1488,7 @@ selec_color(){
       this.datactx.fillRect( this.arr2d[j][col].xpos - 0.5 - this.scrollX, this.arr2d[j][col].ypos - this.scrollY - 0.5,this.arr2d[j][col].width + 1,this.arr2d[j][col].height + 1)
       this.datactx.fillStyle = "black";
       this.datactx.font = `${18}px areal`;
-      this.datactx.fillText(this.arr2d[j][col].data, this.arr2d[j][col].xpos + 2 - this.scrollX, this.arr2d[j + 1][col].ypos - 5 - this.scrollY);
+      this.datactx.fillText(this.arr2d[j][col].data, this.arr2d[j][col].xpos + 2 - this.scrollX, this.arr2d[j+1][col].ypos - 5 - this.scrollY);
       this.datactx.stroke();
       this.datactx.restore();
     }

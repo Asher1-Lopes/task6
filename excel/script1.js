@@ -1,9 +1,36 @@
+
 class excel {
+
+  /**
+  * @typedef {object} Alpha  
+ * @property{number} xpos
+ *  @property{number} ypos
+ *  @property{number} width
+ *  @property{number} height
+ *  @property{String} data
+ *  @property{String} color
+   */
+  /**
+ * @typedef {object} Cell  active cell
+ * @property{number} xpos
+ *  @property{number} ypos
+ *  @property{number} width
+ *  @property{number} height
+ *  @property{String} data
+   */
+/**
+ * 
+ * @param {JSON} csv json 
+ * @param {HTMLDivElement} wraper div element
+ */
   constructor(csv, wraper) {
+this.selecflag = false;
+this.selectedfinal1 = [];
     let num = [];
     this.num = num;
     this.scrollY = 0;
     this.cellheight = 30;
+    this.isAnimating = true
     this.scrollX = 0;
     var startr = 0;
     var startc = 0;
@@ -20,42 +47,48 @@ class excel {
     this.draw = draw;
     this.wraper = wraper;
     this.csv = csv;
-    // this.init();
-    this.show()
-    this.csvToJson();
-    this.headerdraw();
-    this.sidedraw();
     this.pi = "bar";
     this.line2 = false;
     this.bar2 = false;
     this.pie2 = false;
+    this.show()
+  //   this.init();
+    this.csvToJson();
+    this.headerdraw();
+    this.sidedraw();
+  //   setInterval(()=> this.render(),1000)
     this.render();
-    this.decider();
-    this.scrollerdiv()
+    this.decider()
+    // this.scrollerdiv()
+ 
     // this.size()
+    
+    
+
   }
 
+
   hide() {
-    this.wraper.innerHTML = ""
-    this.wraper.style.display = "none";
+      this.wraper.innerHTML = ""
+      this.wraper.style.display = "none";
   }
   show() {
     this.wraper.style.display = "block";
-    this.init()
-    this.render()
-  }
+    this.init();
+    // this.render();
+     }
 
   init() {
     // console.log(this.wraper.offsetWidth, this.wraper.offsetHeight)
     this.sizel = [ 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100 ];
+ 
     // header div
     let div3 = document.createElement("div");
     this.div3 = div3;
     this.wraper.appendChild(div3);
-    // div3.textContent = `&#9698;`
-    div3.innerHTML = '';
+    div3.innerHTML = `&#9698`;
+    div3.style.fontSize = "18px"
     div3.classList.add("div3");
-
     
     
     // all canvas
@@ -93,14 +126,26 @@ class excel {
     this.close = close;
   // graph dragable div 
     let draggablediv = document.createElement("div");
+    this.draggablediv = draggablediv
     draggablediv.classList.add("draggable-div");
 // graph close button
     let closebtnv = document.createElement("div");
+    this.closebtnv = closebtnv
     closebtnv.classList.add("close-btn");
     closebtnv.textContent = "X";
+    closebtnv.style.fontSize = '18px';
     this.div.appendChild(draggablediv);
     draggablediv.appendChild(closebtnv);
     draggablediv.appendChild(graph);
+
+    //  grpahn div resize
+    let resizebtn = document.createElement("div");
+    this.resizebtn = resizebtn
+    resizebtn.classList.add("resizebtn");
+    // closebtnv.textContent = "X";
+    // closebtnv.style.fontSize = '18px';
+    // this.div.appendChild(draggablediv);
+    draggablediv.appendChild(resizebtn);
   // for input 
     let input = document.createElement("input");
     input.classList.add("hidden");
@@ -116,10 +161,10 @@ divmain.appendChild(div)
 this.divmain = divmain
 
 
-
-// div for scroller
-
-
+// events
+this.events()
+  }
+events(){
     // find
     const find = document.getElementById("find");
     find.addEventListener("click", (e) => this.search2DArray(e));
@@ -138,10 +183,8 @@ this.divmain = divmain
     this.down = (e) => this.mousedown1(e, this.data, this.cell);
     this.data.addEventListener("mousedown", this.down);
     // for dragable graph
-    document.addEventListener("DOMContentLoaded", (e) =>
-      this.draggraph(e, draggablediv, closebtnv)
-    );
-
+    const graphBtn = document.getElementById("graph");
+    graphBtn.addEventListener("click", (e) => this.draggraph(e, this.draggablediv, this.closebtnv));
     // copy
     const copy1 = document.getElementById("copy");
     this.copy1 = copy1;
@@ -158,16 +201,71 @@ this.divmain = divmain
     this.headers.addEventListener("mousemove", (e) =>
       this.resize(e, this.headers)
     );
-    this.data.addEventListener("wheel", (e) => this.scroller(e));
+
     // search
     const searchbtn = document.getElementById("search12");
     this.searchbtn = searchbtn;
     this.searchbtn.addEventListener("click", (e) => this.searchdiv(e));
-
-    // this.datactx.scale(window.devicePixelRatio, window.devicePixelRatio);
+const sortbtn = document.getElementById("sort")
+// console.log(sortbtn)
+this.sortbtn = sortbtn
+this.sortbtn.addEventListener("click", (e) => this.sorting(e));
+    // scrolling for x axis
+    window.addEventListener("keydown", (e) => this.xscroll(e));
+    this.data.addEventListener("wheel", (e) => this.scroller(e));
+    window.addEventListener("resize", (e) => this.resizecsv(e))
   }
-// paste func
-  paste() {
+ resizecsv(e){
+
+//  console.log(this.wraper.offsetWidth - 50)
+  this.headers.width = `${this.wraper.offsetWidth - 50}`
+
+  console.log("🚀 ~ excel ~ resizecsv ~ headers:", this.headers.width)
+  this.headers.height = 30
+
+
+  this.data.width =`${this.wraper.offsetWidth - 50}`;
+  this.data.height =`${this.wraper.offsetHeight - 50}`
+this.render()
+  
+  // let leftheaders = this.canvas(50, this.wraper.offsetHeight - 30, "white");
+  // this.leftctx = leftheaders.getContext("2d");
+  // this.leftheaders = leftheaders;
+
+ }
+
+
+
+  // sorting func
+  sorting(){
+    let values = []
+    for(let i =0;i<this.selectedfinal.length;i++){
+      values[i] = parseInt(this.selectedfinal[i].data)
+    }
+    let n = values.length
+    values.sort((a, b) => a - b)
+    console.log(values)
+    if(this.selectedfinal.length>1){
+    for (let i = 0; i < this.selectedfinal.length; i++) {
+      if(!isNaN(  this.selectedfinal[i].data)){
+        this.selectedfinal[i].data = values[i]? values[i] : "";
+      }else{
+        alert("select only numerical values for sorting")
+        break;
+      }
+   
+    }alert("sorted")
+  
+  }
+    else{
+      alert("no values selected")
+    }
+    this.render();
+
+  }
+  // paste
+ paste() {
+  this.isAnimating = false; // stoping animation
     for (let i = 0; i < this.selectedfinal.length; i++) {
       this.selectedfinal[i].data = this.arr2[i] ? this.arr2[i] : "";
     }
@@ -188,6 +286,7 @@ this.divmain = divmain
 // copy func
   copy() {
     // console.log("copy");
+ this.isAnimating = true
     let copytext = "";
     let arr2 = [];
     this.arr2 = arr2;
@@ -198,10 +297,50 @@ this.divmain = divmain
     }
     this.cellintial = this.arr2d[this.minj][this.mini];
     this.finalcell = this.arr2d[this.maxj][this.maxi];
+  
+    // let d2data = this.arr2d[this.cellintial.row][this.cellintial.col]
+    let totalw =0;
+    let totalh = 0;
+for(let i =this.cellintial.col;i<=this.finalcell.col;i++){
+
+totalw += this.arr2d[this.cellintial.row][i].width
+}
+for(let i = this.cellintial.row;i<= this.finalcell.row;i++){
+totalh += this.arr2d[i][this.cellintial.col].height
+}
+   let dashOffset = 0;
+   let drawMarchingAnts = ()=> {
+    if (!this.isAnimating) return;
+      this.datactx.clearRect(0, 0, this.data.width, this.data.height);
+      this.render()
+      this.datactx.setLineDash([5, 5]);
+      this.datactx.lineDashOffset = -dashOffset;
+      this.datactx.lineWidth =3
+      // this.datactx.fillStyle = 'lightblue'; // Fill color
+      // this.datactx.fillRect(
+      //     this.cellintial.xpos - this.scrollX,
+      //     this.cellintial.ypos - this.scrollY,
+      //     totalw,
+      //     totalh
+      // );
+      this.datactx.strokeStyle = 'green';
+      this.datactx.strokeRect(this.cellintial.xpos-this.scrollX, this.cellintial.ypos-this.scrollY, totalw, totalh); // xpos ypos 
+        dashOffset += 1;
+        requestAnimationFrame(()=> drawMarchingAnts());
+     
+    }
+    drawMarchingAnts();
+
    
   }
+
 // search function for display search div
+/**
+ * 
+ * @param {Event} e click
+ */
   searchdiv(e) {
+      
     let searchdiv1 = document.getElementById("searchdiv");
     this.searchdiv1 = searchdiv1;
     searchdiv1.style.display = "block";
@@ -212,10 +351,53 @@ this.divmain = divmain
     this.searchdiv1.style.display = "none";
   }
 // dragable graph div
+/**
+* 
+* @param {Event} e click event
+* @param {HTMLDivElement} draggablediv  drag div
+* @param {HTMLDivElement} closebtnv    close btn div
+*/
   draggraph(e, draggablediv, closebtnv) {
+   // draggable div
     const graphBtn = document.getElementById("graph");
     let isDragging = false;
     let offsetX, offsetY;
+
+
+    let isResizing = false;
+    let lastX = 50;
+    let lastY = 50;
+
+    this.resizebtn.addEventListener('mousedown', (e) => {
+        isResizing = true;
+        lastX = e.clientX;
+        lastY = e.clientY;
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
+    });
+
+    var handleMouseMove= (e) => {
+      if (!isResizing) return;
+
+      const dx = e.clientX - lastX;
+      const dy = e.clientY - lastY;
+
+      const newWidth = draggablediv.clientWidth + dx;
+      const newHeight = draggablediv.clientHeight + dy;
+
+      draggablediv.style.width = `${newWidth}px`;
+      draggablediv.style.height = `${newHeight}px`;
+
+      lastX = e.clientX;
+      lastY = e.clientY;
+  }
+ 
+  var handleMouseUp= (e) => {
+      isResizing = false;
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+  }
+
     var clickgraph = (e) => {
     
       // draggablediv.style.display = "block";
@@ -228,7 +410,7 @@ this.divmain = divmain
       // console.log(draggablediv.style.display)
     };
     var downdiv = (e) => {
-      if (e.target === closebtnv) return; // Do not start dragging if the close button is clicked
+      if (e.target === closebtnv) return;
       isDragging = true;
       const rect = draggablediv.getBoundingClientRect();
       offsetX = e.clientX - rect.left;
@@ -237,8 +419,8 @@ this.divmain = divmain
 
     var movediv = (e) => {
       if (isDragging) {
-        draggablediv.style.left = `${e.clientX - offsetX}px`;
-        draggablediv.style.top = `${e.clientY - offsetY}px`;
+        draggablediv.style.left = `${e.clientX - offsetX }px`;
+        draggablediv.style.top = `${e.clientY - offsetY -200}px`;
       }
     };
 
@@ -311,22 +493,34 @@ this.divmain = divmain
         labels1[count] = this.arr2d[0][j].data;
         count++;
       }
+    
       let arr1 = [0, 0, 0];
       let sum = 0;
       let c = 0;
       for (let i = 0; i < this.selectedfinal.length - 1; i++) {
         if (this.selectedfinal[i].xpos == this.selectedfinal[i + 1].xpos) {
           sum += parseInt(this.selectedfinal[i].data);
-          console.log(this.selectedfinal[i].data);
+
+          // console.log(this.selectedfinal[i].data);
+         
         } else {
           sum += parseInt(this.selectedfinal[i].data);
-          arr1[c] = Math.floor(sum);
+     
+            arr1[c] = Math.floor(sum);
           c++;
           sum = 0;
         }
       }
       sum += parseInt(this.selectedfinal[this.selectedfinal.length - 1].data);
-      arr1[c] = Math.floor(sum);
+        arr1[c] = Math.floor(sum);
+      
+// just add nos
+ for (let i = arr1.length - 1; i >= 0; i--) {
+  if (isNaN(arr1[i])) {
+    arr1.splice(i, 1);
+    labels1.splice(i, 1);
+  }
+}
       if (this.draw != null) this.draw.destroy();
       this.draw = new Chart(this.graphctx, {
         type: this.pi,
@@ -351,6 +545,11 @@ this.divmain = divmain
     }
   }
 // general function for extending cells
+/**
+ * 
+ * @param {Number} count 
+ * @param {string} axis 
+ */
   extend(count, axis) {
     let length = this.arr2d[this.arr2d.length - 1].length;
     let jlen = this.arr2d.length;
@@ -367,6 +566,10 @@ this.divmain = divmain
           rectData["row"] = this.arr2d[this.arr2d.length - 1][i].row + 1;
           rectData["col"] = this.arr2d[this.arr2d.length - 1][i].col;
           rectData["data"] = "";
+            rectData["textalign"] = ""
+      rectData["textbase"] = ""
+      rectData["halfwidth"] = 0
+      rectData["halfheight"] = 0
           data1d.push(rectData);
           this.datacell(rectData);
         }
@@ -391,6 +594,10 @@ this.divmain = divmain
           rectData["data"] = "";
           rectData["row"] = i;
           rectData["col"] = j;
+         rectData["textalign"] = ""
+         rectData["textbase"] = ""
+         rectData["halfwidth"] = 0
+         rectData["halfheight"] = 0
           row.push(rectData);
           this.datacell(rectData);
         }
@@ -400,6 +607,10 @@ this.divmain = divmain
     }
   }
 //func for exendheader 
+/**
+ * 
+ * @param {number} count 
+ */
   extendheader(count) {
     let prev = this.alpha.length;
     for (let i = prev; i < prev + count; i++) {
@@ -409,82 +620,193 @@ this.divmain = divmain
       rectData["width"] = 100;
       rectData["height"] = 30;
       rectData["color"] = "black";
-      rectData["data"] = this.toLetters(i);
+      rectData["data"] = this.toLetters(i+1);
       this.alpha.push(rectData);
     }
   }
 // func for infi letters
+/**
+ * 
+ * @param {number} num  pass number
+ * @returns  aplhabet
+ */
   toLetters(num) {
     var mod = num % 26,
       pow = (num / 26) | 0,
       out = mod ? String.fromCharCode(64 + mod) : (--pow, "Z");
     return pow ? this.toLetters(pow) + out : out;
   }
-// for x axis for shift key
-  xscroll(event) {
-    if (event.shiftKey) {
-      this.xscrollX = true;
-    } else {
-      this.xscrollX = false;
-    }
+// X-axis scrolling based on Shift key
+/**
+ * 
+ * @param {Event} event keydown
+ */
+xscroll(event) {
+  this.xscrollX = event.shiftKey;
+}
+
+// Scroller function
+/**
+ * 
+ * @param {Event} event wheel
+ */
+scroller(event) {
+  const { deltaY, deltaX, shiftKey } = event;
+  const scrollAmount = 30; // Adjust the amount as needed
+
+  if (shiftKey) {
+    this.scrollX = Math.max(0, this.scrollX + deltaY);
+  } else {
+    this.scrollY = Math.max(0, this.scrollY + deltaY);
   }
-// scroller func
-  scroller(event) {
-    let {deltaY} = event;
-    if (event.shiftKey) {
-      this.scrollX = Math.max(0, this.scrollX + deltaY); // extending by 100
-    } else {
-      this.scrollY = Math.max(0, this.scrollY + (deltaY < 0 ? -30 : 30)); // by 30
-    }
+
+  // Only re-render if scrolling actually changes the visible area
+  if (deltaY !== 0 || deltaX !== 0) {
     this.render();
   }
-// render function
-  render() {
-    console.log(this.scrollY);
-    console.log(this.scrollX);
-    this.datactx?.clearRect(0, 0, this.data.width, this.data.height);
-    this.leftctx.clearRect(0, 0, this.leftheaders.width, this.leftheaders.height);
-    this.headersctx.clearRect(0, 0, this.headers.width, this.headers.height);
-    let canvaWidth = this.data.offsetWidth;
-    let canvaHeight = this.data.offsetHeight;
-    let initHeight = 0;
-    let newScrollY = this.scrollY;
-    this.newScrollY = newScrollY;
-    let newScrollX = this.scrollX;
-    for (let i = newScrollY / this.cellheight; i < this.arr2d.length; i++) {
-      const row = this.arr2d[i];
-      if (i == this.arr2d.length - 1) {
-     // if reach end extend by 10 cells
-        this.extend(10, "y");
-        console.log("ey")
-      }
-      if (initHeight > canvaHeight + newScrollY) {
+}
+
+ //  keyfunc
+ /**
+  * 
+  * @param {Event} event keydown
+  */
+keyfunc(event) {
+    if(this.acti!=null){
+    console.log(this.acti)
+    let { row, col } = this.acti;
+const scrollAmount = 30; // Adjust the amount as needed
+if (event.key === 'ArrowUp') {
+  this.scrollY = Math.max(0, this.scrollY - scrollAmount);
+  this.render();
+} else if (event.key === 'ArrowDown') {
+  this.scrollY += scrollAmount;
+ 
+  this.render();
+} else if (event.key === 'ArrowLeft') {
+  this.scrollX = Math.max(0, this.scrollX - scrollAmount);
+
+  this.render();
+} else if (event.key === 'ArrowRight') {
+  this.scrollX += scrollAmount;
+
+  this.render();
+}
+switch (event.keyCode) {
+      case 46: // delete
+        // alert("delete")
+        this.delete()
+       break;
+      case event.ctrlKey && 67: // COPY
+      //  alert("COPY")
+       this.copy()
+      break;
+      case event.ctrlKey && 86: // PASTE
+      //  alert("PASTE")
+       this.paste()
+       
+      break;
+      case event.ctrlKey && 88: // CUT
+      //  alert("CUT")
+       this.cut()
+      break;
+      case 36:
+
+       this.scrollX = 0; // Scroll to the far left
+       this.scrollY = 0; // Scroll to the top
+       this.render();
+      break;
+      default:
         break;
-      } else {
-        let initWidth = 0;
-        initHeight += row[0].height;
-        // drawing side bar
-        this.sidebar(this.num[i]);
-        for (let j = 0; j < row.length; j++) {
-          const col = row[j];
-          if (j == row.length - 1) {
-          // if its end of row thn extend by x axis by 10 cells
-            this.extend(10, "x");
-          }
-          if (initWidth > canvaWidth + newScrollX) {
-            break;
-          } else {
-            initWidth += row[j].width;
-            const col = row[j];
-            // draw datacell and header
-            this.datacell(col);
-            this.topgrid(this.alpha[j]);
-          }
-        }
+    }
+
+  }
+
+
+}
+// Render function
+render() {
+  console.log("ScrollY:", this.scrollY);
+  console.log("ScrollX:", this.scrollX);
+
+  // Ensure cell dimensions are initialized
+  const cellHeight = this.cellheight || 20; 
+  const cellWidth = this.cellwidth || 100;  
+
+  // Clear  drawings
+  this.datactx.clearRect(0, 0, this.data.width, this.data.height);
+  this.leftctx.clearRect(0, 0, this.leftheaders.width, this.leftheaders.height);
+  this.headersctx.clearRect(0, 0, this.headers.width, this.headers.height);
+
+  const canvasWidth = this.data.offsetWidth;
+  const canvasHeight = this.data.offsetHeight;
+
+  let initHeight = -this.scrollY; 
+  let initWidth = -this.scrollX;
+
+  // Calc start and end for rows and columns
+  const startRowIndex = Math.floor(this.scrollY / cellHeight);
+  const endRowIndex = Math.min(startRowIndex + Math.ceil(canvasHeight / cellHeight), this.arr2d.length);
+  const startColIndex = Math.max(0,this.binarySearch(this.arr2d[0], this.scrollX)-5)
+  const endColIndex = Math.min(startColIndex + Math.ceil(canvasWidth / cellWidth)+10, this.arr2d[0].length+26);
+
+  console.log("StartRowIndex:", startRowIndex, "EndRowIndex:", endRowIndex);
+  console.log("StartColIndex:", startColIndex, "EndColIndex:", endColIndex);
+
+  // Render headers and data cells
+  for (let i = startRowIndex; i < endRowIndex; i++) {
+    const row = this.arr2d[i];
+    initHeight += row[0].height;
+
+    // Render the sidebar (left headers)
+    this.sidebar(this.num[i], initHeight);
+
+    let colInitWidth = initWidth; 
+
+    for (let j = startColIndex; j < endColIndex; j++) {
+      const col = row[j];
+      colInitWidth += col.width;
+
+      // Draw the data cell
+      this.datacell(col, colInitWidth, initHeight);
+
+      // Draw the top grid header
+      if (i === startRowIndex) {
+        this.topgrid(this.alpha[j], colInitWidth);
+      }
+
+      // Extend columns if we reach the end
+      if (j === row.length - 1) {
+        this.extend(40, "x");
+        console.log("Extended X-axis by 40 columns");
+      }
+ // wont render columns beyond 
+      if (colInitWidth > canvasWidth + this.scrollX) {
+        break;
       }
     }
+
+    // Extend rows if we reach the end
+    if (i === this.arr2d.length - 1) {
+      this.extend(40, "y");
+      console.log("Extended Y-axis by 40 rows");
+    }
+//  beyond the visible area it wont render
+    if (initHeight > canvasHeight + this.scrollY) {
+      break; 
+    }
   }
+}
+
+
 // function to draw canvas
+/**
+ * 
+ * @param {number} width 
+ * @param {number} height 
+ * @param {string} color 
+ * @returns canvas
+ */
   canvas(width, height, color) {
     let canvas = document.createElement("canvas");
     canvas.width = Math.floor(width * window.devicePixelRatio);
@@ -511,6 +833,10 @@ this.divmain = divmain
       rectData["color"] = "black";
       rectData["row"] = 0;
       rectData["col"] = j;
+      rectData["textalign"] = ""
+      rectData["textbase"] = ""
+      rectData["halfwidth"] = 0
+      rectData["halfheight"] = 0
       rectData["data"] = headers[j];
       header1d.push(rectData);
       this.datacell(rectData);
@@ -530,6 +856,10 @@ this.divmain = divmain
         rectData["color"] = "black";
         rectData["row"] = i;
         rectData["col"] = j;
+        rectData["textalign"] = ""
+        rectData["textbase"] = ""
+        rectData["halfwidth"] = 0
+        rectData["halfheight"] = 0
         rectData["data"] = lines[i].split(",")[j];
         data1d.push(rectData);
         this.datacell(rectData);
@@ -537,9 +867,15 @@ this.divmain = divmain
       }
       this.arr2d.push(data1d);
     }
-
+      // console.log("🚀 ~ excel ~ csvToJson ~ arr2d:", this.arr2d)
+  
   }
+
 // drawing datacell 
+/**
+ * 
+ * @param {Cell} data  data cell 
+ */
   datacell(data) {
     // this.datactx.scale(window.devicePixelRatio, window.devicePixelRatio);
     this.datactx.restore();
@@ -553,7 +889,12 @@ this.divmain = divmain
     this.datactx.fillRect(data.xpos - 0.5 - this.scrollX,data.ypos - this.scrollY - 0.5, data.width + 1, data.height + 1 );
     this.datactx.fillStyle = "black";
     this.datactx.font = `${18}px areal`;
-    this.datactx.fillText(data.data, data.xpos + 2 - this.scrollX,data.ypos + data.height - 5 - this.scrollY );
+    if(data.halfwidth>0){
+      this.datactx.fillText(data.data, data.halfwidth-8,data.halfheight+5);
+    }else{
+      this.datactx.fillText(data.data, data.xpos + 2 - this.scrollX,data.ypos + data.height - 5 - this.scrollY );
+    }
+    // this.datactx.fillText(data.data, data.xpos + 2 - this.scrollX,data.ypos + data.height - 5 - this.scrollY );
     this.datactx.stroke();
     this.datactx.restore();
     this.datactx.save();
@@ -579,6 +920,10 @@ this.divmain = divmain
     }
   }
 // top header getting created
+/**
+ * 
+ * @param {Alpha} alpha 
+ */
   topgrid(alpha) {
       this.headersctx.beginPath();
       this.headersctx.save();
@@ -599,16 +944,18 @@ this.divmain = divmain
   }
 // inserting objects in num arr
   sidedraw() {
+    let count =0;
     for (let i = 0; i < this.arr2d.length; i++) {
       let rectData = {};
       rectData["xpos"] = 0;
-      rectData["ypos"] = i * 30;
+      rectData["ypos"] = i*30
       rectData["width"] = 50;
-      rectData["height"] = 30;
+      rectData["height"] = 30
       rectData["color"] = "black";
       rectData["data"] = i + 1;
       // this.sidebar(rectData);
       this.num.push(rectData);
+  
     }
   }
   // drawing side bar data
@@ -618,6 +965,10 @@ this.divmain = divmain
     }
   }
 // extending side
+/**
+ * 
+ * @param {number} count 
+ */
   extentside(count) {
     let length = this.num.length;
     for (let i = length; i < length + count; i++) {
@@ -628,11 +979,15 @@ this.divmain = divmain
       rectData["height"] = 30;
       rectData["color"] = "black";
       rectData["data"] = i + 1;
-      this.sidebar(rectData); // calling drawing func
+      this.sidebar(rectData); 
       this.num.push(rectData);
     }
   }
 // side bar draw
+/**
+* 
+* @param {Alpha} alpha 
+*/
   sidebar(alpha) {
     this.leftctx.restore();
     this.leftctx.save();
@@ -640,13 +995,20 @@ this.divmain = divmain
     this.leftctx.fillStyle = "#E8E8E8";
     this.leftctx.strokestyle = "black";
     this.leftctx.fillRect( alpha.xpos, alpha.ypos - this.scrollY, alpha.width, alpha.height );
-    this.leftctx.strokeRect( alpha.xpos, alpha.ypos - this.scrollY, alpha.width, alpha.height); //arr[j]
+    this.leftctx.strokeRect( alpha.xpos, alpha.ypos - this.scrollY, alpha.width, alpha.height); 
     this.leftctx.fillStyle = "black";
     this.leftctx.font = `${18}px areal`;
     this.leftctx.fillText( alpha.data, alpha.xpos + 5, alpha.ypos + alpha.height - 5 - this.scrollY);
     this.leftctx.stroke();
   }
-  // position function to get co ordinates
+
+
+/**
+ * 
+ * @param {HTMLCanvasElement} data 
+ * @param {Event} event click
+ * @returns position of cell
+ */
   position(data,event) {
     let rect = this.data.getBoundingClientRect();
     let x = event.clientX - rect.left + this.scrollX;
@@ -667,10 +1029,20 @@ this.divmain = divmain
     return [r, c, sum - this.sizel[r - 1]];
   }
 // db for activating input func
-  dblclick(e, data) {
+/**
+ * 
+ * @param {Event} e  dbl click
+ */
+  dblclick(e) {
     this.inputtext(e, this.cell, this.datactx);
   }
 // input func
+/**
+ * 
+ * @param {Event} e 
+ * @param {Cell} cell active cell
+ * @param {CanvasRenderingContext2D} datactx data2dcontext
+ */
   inputtext(e, cell, datactx) {
     var element = document.querySelector(".hidden");
     this.element = element;
@@ -686,6 +1058,12 @@ this.divmain = divmain
     this.element.addEventListener("blur", this.x);
   }
 // when click datacell gets 
+/**
+ * 
+ * @param {Event} event  blur 
+ * @param {CanvasRenderingContext2D} datactx data2dcontext
+ * @param {Cell} cell active cell
+ */
   Pressclick(event, datactx, cell) {
     if (this.f) {
       var nvalue = this.element.value;
@@ -727,7 +1105,18 @@ this.divmain = divmain
     this.leftctx.restore();
   }
 // when click
+/**
+ * 
+ * @param {Event} e click
+ * @param {HTMLCanvasElement} data data canvas element
+ */
   click(e, data) {
+    console.log(this.selectedfinal1.length)
+   if(this.selectedfinal1.length>40){
+    this.selectedfinal1 = []
+    this.render()
+    // this.render()
+   }
     if (this.acti) { // clearing all cell
       this.datactx.clearRect( this.acti.xpos - this.scrollX,this.acti.ypos - this.scrollY,  this.acti.width,  this.acti.height);
       this.datacell(this.acti);
@@ -735,6 +1124,7 @@ this.divmain = divmain
       this.headerdraw1();
       this.leftctx.clearRect(0, 0, 50, this.leftheaders.height);
       this.sidedraw1();
+    
     }
 
     var [r, c] = this.position(data, e);
@@ -756,8 +1146,53 @@ this.divmain = divmain
     this.datactx.fillText(this.acti.data,this.acti.xpos + 2 - this.scrollX,this.acti.ypos + this.acti.height - 5 - this.scrollY );
     this.datactx.restore();
     this.line();
+
+// this.alpha[r].data
+// console.log("🚀 ~ excel ~ click ~ alpha:", this.alpha[r-1].data)
+
+const posi = document.getElementById("position")
+posi.innerHTML =this.alpha[r-1].data+ ""+(parseInt(c)+1)
+
+const center = document.getElementById("center")
+
+center.addEventListener("click",(e) => this.center(e))
+
+
   }
+/**
+* 
+* @param {Event} e  click for center text
+*/    
+center(e){
+this.datactx.clearRect(this.acti.xpos - this.scrollX, this.acti.ypos - this.scrollY, this.acti.width,this.acti.height);
+this.datactx.save();
+this.datactx.beginPath();
+this.datactx.fillStyle = "white";
+this.datactx.strokeStyle = "grey";
+this.datactx.textAlign = "center";
+this.datactx.textBaseline = "middle";
+this.arr2d[this.acti.row][this.acti.col].textalign = " center"
+this.arr2d[this.acti.row][this.acti.col].textbase  = "middle"
+
+this.datactx.lineWidth = 2;
+this.datactx.rect( this.acti.xpos - this.scrollX, this.acti.ypos - this.scrollY,this.acti.width,this.acti.height);
+this.datactx.stroke();
+this.datactx.clip();
+this.datactx.fillStyle = "black";
+this.datactx.font = `${18}px areal`;
+const centerX = this.acti.xpos - this.scrollX + (this.acti.width / 2);
+const centerY = this.acti.ypos - this.scrollY + (this.acti.height / 2);
+this.arr2d[this.acti.row][this.acti.col].halfwidth = centerX
+this.arr2d[this.acti.row][this.acti.col].halfheight = centerY
+this.datactx.fillText(this.acti.data, centerX, centerY);
+this.datactx.restore();
+// console.log(this.arr2d)
+}
 // for keydown to draw cell 
+/**
+ * 
+ * @param {Cell} data 
+ */
   selected(data) {
     this.datactx.clearRect(  data.xpos - this.scrollX, data.ypos - this.scrollY, data.width, data.height   );
     this.datactx.save();
@@ -773,75 +1208,23 @@ this.divmain = divmain
     this.datactx.fillText( data.data, data.xpos + 2 - this.scrollX, data.ypos + data.height - 5 - this.scrollY );
     this.datactx.restore();
   }
-// keydown func 
-  keyfunc(e, data) {
-    if (this.acti != null) {
-      this.datactx.clearRect( this.acti.xpos - this.scrollX,  this.acti.ypos - this.scrollY,  this.acti.width,  this.acti.height);
-      this.datacell(this.acti);
-      //made changes
-      this.headersctx.clearRect(0, 0, 2100, 30);
-      this.headerdraw1();
-      this.leftctx.clearRect(0, 0, 50, this.leftheaders.height);
-      this.sidedraw1();
+
+
+  delete(){
+
+    for (let i = 0; i < this.selectedfinal.length; i++) {
+      this.selectedfinal[i].data = "";
     }
-    if(this.acti!=null){
-    let { row, col } = this.acti;
-    switch (e.keyCode) {
-      case 37:
-        if (col > 0) {
-          this.acti = this.arr2d[row][col - 1];// left
-          if (this.acti.xpos + this.acti.width - 200 < this.scrollX) {
-            this.scrollX = Math.max(0, this.scrollX - 100);
-            this.render();
-          }
-          this.line();
-          this.selected(this.acti);
-        }
-        break;
-      case 38:
-        if (row > 1) {
-          this.acti = this.arr2d[row - 1][col];// up
-          if (this.acti.ypos + this.acti.height - 60 < this.scrollY) {
-            this.scrollY = Math.max(0, this.scrollY - 30);
-            this.render();
-          }
-          this.line();
-          this.selected(this.acti);
-        }
-        break;
-      case 39:
-        this.acti = this.arr2d[row][col + 1]; // right
-        if (this.acti.xpos + 100 > this.scrollX + this.data.width) {
-          this.scrollX += 100;
-          this.render();
-        }
-        this.line();
-        this.selected(this.acti);
-        break;
-      case 40:
-        this.acti = this.arr2d[row + 1][col]; // down
-        if (this.acti.ypos + 60 > this.scrollY + this.data.height - 180) {
-          this.scrollY += 30;
-          this.render();
-        }
-        this.line();
-        this.selected(this.acti);
-        break;
-      case 9:
-        this.acti = this.arr2d[row][col + 1];
-        this.selected(this.acti);
-        break;
-      case 13:
-        this.acti = this.arr2d[row + 1][col];
-        this.selected(this.acti);
-        break;
-      default:
-        break;
-    }}
-  
+    alert("deleted")
+    this.render();
+
   }
   // mouse move
-  move(e, data, cell) {
+  /**
+   * 
+   * @param {Event} e move
+   */
+  move(e) {
     let [prevstartr, prevstartc] = [this.startr, this.startc];
     this.prevstartr = prevstartr;
     this.prevstartc = prevstartc;
@@ -886,11 +1269,20 @@ this.divmain = divmain
     this.selectedfinal = this.arr_selec;
   }
   // for clearing every cell above 
+  /**
+   * 
+   * @param {Cell} c cell 
+   */
   clearcell(c) {
     this.datactx.clearRect(c.xpos - this.scrollX,c.ypos - this.scrollY,c.width,c.height );
   }
 // on mouse up 
-  mouseup(e, data, cell) {
+/**
+ * 
+ * @param {Event} e mouseup
+ * @param {HTMLCanvasElement} data data canvas element
+ */
+  mouseup(e, data) {
     let [endr1, endc1] = this.position(this.data, e);
     this.endr1 = endr1 - 1;
     this.endc1 = endc1;
@@ -981,7 +1373,12 @@ median1 = (values[mid-1] + values[mid])/2
     data.removeEventListener("mouseup", this.up);
   }
 // on mouse down
-  mousedown1(e, data, cell) {
+/**
+ * 
+ * @param {Event} e  mousedown
+ * @param {HTMLCanvasElement} data datacanvas element
+ */
+  mousedown1(e, data) {  
     let length = this.sizel.length;
     let [startr, startc] = this.position(this.data, e);
     this.startr = startr - 1;
@@ -1038,26 +1435,75 @@ median1 = (values[mid-1] + values[mid])/2
     }
   }
 // for displaying col-resize cursor
+/**
+ * 
+ * @param {Event} e  move
+ */
   resize(e) {
     let rect = this.headers.getBoundingClientRect();
     let x = e.clientX - rect.left + this.scrollX;
-    let sum = 0;
+let sum =0;
     for (let i = 0; i < this.sizel.length; i++) {
+
       if (sum + 4 > x && x > sum && x > 56) {
+       
         this.headers.style.cursor = "col-resize"
         this.headers.addEventListener("mousedown", (e) =>
           this.redown(e, this.headers)
         );
+        this.edge_detected = true
+        this.selecflag = false
         break;
       } else {
-        this.headers.style.cursor = "default";
+        if(this.mousedown_resize){
+         this.edge_detected = true
+        }else{
+          this.selecflag = true;
+          this.edge_detected = true
+          this.headers.style.cursor = "default";
+        }
+
       }
       sum += this.sizel[i];
     }
   }
+
+// for entire column to select
+selec_color(){
+//  this.selectedfinal1
+let startr =this.selectedfinal1[0].row
+let col = this.selectedfinal1[0].col
+let endr = this.selectedfinal1[this.selectedfinal1.length-1].row
+console.log(col)
+console.log(this.arr2d[startr][col].data)
+  for (let j = startr; j <= endr; j++) {
+    console.log(this.arr2d[j][col].ypos)
+    this.datactx.save();
+    this.datactx.beginPath();
+    this.datactx.fillStyle = "#e7f1ec";
+    this.datactx.strokestyle = "black";
+    this.datactx.lineWidth = 2;
+    this.datactx.rect( this.arr2d[j][col].xpos - 0.5 - this.scrollX, this.arr2d[j][col].ypos - this.scrollY - 0.5,this.arr2d[j][col].width + 1,this.arr2d[j][col].height + 1);
+    this.datactx.clip();
+    this.datactx.fillRect( this.arr2d[j][col].xpos - 0.5 - this.scrollX, this.arr2d[j][col].ypos - this.scrollY - 0.5,this.arr2d[j][col].width + 1,this.arr2d[j][col].height + 1)
+    this.datactx.fillStyle = "black";
+    this.datactx.font = `${18}px areal`;
+    this.datactx.fillText(this.arr2d[j][col].data, this.arr2d[j][col].xpos + 2 - this.scrollX, this.arr2d[j+1][col].ypos - 5 - this.scrollY);
+    this.datactx.stroke();
+    this.datactx.restore();
+  }
+}
+
 // when click on mouse down gets activated
+/**
+ * 
+ * @param {Event} e mousedown
+ * @param {HTMLCanvasElement} headers header canvas
+ */
   redown(e, headers) {
-    this.selectedfinal = [];
+    this.selectedfinal = []
+    this.selectedfinal1 = [];
+    let arr_select_t = []
     let addition = 0;
     if (this.acti) {
       this.datactx.clearRect( this.acti.xpos - this.scrollX,this.acti.ypos - this.scrollY,this.acti.width,this.acti.height);
@@ -1066,25 +1512,57 @@ median1 = (values[mid-1] + values[mid])/2
     }
     let [x7, y1, total] = this.position(this.headers, e); // calling for co-ordinates and total length from x position
     this.prev_width = this.sizel[x7 - 2];
+    console.log(total)
+
+
+    if(this.selecflag){
+      for (let i = 0; i <this.arr2d.length; i++) {
+        arr_select_t.push(this.arr2d[i][x7-1])
+      }
+      this.selectedfinal1=arr_select_t
+      // console.log(this.selectedfinal1)
+      this.render()
+      this.selec_color(this.selectedfinal1)
+  
+      }
   // moving tht cursor 
     var resize_mousemove = (e) => {
+      if(this.edge_detected){
       let rect = headers.getBoundingClientRect();
       let x2 = e.clientX - rect.left + this.scrollX;
       addition = x2 - total;
+      if(this.edge_detected){
+        this.sizel[x7 - 2] = this.prev_width + addition;
+ 
+      if (this.sizel[x7 - 2] < 50) {
+        this.sizel[x7 - 2] = 50;
+      } else {
+        this.sizel[x7 - 2] = this.prev_width + addition;
+      }
+      this.dynamicwidth(); // calling render and width func again
+      this.render();
+      }
+      }
+    };
+    var mouseleave=(e)=>{
+      this.mousedown_resize=false
+
+      this.headers.removeEventListener("mousemove", resize_mousemove);
     };
   // mouse up func will terminate
     var resize_mouseup = (e) => {
-      if (this.prev_width + addition > 50) {
-        this.sizel[x7 - 2] = this.prev_width + addition;
+        this.mousedown_resize = false
         headers.removeEventListener("mousemove", resize_mousemove);
-        this.dynamicwidth(); // calling render and width func again
-        this.render();
+        // console.log(this.sizel)
         headers.removeEventListener("mouseup", resize_mouseup);
-      }
+      
     };
     headers.addEventListener("mousemove", resize_mousemove);
     headers.addEventListener("mouseup", resize_mouseup);
+    headers.addEventListener("mouseleave", mouseleave);
   }
+
+
 // for replace data
   replaceitem() {
     var boolea = false;
@@ -1099,6 +1577,10 @@ median1 = (values[mid-1] + values[mid])/2
           boolea = true;
         }
       }
+    }
+    if(boolea == true){
+      
+      alert("data replaced")
     }
     if (boolea == false) {
       alert("data not found");
@@ -1119,6 +1601,10 @@ median1 = (values[mid-1] + values[mid])/2
     this.displayResults(results);
   }
 // displaying search results
+/**
+ * 
+ * @param {string[]} results 
+ */
   displayResults(results) {
     let resultsDiv = document.getElementById("results");
     resultsDiv.innerHTML = "";
@@ -1137,58 +1623,29 @@ median1 = (values[mid-1] + values[mid])/2
       resultsDiv.innerHTML = "<p>No results found.</p>";
     }
   }
-
-scrollerdiv(){
-// for y axis
-  let scroldivy = document.createElement("div")
-scroldivy.classList.add("scroldiv")
-this.wraper.appendChild(scroldivy)
-let childscroll = document.createElement("div")
-childscroll.classList.add("childscroll")
-scroldivy.appendChild(childscroll)
-// console.log(this.arr2d.length)
-let divheight = this.arr2d.length * 30*5;
-childscroll.style.height=`${divheight}px`
-
-// for x axis
-let scroldivx = document.createElement("div")
-scroldivx.classList.add("scroldivx")
-this.wraper.appendChild(scroldivx)
-let childscrollx = document.createElement("div")
-childscrollx.classList.add("childscrollx")
-scroldivx.appendChild(childscrollx)
-// // console.log(this.arr2d.length)
-let divwidth = this.arr2d[0].length * 100;
-// console.log(divwidth)
-childscrollx.style.width=`${divwidth}px`
-
-
-let y = "y"
-scroldivy.addEventListener("scroll", (e) => this.scrollhandle(e,y));
-
-let x = "x"
-scroldivx.addEventListener("scroll",(e) => this.scrollhandle(e,x))
-
-
+  
+  /**
+   * 
+   * @param {string} arr arr2d[0]
+   * @param {number} x  scroll x
+   * @returns 
+   */
+   binarySearch(arr, x)
+{
+  let low = 0;
+  let high = arr.length - 1;
+  let mid;
+  while (high >= low) {
+      mid = low + Math.floor((high - low) / 2);
+      if (arr[mid].xpos == x)
+          return mid;
+      if (arr[mid].xpos > x)
+          high = mid - 1;
+      else
+          low = mid + 1;
+  }
+  return mid;
 }
-
-
-scrollhandle(e,axis){
-
-// console.log("scrolled")
-
-if(axis == 'y'){
-this.scrollY = Math.floor(e.target.scrollTop/30)*30;
-}else{
-  this.scrollX = Math.floor(e.target.scrollLeft/100)*100;
-}
-this.render()
-
-}
-
-
-
-
 
 
 }
