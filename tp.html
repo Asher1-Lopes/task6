@@ -1,92 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resizable Div</title>
+// var query = @"
+//     INSERT INTO datas (Name_1, email, country, city, state, telephone, address_1, address_2, dob, fy2019_20, fy2020_21, fy2021_22, fy2022_23, fy2023_24, msg)
+//     VALUES (@Name, @Email, @Country, @City, @State, @Telephone, @Address_1, @Address_2, @DOB, @FY2019_20, @FY2020_21, @FY2021_22, @FY2022_23, @FY2023_24, @IsComplete)";
 
-    <style>
-      /* styles.css */
-body {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+// try
+// {
+//     using (var connection = new MySqlConnection(_connectionString))
 
-.resizable {
-    position: relative;
-    width: 300px; /* Initial width */
-    height: 200px; /* Initial height */
-    border: 1px solid #000;
-    overflow: hidden;
-}
+//     {
+//         await connection.OpenAsync();
 
-.resizable-content {
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-}
+//         using (var transaction = await connection.BeginTransactionAsync())
+//         {
+//             try
+//             {
 
-.resizer {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background: #000;
-    right: 0;
-    bottom: 0;
-    cursor: nwse-resize; /* Diagonal resize cursor*/
-}  
-    </style>
-</head>
-<body>
-    <div class="resizable">
-        <!-- <div class="resizable-content">
-    
-            Resizable Div
-        </div> -->
-        <div class="resizer"></div>
-    </div>
-    <script >
-      // script.js
-document.addEventListener('DOMContentLoaded', () => {
-    const resizableDiv = document.querySelector('.resizable');
-    const resizer = document.querySelector('.resizer');
+//                 foreach (var item in batchToInsert)
+//                 {
 
-    let isResizing = false;
-    let lastX = 50;
-    let lastY = 50;
+//                     using (var command = new MySqlCommand(query, connection, transaction))
 
-    resizer.addEventListener('mousedown', (e) => {
-        isResizing = true;
-        lastX = e.clientX;
-        lastY = e.clientY;
-        document.addEventListener('mousemove', handleMouseMove);
-        document.addEventListener('mouseup', handleMouseUp);
-    });
+//                     {
+//                         command.Parameters.AddWithValue("@Name", item.Name);
+//                         command.Parameters.AddWithValue("@Email", item.Email);
+//                         command.Parameters.AddWithValue("@Country", item.Country);
+//                         command.Parameters.AddWithValue("@State", item.State);
+//                         command.Parameters.AddWithValue("@City", item.City);
+//                         command.Parameters.AddWithValue("@Telephone", item.Telephone);
+//                         command.Parameters.AddWithValue("@Address_1", item.Address_1);
+//                         command.Parameters.AddWithValue("@Address_2", item.Address_2);
+//                         command.Parameters.AddWithValue("@DOB", item.DOB);
+//                         command.Parameters.AddWithValue("@FY2019_20", item.FY2019_20);
+//                         command.Parameters.AddWithValue("@FY2020_21", item.FY2020_21);
+//                         command.Parameters.AddWithValue("@FY2021_22", item.FY2021_22);
+//                         command.Parameters.AddWithValue("@FY2022_23", item.FY2022_23);
+//                         command.Parameters.AddWithValue("@FY2023_24", item.FY2023_24);
+//                         command.Parameters.AddWithValue("@IsComplete", item.IsComplete);
 
-    function handleMouseMove(e) {
-        if (!isResizing) return;
+//                         await command.ExecuteNonQueryAsync();
+//                     }
+//                 }
 
-        const dx = e.clientX - lastX;
-        const dy = e.clientY - lastY;
-
-        const newWidth = resizableDiv.clientWidth + dx;
-        const newHeight = resizableDiv.clientHeight + dy;
-
-        resizableDiv.style.width = `${newWidth}px`;
-        resizableDiv.style.height = `${newHeight}px`;
-
-        lastX = e.clientX;
-        lastY = e.clientY;
-    }
-
-    function handleMouseUp() {
-        isResizing = false;
-        document.removeEventListener('mousemove', handleMouseMove);
-        document.removeEventListener('mouseup', handleMouseUp);
-    }
-});
-
-    </script>
-</body>
-</html>
+//                 await transaction.CommitAsync();
+//             }
+//             catch (Exception ex)
+//             {
+//                 Console.WriteLine($"Error inserting batch: {ex.Message}");
+//                 await transaction.RollbackAsync();
+//             }
+//         }
+//     }
+// }
+// catch (MySqlException sqlEx)
+// {
+//     Console.WriteLine($"SQL Error: {sqlEx.Message}");
+// }

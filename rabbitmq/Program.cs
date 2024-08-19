@@ -6,13 +6,15 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using System.Diagnostics;
 using insertinto;
 
 public class Program
 {
     private static readonly string _queueName = "hello_queue1";
-    private const int BatchSize = 10000;  // Batch size
+    private const int BatchSize = 10000;
     private int count = 1;
+    private int c = 10;
     private IConnection _rabbitConnection;
     private IModel _channel;
     // private MySqlConnection _dbConnection;
@@ -36,36 +38,52 @@ public class Program
     }
 
     public async Task StartAsync()
-    {
+    {  var stopWatch = new Stopwatch();
         var consumer = new EventingBasicConsumer(_channel);
         consumer.Received += async (model, ea) =>
         {
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
 
-        
+
             try
             {
-                var todoItems = JsonSerializer.Deserialize<List<insertinto.TodoItem>>(message); 
+                //  Console.WriteLine(message.filename);
+                var todoItems = JsonSerializer.Deserialize<List<insertinto.TodoItem>>(message);
+                stopWatch.Start();
                 if (todoItems != null)
                 {
-                    Console.WriteLine("Received chunk with " + todoItems.Count + " items " + count);
-                    count++;
+                    // Console.WriteLine("Received chunk with " + todoItems.Count + " items " + count);
+                    // count++;
                     _todoItemsBatch.AddRange(todoItems);
 
                     if (_todoItemsBatch.Count >= BatchSize)
                     {
 
+
+                      
                         await Myclass.InsertTodoItemsBatchAsync(_todoItemsBatch);
                         _todoItemsBatch.Clear();
+                        Console.WriteLine("Received chunk with " + todoItems.Count + " items " + count);
+                        Console.WriteLine("loaded" + c + "%");
+                        c += 10;
+                        count++;
+                        // if (c > 100)
+                        // {
+                        //     c = 10;
+                        // }
                     }
+
                 }
+
             }
+
             catch (JsonException ex)
             {
                 Console.WriteLine($"Error deserializing message: {ex.Message}");
             }
-
+            stopWatch.Stop();
+            Console.WriteLine(stopWatch);
             // Ack manual
             _channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
         };

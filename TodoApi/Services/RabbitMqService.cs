@@ -28,25 +28,10 @@ public class RabbitMqService
                              autoDelete: false,
                              arguments: null);
     }
-    // public void SendMessage(todoitem)
-    // {
-    //     var msg = JsonSerializer.Serialize(todoitem);
-    //     Console.WriteLine(msg);
-    //     var body = Encoding.UTF8.GetBytes(msg);
-    //     var properties = _channel.CreateBasicProperties();
-    //     properties.Persistent = true;
-
-    //     _channel.BasicPublish(
-    //         exchange: "",
-    //         routingKey: _queueName,
-    //         basicProperties: properties,
-    //         body: body);
-
-
-    // }
-    public void SendChunk(IEnumerable<TodoItem> chunk)
+    
+    public void SendChunk(IEnumerable<TodoItem> chunk, string filename1)
     {
-
+// Console.WriteLine(filename1);
         var message = JsonSerializer.Serialize(chunk);
         //  + message
         Console.WriteLine("Sending chunk: " + count );

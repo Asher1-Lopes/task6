@@ -23,22 +23,28 @@ namespace insertinto
         public long FY2022_23 { get; set; }
         public long FY2023_24 { get; set; }
         public bool IsComplete { get; set; }
+        public string? file_name{get; set; }
     }
 
     public static class Myclass
     {
         private static readonly string _connectionString = "Server=localhost;Database=sql_workbench;User=root;Password=root;";
-        // private static MySqlConnection connection;
-     
-        // public static void init()
-        // {
-        //     using (var connection = new MySqlConnection(_connectionString))
-        //     {
-        //         connection.OpenAsync();
-        //     }
 
-        // }
 
+        private static string EscapeSqlValue(string? value)
+        {
+            if (value == null)
+                return "NULL";
+
+            // Escape single quotes by doubling them
+            value = value.Replace("'", "''");
+
+            // Escape backslashes (optional, depending on MySQL mode)
+            value = value.Replace("\\", "\\\\");
+
+            // Return escaped string wrapped in single quotes
+            return $"'{value}'";
+        }
         public static async Task InsertTodoItemsBatchAsync(List<TodoItem> todoItems)
         {
             if (todoItems == null || todoItems.Count == 0)
@@ -53,68 +59,33 @@ namespace insertinto
                 todoItems.Clear();
             }
 
-            var query = @"
-                INSERT INTO datas (Name_1, email, country, city, state, telephone, address_1, address_2, dob, fy2019_20, fy2020_21, fy2021_22, fy2022_23, fy2023_24, msg)
-                VALUES (@Name, @Email, @Country, @City, @State, @Telephone, @Address_1, @Address_2, @DOB, @FY2019_20, @FY2020_21, @FY2021_22, @FY2022_23, @FY2023_24, @IsComplete)";
-
-            try
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
-                using (var connection = new MySqlConnection(_connectionString))
+               await connection.OpenAsync();
 
+                // Create the initial part of the query
+                var query = "INSERT INTO datas (Name_1, email, country, city, state, telephone, address_1, address_2, dob, fy2019_20, fy2020_21, fy2021_22, fy2022_23, fy2023_24, msg, file_name) VALUES ";
+
+                // Build the values part
+                var valuesList = new List<string>();
+                foreach (var item in batchToInsert)
                 {
-                    await connection.OpenAsync();
+                    var values = $"({EscapeSqlValue(item.Name)}, {EscapeSqlValue(item.Email)}, {EscapeSqlValue(item.Country)}, {EscapeSqlValue(item.City)}, {EscapeSqlValue(item.State)}, {item.Telephone}, {EscapeSqlValue(item.Address_1)}, {EscapeSqlValue(item.Address_2)}, {EscapeSqlValue(item.DOB)}, {item.FY2019_20}, {item.FY2020_21}, {item.FY2021_22}, {item.FY2022_23}, {item.FY2023_24}, {(item.IsComplete ? 1 : 0)},{EscapeSqlValue(item.file_name )})";
+                    valuesList.Add(values);
+                
+                }
 
-                    using (var transaction = await connection.BeginTransactionAsync())
-                    {
-                        try
-                        {   
-                          
-                            foreach (var item in batchToInsert)
-                            {   
-                             
-                                using (var command = new MySqlCommand(query, connection, transaction))
+                // Join all values with commas and add to the query
+                query += string.Join(", ", valuesList);
 
-                                {
-                                    command.Parameters.AddWithValue("@Name", item.Name);
-                                    command.Parameters.AddWithValue("@Email", item.Email);
-                                    command.Parameters.AddWithValue("@Country", item.Country);
-                                    command.Parameters.AddWithValue("@State", item.State);
-                                    command.Parameters.AddWithValue("@City", item.City);
-                                    command.Parameters.AddWithValue("@Telephone", item.Telephone);
-                                    command.Parameters.AddWithValue("@Address_1", item.Address_1);
-                                    command.Parameters.AddWithValue("@Address_2", item.Address_2);
-                                    command.Parameters.AddWithValue("@DOB", item.DOB);
-                                    command.Parameters.AddWithValue("@FY2019_20", item.FY2019_20);
-                                    command.Parameters.AddWithValue("@FY2020_21", item.FY2020_21);
-                                    command.Parameters.AddWithValue("@FY2021_22", item.FY2021_22);
-                                    command.Parameters.AddWithValue("@FY2022_23", item.FY2022_23);
-                                    command.Parameters.AddWithValue("@FY2023_24", item.FY2023_24);
-                                    command.Parameters.AddWithValue("@IsComplete", item.IsComplete);
-
-                                    await command.ExecuteNonQueryAsync();
-                                }
-                            }
-
-                            await transaction.CommitAsync();
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine($"Error inserting batch: {ex.Message}");
-                            await transaction.RollbackAsync();
-                        }
-                    }
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                   await command.ExecuteNonQueryAsync();
+                
                 }
             }
-            catch (MySqlException sqlEx)
-            {
-                Console.WriteLine($"SQL Error: {sqlEx.Message}");
-            }
-            finally
-            {
-                // connection?.Close();
-                // connection?.Dispose();
-                // // connection = null; 
-            }
+
+
         }
 
 

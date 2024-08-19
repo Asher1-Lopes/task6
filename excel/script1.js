@@ -56,14 +56,9 @@ this.selectedfinal1 = [];
     this.csvToJson();
     this.headerdraw();
     this.sidedraw();
-  //   setInterval(()=> this.render(),1000)
+
     this.render();
     this.decider()
-    // this.scrollerdiv()
- 
-    // this.size()
-    
-    
 
   }
 
@@ -75,7 +70,6 @@ this.selectedfinal1 = [];
   show() {
     this.wraper.style.display = "block";
     this.init();
-    // this.render();
      }
 
   init() {
