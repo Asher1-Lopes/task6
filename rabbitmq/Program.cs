@@ -8,13 +8,15 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Diagnostics;
 using insertinto;
+using updateinto;
+
 
 public class Program
 {
     private static readonly string _queueName = "hello_queue1";
-    private const int BatchSize = 10000;
+    private int BatchSize = 0;
     private int count = 1;
-    private int c = 10;
+    private int c = 0;
     private IConnection _rabbitConnection;
     private IModel _channel;
     // private MySqlConnection _dbConnection;
@@ -38,7 +40,8 @@ public class Program
     }
 
     public async Task StartAsync()
-    {  var stopWatch = new Stopwatch();
+    {
+        var stopWatch = new Stopwatch();
         var consumer = new EventingBasicConsumer(_channel);
         consumer.Received += async (model, ea) =>
         {
@@ -48,26 +51,44 @@ public class Program
 
             try
             {
-                //  Console.WriteLine(message.filename);
-                var todoItems = JsonSerializer.Deserialize<List<insertinto.TodoItem>>(message);
+
+                // Deserialize the message to TodoMessage object
+                var todoMessage = JsonSerializer.Deserialize<TodoMessage>(message);
+
                 stopWatch.Start();
-                if (todoItems != null)
+
+                if (todoMessage != null)
                 {
-                    // Console.WriteLine("Received chunk with " + todoItems.Count + " items " + count);
-                    // count++;
+                    var filename = todoMessage.Filename;
+                    var file_id = todoMessage.File_id;
+                    int no_ofchunks = todoMessage.No_ofchunks;
+
+                    var todoItems = todoMessage.Chunk;
+
+                    // Console.WriteLine(todoItems.Count());
+                    BatchSize = todoItems.Count();
+                    // Console.WriteLine( no_ofchunks);
+
+                    int percent = 100 / no_ofchunks;
+                    c = percent;
                     _todoItemsBatch.AddRange(todoItems);
 
                     if (_todoItemsBatch.Count >= BatchSize)
                     {
 
 
-                      
-                        await Myclass.InsertTodoItemsBatchAsync(_todoItemsBatch);
+
+                        await Myclass.InsertTodoItemsBatchAsync(_todoItemsBatch, filename, file_id);
                         _todoItemsBatch.Clear();
-                        Console.WriteLine("Received chunk with " + todoItems.Count + " items " + count);
+                        Console.WriteLine("Received chunk with " + todoItems.Count().ToString() + " items " + count);
+
                         Console.WriteLine("loaded" + c + "%");
-                        c += 10;
+                        //   await Myclass1.updateloaderAsync(c);
+                        c += percent;
                         count++;
+
+                        // update func will come 
+                      
                         // if (c > 100)
                         // {
                         //     c = 10;
@@ -82,8 +103,11 @@ public class Program
             {
                 Console.WriteLine($"Error deserializing message: {ex.Message}");
             }
+
+
             stopWatch.Stop();
-            Console.WriteLine(stopWatch);
+            Console.WriteLine(stopWatch.Elapsed);
+
             // Ack manual
             _channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
         };
@@ -111,4 +135,12 @@ public class Program
         var program = new Program();
         await program.StartAsync();
     }
+    public class TodoMessage
+    {
+        public string Filename { get; set; } = string.Empty;
+        public int File_id { get; set; }
+        public int No_ofchunks { get; set; }
+        public IEnumerable<TodoItem> Chunk { get; set; }
+    }
+
 }

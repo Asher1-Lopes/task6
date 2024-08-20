@@ -28,13 +28,26 @@ public class RabbitMqService
                              autoDelete: false,
                              arguments: null);
     }
-    
-    public void SendChunk(IEnumerable<TodoItem> chunk, string filename1)
+
+    public void SendChunk(IEnumerable<TodoItem> chunk, string filename1,int fileid,int no_ofchunks)
     {
-// Console.WriteLine(filename1);
-        var message = JsonSerializer.Serialize(chunk);
+        // Console.WriteLine(filename1);
+        // Console.WriteLine("heyu"+fileid);
+
+        var messageObject = new TodoMessage
+        {
+            Filename = filename1,
+            Chunk = chunk,
+            No_ofchunks = no_ofchunks,
+            File_id = fileid
+
+        };
+
+
+
+        var message = JsonSerializer.Serialize(messageObject);
         //  + message
-        Console.WriteLine("Sending chunk: " + count );
+        Console.WriteLine("Sending chunk: " + count);
         count++;
 
         var body = Encoding.UTF8.GetBytes(message);
@@ -57,4 +70,13 @@ public class RabbitMqService
         _connection?.Dispose();
 
     }
+
+    public class TodoMessage
+{
+    public string Filename { get; set; }= string.Empty;
+    public int File_id { get; set; }
+
+    public int No_ofchunks { get; set; }
+    public IEnumerable<TodoItem> Chunk { get; set; }
+}
 }
