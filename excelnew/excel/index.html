@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>excel</title>
+    <link rel="stylesheet" href="./styles/style1.css">
+    <link rel="stylesheet" href="./styles/style.css">
+    
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  />
+</head>
+<body>
+    <nav>
+        <div>Books</div>
+        <div class="mid">
+            <input type="text" placeholder="search for data">
+        </div>
+        <div>
+            <a href="">home</a>
+            <a href="">contact</a>
+            <a href="">about</a>
+        </div>
+     </nav>
+
+<div class="sub1">
+     <div class="sub-container">
+        <div class="searchdiv" id="searchdiv">
+            <div id="close">X</div>
+
+            <p>SEARCH</p>
+
+            <input type="text" id="searchInput" placeholder="Enter search term">
+            <button  id="find">find</button><br>
+            <input type="text" id="replaceinput1" placeholder="Enter replace term">
+            <input type="text" id="replaceinput" placeholder="Enter replace with">
+            <button id="replace">replace</button>
+            <br>
+            searching results....
+            <div id="results" class="results"></div>
+
+        </div>
+        <div class="subdiv">
+            <i class="fa-solid fa-sort" id="sort"></i>
+            <i class="fa-solid fa-rotate-right"></i>
+           <span>undo</span>
+            
+        </div>
+        
+        <div class="subdiv block2">
+            <div class="block21">
+             
+                <i class="fa-solid fa-paste" id="paste" ></i>
+                <!-- <span class="hidden1">helo</span> -->
+                <i class="fa-solid fa-copy" id="copy"></i>
+            </div>
+            <div>
+                <div><i class="fa-solid fa-scissors" id="cut"></i></div>
+            </div>
+        </div>
+        <div  class="mid1 subdiv">
+            <div class="btns">
+                <button id="search12">search</button>
+                
+                <!-- <button id="sheet">Add sheet</button>
+                <button id="next"> <i class="fa-solid fa-arrow-right"  style="color:white"></i></button>
+        -->
+                
+                <!-- <label for="fileuploader">Upload a CSV file:</label> -->
+                <label for="fileuploader">   
+                    <input type="file" name="file" id="fileuploader" accept="text/csv" style="display: none;">
+                  <div>
+                 Upload 
+                 <i class="fa-solid fa-upload"></i>
+                  </div>
+                 </label>
+
+                
+                
+                <!-- <button id="active">Calc</button> -->
+      <span> 
+        <button id="active">Calc</button>
+              
+        <div class="content">
+        <div class="box1">
+            <b>MULTIPLICATION</b><p id="multi"></p>
+           <b>SUM</b> <p id="sum"> </p>
+           <b>MEAN</b>   <p id="mean"></p>
+             <B>MAX</B> <p id="max"></p>
+           <B>MIN</B>   <p id="min"></p>
+           <b>MODE</b><p id="mode"></p>
+           <b>MEDIAN</b><p id="median"></p>
+        </div>
+        </div>
+        </span>  
+        <span class="files"> 
+            <button id="active">Files Uploaded</button>
+                  
+            <div class="box">
+         
+            <div id="data-container">
+                <div class="file-container">
+                    <div class="container" id="container">
+
+                    </div>
+                </div>
+            </div>
+            </div>
+            </span>  
+        <button class="button1" id = "center">center</button>
+            </div>
+        </div>
+        <div class="subdiv mid2">
+            <span>
+            <button class="button1" id = "graph">graph</button>
+    
+            <div class="graph12">
+                <button id="line">line</button>
+                <button id="bar">bar</button>
+                <button id="pie">pie</button>
+            </div>
+      
+        </span>
+        
+        
+        </div>
+        <div class="subdiv">
+              
+        current element<span id="position"></span>
+        </div>
+        
+     </div>
+    </div>
+    <div class="progrescenter">
+  
+    <div id="progress-container">
+        <div id="progress-bar">0%</div>
+    </div>
+</div>  
+
+<div class="filenocontent" id ="filenocontent1">
+    <div class="no-files">
+        <img src="fileerror.jpg" alt="No files uploaded" class="no-files-image">
+        <p class="no-files-message">No files uploaded</p>
+    </div>
+
+</div>
+    <div class = "wraper" style="height: 100vh;">
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="./script1.js"></script>
+    <!-- <script src="../tp1.js"></script> -->
+    <!-- <script src="../tp.js"></script> -->
+    <script src="./script2.js"></script>
+
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> -->
+    <!-- <script src="./index.js"></script> -->
+    
+</body>
+</html>

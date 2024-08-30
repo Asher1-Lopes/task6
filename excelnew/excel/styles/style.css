@@ -1,0 +1,306 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: white;
+  overflow: hidden;
+}
+
+nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+  background-color: rgb(10, 134, 10);
+  color: white;
+  font-size: larger;
+  font-weight: bold;
+  height: 3em;
+}
+nav .mid {
+  flex-grow: 1;
+}
+nav .mid input {
+  min-width: 400px;
+  border-radius: 10px;
+  border: none;
+  text-align: center;
+  padding: 5px;
+}
+nav a {
+  text-decoration: none;
+  color: white;
+  margin-right: 3px;
+}
+
+.sub1 {
+  position: sticky;
+  top: 0px;
+  z-index: 1;
+  background-color: white;
+}
+.sub1 .sub-container {
+  margin: 10px;
+  display: flex;
+  flex-direction: row;
+  background-color: #e4e4e4;
+  border-radius: 5px;
+  height: 100px;
+  padding: 5px;
+  text-align: center;
+  position: relative;
+}
+.sub1 .sub-container .searchdiv {
+  position: absolute;
+  top: 200px;
+  left: 100px;
+  width: 400px;
+  height: 400px;
+  background-color: white;
+  box-shadow: 1px 2px 1px 1px grey;
+  display: none;
+}
+.sub1 .sub-container .searchdiv #close {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  cursor: pointer;
+  background-color: red;
+  width: 30px;
+  color: white;
+}
+.sub1 .sub-container .searchdiv .results {
+  overflow-y: scroll;
+  height: 250px;
+}
+.sub1 .sub-container .subdiv {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  justify-content: center;
+  border-right: 1px solid rgb(190, 186, 186);
+}
+.sub1 .sub-container .subdiv i {
+  margin: 3px;
+  color: grey;
+  cursor: pointer;
+}
+.sub1 .sub-container .subdiv span {
+  margin: 3px;
+  color: grey;
+}
+.sub1 .sub-container .block2 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.sub1 .sub-container .block2 .block21 {
+  display: flex;
+  flex-direction: column;
+  margin: 3px;
+}
+.sub1 .sub-container .mid1 {
+  flex-grow: 1;
+}
+.sub1 .sub-container .mid1 .btns {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.sub1 .sub-container .mid1 .btns .hidden {
+  display: none;
+}
+.sub1 .sub-container .mid1 .btns label div {
+  padding: 3px;
+  min-width: 150px;
+  text-align: center;
+  background-color: grey;
+  color: white;
+  border-radius: 5px;
+  box-shadow: 1px 2px 1px 1px black;
+}
+.sub1 .sub-container .mid1 .btns label div i {
+  color: black;
+}
+.sub1 .sub-container .mid1 .btns span .box {
+  display: none;
+}
+.sub1 .sub-container .mid1 .btns span .box1 {
+  display: none;
+}
+.sub1 .sub-container .mid1 .btns span:hover {
+  position: relative;
+}
+.sub1 .sub-container .mid1 .btns span:hover .box1 {
+  display: block;
+  padding-top: 14px;
+  width: 350px;
+  height: auto;
+  top: 80px;
+  right: -100px;
+  align-items: center;
+  background-color: white;
+  color: black;
+  position: absolute;
+  z-index: 10;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+.sub1 .sub-container .mid1 .btns span:hover .box {
+  display: block;
+  width: 350px;
+  height: 350px;
+  top: 80px;
+  right: -100px;
+  align-items: center;
+  background-color: white;
+  color: black;
+  position: absolute;
+  z-index: 10;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+.sub1 .sub-container .mid1 .btns span:hover .box .content {
+  overflow-y: scroll;
+  height: 350px;
+}
+.sub1 .sub-container .mid1 .btns span:hover .box #data-container .file-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 16px; /* Spacing between items */
+  padding: 20px;
+}
+.sub1 .sub-container .mid1 .btns span:hover .box #data-container .file-container .container {
+  height: 300px;
+  overflow-y: scroll;
+  width: 300px;
+}
+.sub1 .sub-container .mid1 .btns span:hover .box #data-container .file-container .container .file-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin: 5px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  width: 250px; /* Fixed width for demonstration */
+}
+.sub1 .sub-container .mid1 .btns span:hover .box #data-container .file-container .container .file-item .file-icon {
+  font-size: 24px;
+  margin-right: 16px;
+}
+.sub1 .sub-container .mid1 .btns span:hover .box #data-container .file-container .container .file-item .file-icon i {
+  color: green;
+}
+.sub1 .sub-container .mid1 .btns span:hover .box #data-container .file-container .container .file-item .file-info {
+  display: flex;
+  flex-direction: column;
+  /* Style the file date */
+}
+.sub1 .sub-container .mid1 .btns span:hover .box #data-container .file-container .container .file-item .file-info .file-name {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+.sub1 .sub-container .mid1 .btns span:hover .box #data-container .file-container .container .file-item .file-info .file-date {
+  color: gray;
+}
+.sub1 .sub-container .mid1 .btns span:hover .box #data-container .file-container .container .file-item:hover {
+  background-color: rgba(153, 153, 153, 0.8823529412);
+}
+.sub1 .sub-container .mid1 .btns button {
+  padding: 3px;
+  min-width: 150px;
+  text-align: center;
+  background-color: grey;
+  color: white;
+  border-radius: 5px;
+  box-shadow: 1px 1px 1px black;
+}
+.sub1 .sub-container .mid2 {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+}
+.sub1 .sub-container .mid2 .button1 {
+  padding: 3px;
+  min-width: 150px;
+  max-width: 150px;
+  text-align: center;
+  background-color: grey;
+  color: white;
+  border-radius: 5px;
+  box-shadow: 1px 1px 1px black;
+  position: relative;
+}
+.sub1 .sub-container .mid2 span .graph12 {
+  display: none;
+}
+.sub1 .sub-container .mid2 span:hover {
+  position: relative;
+}
+.sub1 .sub-container .mid2 span:hover .graph12 {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  width: 350px;
+  top: 80px;
+  right: -100px;
+  align-items: center;
+  background-color: white;
+  position: absolute;
+  z-index: 2;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+.sub1 .sub-container .mid2 span:hover .graph12 button {
+  width: 100px;
+  padding: 3px;
+  margin: 3px;
+  text-align: center;
+  background-color: grey;
+  color: white;
+  border-radius: 5px;
+}
+
+.progrescenter {
+  display: flex;
+  justify-content: center;
+}
+.progrescenter #progress-container {
+  width: 600px;
+  background-color: #f3f3f3;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  display: none;
+}
+.progrescenter #progress-container #progress-bar {
+  width: 0%;
+  height: 30px;
+  background-color: #4caf50;
+  text-align: center;
+  text-align: center;
+  color: white;
+  line-height: 30px; /* Center text vertically */
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+.filenocontent {
+  display: flex;
+  justify-content: center;
+  padding: 100px;
+}
+.filenocontent .no-files {
+  text-align: center;
+  width: 500px;
+  padding: 20px;
+  background-color: #fff;
+}
+.filenocontent .no-files .no-files-image {
+  width: 100%; /* Adjust size as needed */
+  height: auto;
+  margin-bottom: 10px;
+}
+.filenocontent .no-files .no-files-message {
+  font-size: 18px;
+  color: #333;
+}/*# sourceMappingURL=style.css.map */

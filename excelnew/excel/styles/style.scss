@@ -1,0 +1,10 @@
+body{
+    margin:0;
+    padding :0;
+    background-color:white;
+    overflow: hidden;
+}
+@import "./grid";
+@import "./nav";
+@import "./container";
+@import "./loader.scss";

@@ -523,3 +523,7 @@ C:\Users\asher.lopes\Desktop\NEW JOINEE\task5\TodoApi\obj\Debug\net8.0\refint\To
 C:\Users\asher.lopes\Desktop\NEW JOINEE\task5\TodoApi\obj\Debug\net8.0\TodoApi.pdb
 C:\Users\asher.lopes\Desktop\NEW JOINEE\task5\TodoApi\obj\Debug\net8.0\TodoApi.genruntimeconfig.cache
 C:\Users\asher.lopes\Desktop\NEW JOINEE\task5\TodoApi\obj\Debug\net8.0\ref\TodoApi.dll
+C:\Users\asher.lopes\Desktop\NEW JOINEE\task5\TodoApi\bin\Debug\net8.0\MySql.EntityFrameworkCore.dll
+C:\Users\asher.lopes\Desktop\NEW JOINEE\task5\TodoApi\bin\Debug\net8.0\MySqlConnector.dll
+C:\Users\asher.lopes\Desktop\NEW JOINEE\task5\TodoApi\bin\Debug\net8.0\MySqlConnector.DependencyInjection.dll
+C:\Users\asher.lopes\Desktop\NEW JOINEE\task5\TodoApi\bin\Debug\net8.0\Pomelo.EntityFrameworkCore.MySql.dll

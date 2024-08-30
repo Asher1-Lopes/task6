@@ -8,7 +8,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Diagnostics;
 using insertinto;
-using updateinto;
+// using updateinto;
 
 
 public class Program
@@ -17,6 +17,8 @@ public class Program
     private int BatchSize = 0;
     private int count = 1;
     private int c = 0;
+
+    private int incre = 0;
     private IConnection _rabbitConnection;
     private IModel _channel;
     // private MySqlConnection _dbConnection;
@@ -70,7 +72,12 @@ public class Program
                     // Console.WriteLine( no_ofchunks);
 
                     int percent = 100 / no_ofchunks;
-                    c = percent;
+                    // c= percent;
+                    if(incre ==0){
+                         c= percent;
+                         incre++;
+                    }
+
                     _todoItemsBatch.AddRange(todoItems);
 
                     if (_todoItemsBatch.Count >= BatchSize)
@@ -78,21 +85,22 @@ public class Program
 
 
 
-                        await Myclass.InsertTodoItemsBatchAsync(_todoItemsBatch, filename, file_id);
+                     await Myclass.InsertTodoItemsBatchAsync(_todoItemsBatch, filename, file_id,percent);
                         _todoItemsBatch.Clear();
                         Console.WriteLine("Received chunk with " + todoItems.Count().ToString() + " items " + count);
-
+                    //   await  Myclass1.updateloader(c);
                         Console.WriteLine("loaded" + c + "%");
-                        //   await Myclass1.updateloaderAsync(c);
+
                         c += percent;
                         count++;
 
                         // update func will come 
-                      
-                        // if (c > 100)
-                        // {
-                        //     c = 10;
-                        // }
+
+                        if (c > 100)
+                        {
+                           incre=0;
+
+                        }
                     }
 
                 }

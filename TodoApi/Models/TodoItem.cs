@@ -19,6 +19,5 @@ public class TodoItem
     public long FY2022_23 { get; set; }
     public long FY2023_24 { get; set; }
 
-
     public bool IsComplete { get; set; }
 }

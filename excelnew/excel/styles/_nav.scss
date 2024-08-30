@@ -1,0 +1,29 @@
+nav{
+    display:flex;
+    flex-direction: row;
+ 
+    align-items: center;
+    text-align: center;
+    background-color:  rgb(10, 134, 10);;
+    color:white;
+    font-size: larger;
+    font-weight: bold;
+    height:3em;
+
+    .mid{
+        flex-grow:1;
+       input{
+        min-width: 400px;
+        border-radius: 10px;
+        border:none;
+        text-align: center;
+        padding:5px;
+      
+       }
+    }
+    a{
+        text-decoration: none;
+        color:white;
+        margin-right: 3px;
+    }
+}

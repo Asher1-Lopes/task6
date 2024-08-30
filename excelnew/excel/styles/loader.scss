@@ -1,0 +1,49 @@
+
+.progrescenter{
+display: flex;
+justify-content: center;
+    #progress-container {
+        width: 600px;
+        background-color: #f3f3f3;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+        display: none;
+        #progress-bar {
+            width: 0%;
+            height: 30px;
+            background-color: #4caf50;
+            text-align: center;
+            text-align: center;
+            color: white;
+            line-height: 30px; /* Center text vertically */
+            border-radius: 4px;
+            transition: width 0.3s;
+    
+        }
+    }
+}
+
+.filenocontent{
+display:flex;
+justify-content: center;
+padding:100px;
+    .no-files {
+        text-align: center;
+        width:500px;
+        padding: 20px;
+      
+        background-color: #fff; 
+     
+        .no-files-image {
+            width: 100%; /* Adjust size as needed */
+            height: auto;
+            margin-bottom: 10px;
+        }
+        .no-files-message {
+            font-size: 18px;
+            color: #333;
+        }
+        
+    }
+}

@@ -12,11 +12,46 @@ namespace updateinto
         private static readonly string _connectionString = "Server=localhost;Database=sql_workbench;User=root;Password=root;";
 
 
-        public static async Task updateloaderAsync( int c)
+        public static void updateloader(int percent, int file_id)
         {
 
 
-            Console.WriteLine(c);
+
+            // update query 
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
+                {
+                    connection.Open();
+
+                    // Corrected SQL query with parameters    '" + file.FileName + "'
+                    string updSql = "UPDATE files SET loader = loader + @percent WHERE id = @file_id;";
+                    try
+                    {
+                        using (MySqlCommand command = new MySqlCommand(updSql, connection))
+                        {
+                            command.Parameters.AddWithValue("@percent", percent);
+                            command.Parameters.AddWithValue("@file_Id", file_id);
+                            int updated = command.ExecuteNonQuery();
+
+
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error inserting batch: {ex.Message}");
+                    }
+                }
+            }
+            catch (MySqlException sqlEx)
+            {
+                Console.WriteLine($"SQL Error: {sqlEx.Message}");
+            }
+            finally
+            {
+                // connection.Close();
+            }
+
 
 
         }
